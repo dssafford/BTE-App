@@ -1,0 +1,600 @@
+
+
+      #  cmd history
+      1  help nvim-from-vim
+      2  asdf
+      3  21
+      4  set nonumber
+      5  set number
+      6  :q
+      7  q:
+      8  w testnvim1.txt
+      9  qw
+     10  wQ
+     11  Wq
+     12  help nvim
+     13  i
+     14  NVIMTreeToggle
+     15  Colorscheme
+     16  Alpha
+     17  :lua require("mini.starter").open()
+     18  h
+     19  nh
+     20  /h
+     21  Map [d
+     22  map [d
+     23  map gd
+     24  map K
+     25  45
+     26  $
+     27  884
+     28  colorscheme tokyo-night
+     29  edit $VIMRUNTIME/colors
+     30  354
+     31  Treesitter
+     32  TSUpdate
+     33  qq 
+     34  4
+     35  NvimTreeFocus
+     36  echo mapleader
+     37  split terminal
+     38  split | terminal
+     39  :lua vim.keymap.set("n", "<leader>tt", function() print("TT works!") end)
+     40  checkhealth
+     41  checkhelth which-key
+     42  checkhealth which-key.lua
+     43  version
+     44  verbose version
+     45  :verbose nmap gc
+     46  scriptnames
+     47  :verbose nmap <leader>
+     48  :verbose nmap NvimTreeToggle
+     49  :verbose nmap Explorer
+     50  :verbose map <leader>s
+     51  check
+     52  NvimTreeTogglee
+     53  Lazy profile
+     54  verbose map <leader>e
+     55  :verbose nmap <leader>e
+     56  :map <C-Left>
+     57  verbose nmap <C-Left>
+     58  :source ~/.config/nvim/init.lua
+     59  source ~/.config/nvim/init.lua
+     60  lua require("nvim-tree.api").tree.open()
+     61  botright split | terminal
+     62  Completion
+     63  Lazy reload nvim-tree
+     64  lua print(vim.fn.expand("%:p"))
+     65  Telescope git_status
+     66  OpenTermHere
+     67  tcd
+     68  qq
+     69  source $MYVIMRC
+     70  Debug
+     71  Obsidian
+     72  ObsidianSwitch
+     73  Masonlog
+     74  Lsp-Info
+     75  :lua require("nvim-tree.api").tree.toggle_hidden_filter()
+     76  lua require("nvim-tree.api").tree.toggle_hidden_filter()
+     77  NvimTreeToggle
+     78  nf
+     79  %s/World/PlanetShit/g
+     80  My
+     81  my
+     82  nmap <Leader>my :write<CR>:source<CR>
+     83  HelloWorl
+     84  Hello
+     85  Lazy sunc
+     86  lua package.loaded["hello.init"] = nil
+     87  HelloRestore
+     88  Lazy home dougsafford/nvim-hello
+     89  Lazy restore
+     90  lua package.loaded["hello"] = nil
+     91  :lua for k in pairs(package.loaded) do if k:match("^hello") then package.loaded[k] = nil end end
+     92  lua for k in pairs(package.loaded) do if k:match("^hello") then package.loaded[k] = nil end end
+     93  lua require("hello").setup()
+     94  HelloReload
+     95  HelloWorld
+     96  ObsidianSearch
+     97  '<,'>+y
+     98  Lazy clean
+     99  "+y
+    100  *p
+    101  "*p
+    102  +p
+    103  echo has('clipboard')
+    104  reg +
+    105  "+p
+    106  put +
+    107  lua require("nvim-tree.api").tree.change_root(require("nvim-tree.lib").get_cwd())
+    108  lua require("nvim-tree.api").tree.change_root(vim.fn.getcwd())
+    109  :lua require("nvim-tree.api").tree.change_root(vim.fn.getcwd())
+    110  :lua require("nvim-tree.api").tree.open(); require("nvim-tree.api").tree.change_root(vim.fn.getcwd())
+    111  lua require("nvim-tree.api").tree.change_root(vim.fn.getcwd()); require("nvim-tree.api").tree.open()
+    112  lua local api=require("nvim-tree.api"); api.tree.find_file({fo...ee.change_root(api.tree.get_node_under_cursor().absolute_path)
+    113  e .
+    114  lua require("nvim-tree.api").tree.find_file({ focus = true })
+    115  lua local node=require("nvim-tree.api").tree.get_node_under_cu...uire("nvim-tree.api").tree.change_root(node.absolute_path) end
+    116  e . ~/.config/nvim/init.lua
+    117  ............. /Users/dougs/Library
+    118  +y
+    119  :set nonumber norelativenumber
+    120  verbose nmap l
+    121  verbose nmap h
+    122  lua require('harpoon')
+    123  Lazy reload
+    124  Lazy reload harpoon
+    125  :lua require("harpoon").ui:toggle_quick_menu(require("harpoon"):list())
+    126  lua require("harpoon").ui:toggle_quick_menu(require("harpoon"):list())
+    127  Telescope harpoon marks
+    128  :lua for _, k in ipairs(require("which-key").get_registered_keys()) do print(vim.inspect(k)) end
+    129  lua for _, k in ipairs(require("which-key").get_registered_keys()) do print(vim.inspect(k)) end
+    130  :lua
+    131  lua << EOF
+    132  lua for k, v in pairs(require("which-key").get_registered_keys...o if k == "" then print("❌ BAD KEY:", vim.inspect(v)) end end
+    133  lua print(vim.inspect(require("which-key").config.mappings))
+    134  checkhealth snacks
+    135  lua require"luaPlugin"
+    136   /Users/dougs/PycharmProjects
+    137  Tutor
+    138  execute
+    139  help
+    140  Terminal
+    141  Term
+    142  terminal
+    143  edit ~/.local/state/nvim/lsp.log
+    144  MasonUninstall textlsp
+    145  mini
+    146  Mini
+    147  VimBeGood
+    148  checkhealth yazi
+    149  !which yazi
+    150  lua print(require("luasnip") ~= nil)
+    151  lua print(vim.inspect(require("luasnip").snippets))
+    152  require("luasnip.loaders.from_lua").lazy_load({ paths = "~/.config/nvim/lua/snippets" })
+    153  lua require("luasnip.loaders.from_lua").lazy_load({ paths = "~/.config/nvim/lua/snippets" })
+    154  verbose tnoremap <Esc><Esc>
+    155  verbose tmap esc
+    156  verbose tmap <Esc>
+    157  e message.py
+    158  s/sekect/select/g
+    159  s/sekect/select/gg
+    160  %s/sekect/select/g
+    161  set filetype?
+    162  DB
+    163  h neotest.config
+    164  h dadbod
+    165  Lazy update echasnovski/mini.nvim
+    166  lua =require("mini.files").version
+    167  lua =require("mini.files").set_mapping
+    168  oil
+    169  Oil
+    170  help oil.vim
+    171  echo &filetype
+    172  lua require("oil.actions").create.callback()
+    173  lua require("oil").actions.create.callback()
+    174  lua print(vim.inspect(require("oil").actions))
+    175  WinCmd
+    176  windmc
+    177  wincmd
+    178  help windows
+    179  help user-manual
+    180  e file1.txt file2.txt file3.txt
+    181  b27
+    182  b10
+    183  '<,
+    184  b file
+    185  b bte
+    186  tabnew file.txt
+    187  tabedit other.txt
+    188  tab 3
+    189  vim.o.showtabline = 2  -- Always show tabline
+    190  ts
+    191  te
+    192  sc
+    193  telescope
+    194  help fold-commands
+    195  set fold-method
+    196  set foldcolumn = 1
+    197  set foldcolumn=1
+    198  set 
+    199  set foldmeth
+    200  set foldmethod
+    201  set cmdheight=0
+    202  Tmux
+    203  foldmethod=
+    204  set foldmethod=manual
+    205  set fdm?
+    206  set fdm=indent
+    207  !yazi
+    208  cd ~/.config/tmux/
+    209  cd ~/documents/obsidian/DougVault/_Inbox/_ToProcess/
+    210  :Telescope
+    211  e main.py
+    212  :Lazy update stevearc/oil.nvim
+    213  :verbose nmap m
+    214  :set showcmd?
+    215  set cmdheight
+    216  MarksListBuf
+    217  '<,'>abbreviate
+    218  Marks
+    219  52
+    220  bb 52
+    221  b 52
+    222  b32
+    223  ObsidianNew
+    224  b44
+    225  b52
+    226  buffer15
+    227  buffer7
+    228  bnext
+    229  bn
+    230  map S
+    231  vebose nmap S
+    232  verbose nmap S
+    233  TSPlaygroundToggle
+    234  b42
+    235  b2
+    236  InspectTree
+    237  TSBufEnable indent
+    238  TSBufEnable highlight
+    239  q\
+    240  set nolist
+    241  set nolint
+    242  :lua print(vim.inspect(vim.diagnostic.get(0)))
+    243  lua print(vim.inspect(vim.diagnostic.get(0)))
+    244  tb
+    245  b11u
+    246  ls b
+    247  bnew
+    248  TabNew
+    249  tmux kill-server
+    250  sessions
+    251  :abclear
+    252  telescope buffers
+    253  Telescope command_history
+    254  lua for k,v in pairs(require("which-key").config.mappings) do if k == "" then print("❌ BAD KEY:", vim.inspect(v)) end end
+    255  e doug.txt
+    256  save eatshit.txt
+    257  saveas noway.txt
+    258  b45
+    259  mksession
+    260  Copilot setup
+    261  Copilot auth
+    262  save ass.txt
+    263  Copilot status
+    264  Copilot panel
+    265  e demo.py
+    266  tabnew
+    267  tabs
+    268  map 
+    269  closw
+    270  wqa
+    271  confirm bdelete
+    272  lua vim.diagnostics.disable()
+    273  lua vim.diagnostic.di
+    274  lua vim.diagnostic.disable()
+    275  ls buffers
+    276  ls buf
+    277  e #
+    278  .
+    279  @:
+    280  map [a
+    281  args
+    282  :verbose nmap [a
+    283  :verbose nmap <Tab>
+    284  lua vim.keymap.set("n", "<expr>", "<Tab>", function() return vim.fn.getcharstr() end)
+    285  lua vim.keymap.set("n", "<Tab>", function() print("You pressed Tab") end, { noremap = true, silent = false })
+    286  b kic
+    287  b read
+    288  bd5
+    289  wo
+    290  b19
+    291  bd la
+    292  cwd
+    293  lcd /Documents
+    294  lcd ~/Documents/ob
+    295  lcd ~/Documents/obsidian
+    296  lcd Documents/obsidian/
+    297  lcd
+    298  lcd Documents/obsidian
+    299  `
+    300  %s//notion
+    301  %s//has_more
+    302  %s//has
+    303  q/
+    304  ls registers
+    305  w nodashboard.lua
+    306  wq
+    307  reg ab
+    308  reg a
+    309  help telescope
+    310  saveas new-init.lua
+    311  telescop
+    312  lazy
+    313  :lua print(require("blink.cmp"))
+    314  lspinfo
+    315  mason
+    316  ::q
+    317  help quickfix
+    318  cprev
+    319  cfirst
+    320  clast
+    321  quicklist
+    322  Telescope quickfix
+    323  b9
+    324  lcd Documents
+    325  lcd ~/Documents
+    326  NoiceTelescope```
+    327  ls
+    328  VenvSetup
+    329  qs
+    330  :Lazy reload lualine.nvim
+    331  echo showmode
+    332  echo &showmode
+    333  echo &laststatus
+    334  vim.api.nvim_set_hl(0, "StatusLine", { bg = "#ff00ff", fg = "#ffffff" })
+    335  vim.o.termguicolors = true
+    336  vim.o.laststatus = 2
+    337  lu
+    338  lua vim.o.laststatus = 2
+    339  lua vim.o.termguicolors = true
+    340  lua vim.cmd.colorscheme("default")
+    341  lua vim.api.nvim_set_hl(0, "StatusLine", { bg = "#ff0000", fg = "#ffffff" })
+    342  :hi StatusLine guibg=#ff00ff guifg=#ffffff
+    343  recordings
+    344  registers
+    345  set showcmd
+    346  set cmdheight?
+    347  cmdheight
+    348  show cmdheight
+    349  w dougtest.txt
+    350  m@a ii
+    351  echo
+    352  setheight
+    353  echo &cmdheight
+    354  setcmdheight=1
+    355  set cmdheight= 1
+    356  set cmdheight=1
+    357  abclear1`1`
+    358  w test.txt
+    359  lazygit
+    360  quit
+    361  make
+    362  cnext
+    363  buff'
+    364  buf
+    365  b85
+    366  b88
+    367  regs
+    368  buffer
+    369  Telescope buffers
+    370  jumps
+    371  mksession shit.vim
+    372  mksession splits.vim
+    373  e ~/.config/nvim/init.luq
+    374  e ~/.config/nvim/init.lua
+    375  Telescope marks
+    376  checkhealth telescope
+    377  telescope colorscheme
+    378  telescope colorschemes
+    379  vsp
+    380  verbose imap <Tab>
+    381  :verbose imap <Tab>
+    382  Telescope find_files
+    383  source%
+    384  w dougbufftest.txt
+    385  w code.txt
+    386  w dougsimple.go
+    387  e autosave.lua
+    388  abclear
+    389  :lua vim.notify("test message from notify()")
+    390  :autocmd BufWritePost
+    391  mksession tjtutorial
+    392  vim.api.nvim_del_augroup_by_name("TestNotify")
+    393  lua vim.api.nvim_del_augroup_by_name("TestNotify")
+    394  autocmd BufWritePost
+    395  souce %
+    396  source %
+    397  :source ~/.config/nvim/config/keymaps.lua
+    398  :source ~/.config/nvim/lua/config/keymaps.lua
+    399  %y+
+    400  sign place
+    401  marks
+    402  fold
+    403  setfold&
+    404  setfold?
+    405  Telescope help
+    406  Telescope help_tags
+    407  echo foldmethod
+    408  echo fold-method
+    409  foldmethod
+    410  set foldmethod&
+    411  set foldmethod?
+    412  set foldmethod=indent
+    413  !ls
+    414  !ls -l
+    415  !!ls
+    416  read !ls .
+    417  snew
+    418  splitnew
+    419  spnew
+    420  sp
+    421  vnew
+    422  verbose nmap <c-l>
+    423  :verbose nmap <C-l>
+    424  e split
+    425  Telescope
+    426  cd ~/go_projects
+    427  cs first
+    428  cd first
+    429  '<,'
+    430  %d
+    431  set fdm
+    432  e main.go
+    433  vsplit new
+    434  echo nvim_get_current_buf()
+    435  lcd /dougs/go_projects/cards
+    436  lcd /Users/dougs/go_projects/cards
+    437  lcd /Users/dougs/go_projects/first/
+    438  lcd /users/dougs/go_projects/first
+    439  lcd /users/dougs/go_projects/cards
+    440  lcd /users/dougs/go_projects/res
+    441  pwd
+    442  lcd /users/dougs/go_projects/rest_first/
+    443  split
+    444  vsplit enew
+    445  wa
+    446  verbose imap <S-Tab>
+    447  showmode
+    448  set showmode
+    449  show comdline
+    450  show cmdline
+    451  vim.opt.cmdheight
+    452  vim.opt.cmdheight = 1
+    453  vim.opt.cmdheight=1
+    454  vim.o.cmdheight = 1
+    455  yu
+    456  lua
+    457  lua vim.opt.cmdheight=1
+    458  Mason
+    459  help g
+    460  vsplit
+    461  read ls *.py
+    462  read !ls *.py
+    463  q'
+    464  '<,'>
+    465  LspInfo
+    466  TSinstall
+    467  TSInstall
+    468  TSInstall python
+    469  lua :verbose setlocal indentexpr?
+    470  :verbose setlocal indentexpr?
+    471  !black
+    472  verbose nmap gA
+    473  :verbose nmap <leader>a
+    474  verbose nmap <leader>a
+    475  verbose map a
+    476  echo exists("Which-Key")
+    477  :echo exists(':WhichKey')
+    478  checkhealth which-key
+    479  '<,'>w
+    480  :;
+    481  lazy sync
+    482  abbreviate
+    483  Lazy sybc
+    484  Lasy sync
+    485  ObsidianMyTest
+    486  ObsidianNew mytest
+    487  ObsidianNew crapdoug
+    488  ObsidianNew crapdo
+    489  ObsidianNew crapdouglas
+    490  LspRestart
+    491  q!
+    492  c
+    493  '<,'>q
+    494  yank
+    495  Lazy
+    496  vs
+    497  A
+    498  messages
+    499  Telescope colorscheme
+    500  Dashboard\
+    501  '<,'>LazyGit
+    502  d
+    503  ld
+    504  W
+    505  changes
+    506  enew doug.md
+    507  e doug.md
+    508  enew aws_arc.md
+    509  e
+    510  Lazy synbc
+    511  Lazy sync
+    512  InsertFrontmatter
+    513  DBUI
+    514  %s/cat/mouse/c
+    515  %s/cat/mouse/cg
+    516  /.+
+    517  /.
+    518  %s/fooa*bar
+    519  aws
+    520  enew aws_commands.txt
+    521  w aws_commands.txt
+    522  w test_search.txt
+    523  set magic?
+    524  bend
+    525  bexit
+    526  bclose
+    527  yy
+    528  w vim_sort_substitution_tutorial.txt
+    529  colorscheme
+    530  %s/'What is the Major System peg for/Number
+    531  %s/question/number
+    532  %s/answer/name
+    533  %s/quiz/learn_numbers
+    534  %s/number,`
+    535  '<,'>%s/number,/
+    536  '<,'>%s/number,/''
+    537  /\%s/\v(\(INSERT INTO learn_numbers\s*\(.*?\),\s*)number,/\1/
+    538  %s/\v(\(INSERT INTO learn_numbers\s*\(.*?\),\s*)number,/\1/
+    539  %s/number, 
+    540  %s/\v(VALUES\s*\()\d+,\s*//g
+    541  %s/Number
+    542  %s/\v(\)\s*(\d+)/\1 VALUES (\2/
+    543  %s/\v(\))\s*(\d+,\s*'.{-})/\1 VALUES (\2)/g
+    544  %s/\(INSERT INTO learn_numbers (id, number, name)\)\s\+\(\d\+,\s*'[^']\+',\s*'[^']\+'\);/\1 VALUES (\2);/
+    545  %s/\v(VALUES\s*)\d+,\s*/\1/
+    546  %s/VALUES\s*(\d\+,\s*/VALUES (/
+    547  %s/Number/'Number
+    548  db
+    549  dashboard
+    550  Dashboard
+    551  '<,'>sort
+    552  '<,'>s/\(.*\),\(.*\),\(.*\)/
+    553  '<,'>s/\v(.*),(.*),(.*)/\2 \1 died at the age of \3
+    554  '<,'>yy
+    555  qa
+    556  y
+    557  reg a,b
+    558  reg b
+    559  reg abc
+    560  read reg
+    561  new
+    562  redir => regs
+    563  silent registers
+    564  redir END
+    565  put =regs
+    566  RegDump
+    567  put a
+    568  put abcde
+    569  p
+    570  close
+    571  :!aws ec2 describe-subnets --filters "Name=vpc-id,Values=:!aws...=vpc-0abc123def456" > /tmp/subnets.jsonzz" > /tmp/subnets.json
+    572  !aws ec2 describe-subnets --filters "Name=vpc-id,Values=vpc-00bc2ee475f7c0f7" > /tmp/subnets.json
+    573  buff53
+    574  :!aws ec2 describe-subnets --filters "Name=vpc-id,Values=vpc-00bcd2ee475f7c0f7" --no-cli-pager > /tmp/subnets.json
+    575  enew
+    576  buff
+    577  b
+    578  buffers
+    579  b53
+    580  '<,'>y
+    581  reg
+    582  reg0
+    583  0
+    584  "0
+    585  w aws_dump_vpc_describe.md
+    586  w
+    587  copen
+    589  w fuckyou.txt
+    590  q
+    591  :new
+    592  read !rg "GenerateDataKey" --type py -n \| head -n 10
+    594  lcd /users/dougs/go_projects/rest_first
+    595  while
+    596  new r!history /
+    597  bd
+    598  redir >vim_command_history.txt
+>   599  history :

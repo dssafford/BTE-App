@@ -1,0 +1,12 @@
+# Azure-specific requirements
+# Install with: pip install -r requirements.txt -r requirements.azure.txt
+
+# Azure Functions
+azure-functions
+nest-asyncio
+
+# Azure Key Vault for secrets management
+azure-identity
+azure-keyvault-secrets
+
+# All base requirements from requirements.txt are still needed

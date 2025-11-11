@@ -1,0 +1,11 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "",
+    "FUNCTIONS_WORKER_RUNTIME": "python",
+    "CLOUD_PROVIDER": "azure",
+    "USE_SQLITE": "1",
+    "USE_SECRETS_MANAGER": "0",
+    "USE_AZURE_KEYVAULT": "0"
+  }
+}

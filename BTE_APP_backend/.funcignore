@@ -1,0 +1,19 @@
+# Azure Functions ignore file
+.git*
+.vscode
+.venv
+__pycache__
+.pytest_cache
+*.pyc
+*.pyo
+*.pyd
+.Python
+.env
+.env.local
+local.settings.json
+test
+tests/
+lambda_build/
+data/*.db
+data/*.sql
+*.md
