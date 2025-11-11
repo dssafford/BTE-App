@@ -15,12 +15,31 @@ jobs:
         with:
           submodules: true
 
-      - name: Build And Deploy
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: BTE_APP_frontend/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd BTE_APP_frontend
+          npm ci
+
+      - name: Build frontend
+        run: |
+          cd BTE_APP_frontend
+          npm run build
+        env:
+          NEXT_PUBLIC_API_URL: https://bte-api-functions.azurewebsites.net/api
+
+      - name: Deploy to Azure Static Web Apps
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          app_location: "/BTE_APP_frontend"
-          output_location: "out"
+          app_location: "BTE_APP_frontend/out"
+          skip_app_build: true
