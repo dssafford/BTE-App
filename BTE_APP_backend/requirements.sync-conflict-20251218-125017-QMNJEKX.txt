@@ -1,0 +1,10 @@
+fastapi
+sqlalchemy
+pymysql
+uvicorn
+pytz
+mangum
+pydantic==1.10.13
+pydantic-core
+boto3 
+python-dotenv
