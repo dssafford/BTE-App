@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // A simple user icon component
 const UserIcon = () => (
@@ -11,16 +11,29 @@ const UserIcon = () => (
   </svg>
 );
 
+interface AzureUser {
+  identityProvider: string;
+  userId: string;
+  userDetails: string;
+  userRoles: string[];
+}
+
 export default function NavBar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  
-  // --- Mock Authentication State ---
-  // Replace this with your actual auth context or state management
-  const [user, setUser] = useState<{ name: string } | null>(null);
-  // To test the logged-in view, you can temporarily set the initial state to:
-  // const [user, setUser] = useState<{ name: string } | null>({ name: "Doug" });
-  // --- End Mock ---
+  const [user, setUser] = useState<AzureUser | null>(null);
+
+  // Fetch user from Azure Static Web Apps auth
+  useEffect(() => {
+    fetch('/.auth/me')
+      .then(res => res.json())
+      .then(data => {
+        if (data.clientPrincipal) {
+          setUser(data.clientPrincipal);
+        }
+      })
+      .catch(err => console.error('Auth check failed:', err));
+  }, []);
 
   const links = [
     { href: "/", label: "Home" },
@@ -31,17 +44,6 @@ export default function NavBar() {
     { href: "/numbers/study", label: "Numbers Study" },
     { href: "/numbers/quiz", label: "Numbers Quiz" },
   ];
-
-  // This is a mock login/logout function for demonstration purposes
-  const handleLogin = (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent navigation
-    setUser({ name: "Doug" });
-  };
-  
-  const handleLogout = (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent navigation
-    setUser(null);
-  };
 
   return (
     <nav className="w-full bg-zinc-800 border-b-2 border-amber-400 p-3 sticky top-0 z-50">
@@ -73,14 +75,14 @@ export default function NavBar() {
             <>
               <div className="flex items-center space-x-2">
                 <UserIcon />
-                <span className="text-amber-400 font-semibold">{user.name}</span>
+                <span className="text-amber-400 font-semibold">{user.userDetails}</span>
               </div>
-              <Link href="/logout" onClick={handleLogout} className="text-amber-400 hover:text-amber-300 font-bold text-lg">
+              <a href="/.auth/logout?post_logout_redirect_uri=/" className="text-amber-400 hover:text-amber-300 font-bold text-lg">
                 Logout
-              </Link>
+              </a>
             </>
           ) : (
-            <Link href="/login" onClick={handleLogin} className="text-amber-400 hover:text-amber-300 font-bold text-lg">
+            <Link href="/" className="text-amber-400 hover:text-amber-300 font-bold text-lg">
               Login
             </Link>
           )}
@@ -120,14 +122,14 @@ export default function NavBar() {
                 <>
                   <div className="flex items-center space-x-2">
                     <UserIcon />
-                    <span className="text-amber-400 font-semibold">{user.name}</span>
+                    <span className="text-amber-400 font-semibold">{user.userDetails}</span>
                   </div>
-                  <Link href="/logout" onClick={(e) => { handleLogout(e); setIsOpen(false); }} className="text-amber-400 hover:text-amber-300 font-bold text-lg">
+                  <a href="/.auth/logout?post_logout_redirect_uri=/" onClick={() => setIsOpen(false)} className="text-amber-400 hover:text-amber-300 font-bold text-lg">
                     Logout
-                  </Link>
+                  </a>
                 </>
               ) : (
-                <Link href="/login" onClick={(e) => { handleLogin(e); setIsOpen(false); }} className="text-amber-400 hover:text-amber-300 font-bold text-lg">
+                <Link href="/" onClick={() => setIsOpen(false)} className="text-amber-400 hover:text-amber-300 font-bold text-lg">
                   Login
                 </Link>
               )}

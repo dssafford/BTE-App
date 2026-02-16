@@ -34,8 +34,10 @@ export default function NumbersQuizPage() {
   const [threshold, setThreshold] = useState(85);
   const [quizChecked, setQuizChecked] = useState(false);
 
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
   useEffect(() => {
-    fetch("http://localhost:8000/learn_numbers")
+    fetch(`${API_URL}/learn_numbers`)
       .then((res) => res.json())
       .then((data: LearnNumber[]) => setAllNumbers(data))
       .catch(console.error);

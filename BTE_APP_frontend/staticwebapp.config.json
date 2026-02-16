@@ -1,6 +1,14 @@
 {
   "routes": [
     {
+      "route": "/.auth/login/github",
+      "statusCode": 404
+    },
+    {
+      "route": "/.auth/login/google",
+      "statusCode": 404
+    },
+    {
       "route": "/",
       "allowedRoles": ["anonymous", "authenticated"]
     },

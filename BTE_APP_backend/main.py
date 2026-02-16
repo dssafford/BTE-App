@@ -11,6 +11,7 @@ from schemas import UserProgressIn, UserProgressOut, WrongAnswerIn, WrongAnswerO
 import os
 import json
 import boto3
+from urllib.parse import quote_plus
 from botocore.exceptions import ClientError
 from mangum import Mangum
 import logging
@@ -121,12 +122,15 @@ else:
             "dbname": os.getenv("DB_NAME"),
         }
 
+    # URL-encode password to handle special characters like @ and !
+    encoded_password = quote_plus(db_creds['password'])
     SQLALCHEMY_DATABASE_URL = (
-        f"mysql+pymysql://{db_creds['username']}:{db_creds['password']}"
+        f"mysql+pymysql://{db_creds['username']}:{encoded_password}"
         f"@{db_creds['host']}:{db_creds['port']}/{db_creds['dbname']}"
     )
-    # Azure MySQL requires SSL
-    connect_args = {"ssl": {"ssl_mode": "REQUIRED"}} if USE_AZURE_KEYVAULT else {}
+    # Azure MySQL requires SSL (detect Azure by host or cloud provider)
+    is_azure_mysql = CLOUD_PROVIDER == "azure" or (db_creds.get('host', '').endswith('.mysql.database.azure.com'))
+    connect_args = {"ssl": {"ssl_mode": "REQUIRED"}} if is_azure_mysql else {}
     engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args=connect_args)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -206,8 +210,16 @@ def get_behaviors(db: Session = Depends(get_db)):
 
 @app.post("/behaviors", response_model=BehaviorOut)
 def add_behavior(behavior: BehaviorIn, db: Session = Depends(get_db)):
+    # Get the next available number
+    max_number = db.query(func.max(Behavior.number)).scalar() or 0
+    next_number = max_number + 1
+
     db_behavior = Behavior(
-        name=behavior.name, symbol=behavior.symbol, number=0)
+        name=behavior.name,
+        symbol=behavior.symbol,
+        number=next_number,
+        body_region=getattr(behavior, 'body_region', None)
+    )
     db.add(db_behavior)
     print("Inserting data:", db_behavior)
     try:

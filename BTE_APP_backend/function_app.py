@@ -9,17 +9,25 @@ import os
 # Set cloud provider for Azure
 os.environ.setdefault("CLOUD_PROVIDER", "azure")
 
-# Import the FastAPI app
-from main import app
-
-# Azure Functions uses ASGI adapter for FastAPI
+# Apply nest_asyncio early
 import nest_asyncio
 nest_asyncio.apply()
 
-# Create Azure Functions app
-azure_app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
+# Create Azure Functions app (must be named 'app' for v2 programming model)
+app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
-@azure_app.route(route="{*route}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"])
+# Global variable for lazy-loaded FastAPI app
+_fastapi_app = None
+
+def get_fastapi_app():
+    """Lazy-load FastAPI app to avoid import-time database connections"""
+    global _fastapi_app
+    if _fastapi_app is None:
+        from main import app as fastapi_app
+        _fastapi_app = fastapi_app
+    return _fastapi_app
+
+@app.route(route="{*route}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"])
 async def bte_api(req: func.HttpRequest) -> func.HttpResponse:
     """
     Azure Functions HTTP trigger that forwards all requests to FastAPI app
@@ -30,8 +38,11 @@ async def bte_api(req: func.HttpRequest) -> func.HttpResponse:
         # Import ASGI adapter
         from asgi_adapter import AsgiMiddleware
 
+        # Get FastAPI app (lazy-loaded)
+        fastapi_app = get_fastapi_app()
+
         # Create ASGI adapter for FastAPI
-        asgi_middleware = AsgiMiddleware(app)
+        asgi_middleware = AsgiMiddleware(fastapi_app)
 
         # Convert Azure Functions request to ASGI and get response
         response = await asgi_middleware.handle(req)
