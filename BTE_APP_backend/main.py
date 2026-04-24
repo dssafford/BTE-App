@@ -1,13 +1,18 @@
-from fastapi import FastAPI, Depends, HTTPException, APIRouter
+from fastapi import FastAPI, Depends, HTTPException, APIRouter, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from pydantic import BaseModel
-from models import Behavior, Base, UserProgress, WrongAnswer, LearnNumber
+from models import Behavior, Base, UserProgress, WrongAnswer, LearnNumber, Deck, Card, ReviewEvent
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime, timedelta
-from schemas import UserProgressIn, UserProgressOut, WrongAnswerIn, WrongAnswerOut, LearnNumberIn, LearnNumberOut
+from schemas import (
+    UserProgressIn, UserProgressOut, WrongAnswerIn, WrongAnswerOut,
+    LearnNumberIn, LearnNumberOut,
+    DeckIn, DeckOut, CardIn, CardOut, ReviewEventIn, ReviewEventOut,
+)
 import os
 import json
 import boto3
@@ -199,6 +204,33 @@ def get_db():
         db.close()
 
 
+def get_current_user_id() -> int:
+    """Authenticated user id for deck/card/review endpoints.
+
+    TODO(Phase 1 item 9): replace this stub with Microsoft auth token
+    extraction. The frontend currently hardcodes user_id=123, so returning
+    123 here keeps parity with existing /behaviors + /learn_numbers flows
+    until item 9 wires the real claim.
+    """
+    return 123
+
+
+# Global 500 catcher (design doc section 2B — hybrid pattern: this handles
+# unexpected exceptions, individual endpoints keep raising HTTPException
+# for known 4xx conditions). HTTPException is intercepted by FastAPI's
+# built-in handler before reaching this one, so 4xx bodies still flow
+# through normally.
+@app.exception_handler(Exception)
+async def unhandled_exception_handler(request: Request, exc: Exception):
+    logger.exception(
+        "Unhandled exception on %s %s", request.method, request.url.path
+    )
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal server error"},
+    )
+
+
 @app.get("/", tags=["Root"])
 def root():
     return {"message": "Welcome to the BTE API!"}
@@ -266,10 +298,130 @@ def add_learn_number(learn_number: LearnNumberIn, db: Session = Depends(get_db))
 @app.get("/version-check")
 def version_check():
     return {
-        "message": "Lambda updated with learn_numbers endpoints", 
+        "message": "Lambda updated with learn_numbers endpoints",
         "timestamp": datetime.utcnow().isoformat(),
         "has_learn_numbers": True
     }
+
+
+# --- Deck / Card / Review endpoints (Phase 1 deck-agnostic schema) ---
+
+@app.get("/decks", response_model=List[DeckOut])
+def list_decks(
+    db: Session = Depends(get_db),
+    user_id: int = Depends(get_current_user_id),
+):
+    return (
+        db.query(Deck)
+        .filter(Deck.user_id == user_id)
+        .order_by(Deck.created_at.asc())
+        .all()
+    )
+
+
+@app.post("/decks", response_model=DeckOut, status_code=201)
+def create_deck(
+    deck_in: DeckIn,
+    db: Session = Depends(get_db),
+    user_id: int = Depends(get_current_user_id),
+):
+    deck = Deck(
+        user_id=user_id,
+        name=deck_in.name,
+        match_strategy=deck_in.match_strategy,
+        render_config=deck_in.render_config,
+    )
+    db.add(deck)
+    db.commit()
+    db.refresh(deck)
+    return deck
+
+
+@app.get("/decks/{deck_id}/cards", response_model=List[CardOut])
+def list_cards_in_deck(
+    deck_id: int,
+    db: Session = Depends(get_db),
+    user_id: int = Depends(get_current_user_id),
+):
+    deck = db.query(Deck).filter(Deck.id == deck_id).first()
+    if deck is None:
+        raise HTTPException(status_code=404, detail="Deck not found")
+    if deck.user_id != user_id:
+        raise HTTPException(status_code=403, detail="Deck belongs to another user")
+    return (
+        db.query(Card)
+        .filter(Card.deck_id == deck_id)
+        .order_by(Card.id.asc())
+        .all()
+    )
+
+
+@app.post("/cards", response_model=CardOut, status_code=201)
+def create_card(
+    card_in: CardIn,
+    db: Session = Depends(get_db),
+    user_id: int = Depends(get_current_user_id),
+):
+    deck = db.query(Deck).filter(Deck.id == card_in.deck_id).first()
+    if deck is None:
+        raise HTTPException(status_code=404, detail="Deck not found")
+    if deck.user_id != user_id:
+        raise HTTPException(status_code=403, detail="Deck belongs to another user")
+    card = Card(
+        deck_id=card_in.deck_id,
+        prompt_text=card_in.prompt_text,
+        answer_text=card_in.answer_text,
+        card_metadata=card_in.card_metadata,
+    )
+    db.add(card)
+    db.commit()
+    db.refresh(card)
+    return card
+
+
+@app.post("/reviews", response_model=ReviewEventOut, status_code=201)
+def record_review(
+    review_in: ReviewEventIn,
+    db: Session = Depends(get_db),
+    user_id: int = Depends(get_current_user_id),
+):
+    card = db.query(Card).filter(Card.id == review_in.card_id).first()
+    if card is None:
+        raise HTTPException(status_code=404, detail="Card not found")
+    # Cross-user review events aren't blocked on the server — FSRS is
+    # per-user and a user reviewing someone else's card is nonsensical
+    # but not dangerous; the review_events.user_id keeps the two users
+    # isolated in every downstream query.
+    event = ReviewEvent(
+        user_id=user_id,
+        card_id=review_in.card_id,
+        rating=review_in.rating,
+        latency_ms=review_in.latency_ms,
+    )
+    db.add(event)
+    db.commit()
+    db.refresh(event)
+    return event
+
+
+@app.get("/reviews", response_model=List[ReviewEventOut])
+def list_reviews(
+    limit: int = 500,
+    db: Session = Depends(get_db),
+    user_id: int = Depends(get_current_user_id),
+):
+    if limit <= 0 or limit > 5000:
+        raise HTTPException(
+            status_code=400, detail="limit must be between 1 and 5000"
+        )
+    return (
+        db.query(ReviewEvent)
+        .filter(ReviewEvent.user_id == user_id)
+        .order_by(ReviewEvent.reviewed_at.desc())
+        .limit(limit)
+        .all()
+    )
+
 
 router = APIRouter()
 

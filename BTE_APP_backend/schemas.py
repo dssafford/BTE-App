@@ -1,7 +1,22 @@
 from pydantic import BaseModel, Field
+from pydantic.utils import GetterDict
 from typing import Any, Dict, Optional, List
 from datetime import datetime
 from typing_extensions import Literal
+
+
+class _CardGetter(GetterDict):
+    """Maps the SQL column `metadata` (exposed on the ORM as `card_metadata`
+    because `metadata` is reserved on SQLAlchemy's declarative Base) back to
+    the `metadata` key that the JSON API uses. Needed because Pydantic v1's
+    orm_mode reads attributes by alias, and `getattr(card, 'metadata')`
+    would return SQLAlchemy's Base.metadata registry, not the JSON dict.
+    """
+
+    def get(self, key: Any, default: Any = None) -> Any:
+        if key == "metadata":
+            return getattr(self._obj, "card_metadata", default)
+        return super().get(key, default)
 
 
 class UserProgressIn(BaseModel):
@@ -105,6 +120,7 @@ class CardOut(BaseModel):
     class Config:
         orm_mode = True
         allow_population_by_field_name = True
+        getter_dict = _CardGetter
 
 
 class ReviewEventIn(BaseModel):
