@@ -1,5 +1,6 @@
 fastapi
 sqlalchemy
+alembic
 pymysql
 uvicorn
 pytz
