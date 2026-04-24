@@ -204,15 +204,80 @@ def get_db():
         db.close()
 
 
-def get_current_user_id() -> int:
-    """Authenticated user id for deck/card/review endpoints.
-
-    TODO(Phase 1 item 9): replace this stub with Microsoft auth token
-    extraction. The frontend currently hardcodes user_id=123, so returning
-    123 here keeps parity with existing /behaviors + /learn_numbers flows
-    until item 9 wires the real claim.
+def _hash_oid_to_int(oid: str) -> int:
+    """Fold a Microsoft OID (GUID string) into a stable 31-bit positive int.
+    Kept small enough to fit a SQLite/MySQL INTEGER and to avoid sign
+    issues on drivers that interpret the high bit as negative. SHA-256
+    truncation trades reversibility for schema compatibility — fine for
+    Phase 1 because a reverse map isn't required. A proper users table
+    (OID -> surrogate int) is deferred until multi-user ships.
     """
-    return 123
+    import hashlib
+    digest = hashlib.sha256(oid.encode("utf-8")).digest()
+    return int.from_bytes(digest[:4], "big") & 0x7FFFFFFF
+
+
+def _decode_client_principal(header_value: str) -> dict | None:
+    """Decode the base64-encoded JSON blob that Azure Static Web Apps puts
+    in x-ms-client-principal (and that the frontend mirrors in
+    x-user-principal when the backend isn't behind the SWA linked-API
+    proxy). Returns None if the header is malformed rather than raising,
+    so the caller can choose its own 401 semantics.
+    """
+    import base64
+    import json
+    try:
+        raw = base64.b64decode(header_value)
+        parsed = json.loads(raw)
+        return parsed if isinstance(parsed, dict) else None
+    except Exception:
+        return None
+
+
+def get_current_user_id(request: Request) -> int:
+    """Resolve the current user id from the incoming request (Phase 1 item 9).
+
+    Precedence (production-first):
+      1. x-ms-client-principal     — added by Azure Static Web Apps when
+                                     the backend is reached via SWA's
+                                     linked-API reverse proxy. Trusted.
+      2. x-user-principal          — same shape, but set by the frontend
+                                     when the backend is called directly
+                                     (not through the SWA proxy). Trusted
+                                     only in solo-user deployments; a
+                                     malicious client could spoof this
+                                     header to impersonate another OID.
+                                     Acceptable for the current audience
+                                     of one; a future multi-user pass
+                                     upgrades this to real JWT validation.
+      3. DEV_FALLBACK_USER_ID env  — lets local dev and the existing
+                                     hardcoded frontend quiz flow keep
+                                     working without an auth context.
+      4. Otherwise HTTP 401.
+
+    The returned int is a stable SHA-256 fold of the MS OID so it fits
+    the INTEGER user_id columns already in the schema without a new
+    users table.
+    """
+    for header_name in ("x-ms-client-principal", "x-user-principal"):
+        raw = request.headers.get(header_name)
+        if not raw:
+            continue
+        principal = _decode_client_principal(raw)
+        if not principal:
+            continue
+        oid = principal.get("userId") or principal.get("user_id")
+        if oid:
+            return _hash_oid_to_int(str(oid))
+
+    fallback = os.getenv("DEV_FALLBACK_USER_ID")
+    if fallback:
+        try:
+            return int(fallback)
+        except ValueError:
+            pass
+
+    raise HTTPException(status_code=401, detail="Not authenticated")
 
 
 # Global 500 catcher (design doc section 2B — hybrid pattern: this handles

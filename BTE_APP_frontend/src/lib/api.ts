@@ -39,20 +39,84 @@ function ensureUrl(): string {
   return API_URL;
 }
 
+// --- Auth header helpers (Phase 1 item 9) ---
+//
+// When the backend is reached via Azure Static Web Apps' linked-API proxy,
+// SWA adds x-ms-client-principal automatically and this helper is a no-op
+// at the network layer. When the frontend calls the backend directly
+// (configured via NEXT_PUBLIC_API_URL at a different origin), we mirror
+// the SWA header shape in x-user-principal so the backend's
+// get_current_user_id dep has something to read. The backend prefers the
+// SWA-provided header when both exist.
+//
+// clientPrincipal is fetched once from /.auth/me and cached in module
+// scope. Call `primeAuth()` on app mount (the home page already does this)
+// so the first endpoint call doesn't race the auth lookup. If
+// primeAuth() hasn't run, request functions fall back to a just-in-time
+// fetch — slower on first call but never blocks indefinitely.
+
+interface ClientPrincipal {
+  userId: string;
+  userDetails?: string;
+  identityProvider?: string;
+  userRoles?: string[];
+}
+
+let cachedPrincipal: ClientPrincipal | null | undefined = undefined; // undefined = not loaded yet
+
+export async function primeAuth(): Promise<ClientPrincipal | null> {
+  if (cachedPrincipal !== undefined) return cachedPrincipal;
+  try {
+    const res = await fetch("/.auth/me");
+    if (!res.ok) {
+      cachedPrincipal = null;
+      return null;
+    }
+    const data = await res.json();
+    cachedPrincipal = (data?.clientPrincipal as ClientPrincipal | null) ?? null;
+  } catch {
+    cachedPrincipal = null;
+  }
+  return cachedPrincipal;
+}
+
+function encodePrincipal(p: ClientPrincipal): string {
+  // Base64 of the JSON form — same encoding SWA uses for
+  // x-ms-client-principal.
+  if (typeof window !== "undefined" && typeof btoa === "function") {
+    return btoa(JSON.stringify(p));
+  }
+  // Node fallback for tests / SSR.
+  return Buffer.from(JSON.stringify(p)).toString("base64");
+}
+
+async function authHeaders(): Promise<Record<string, string>> {
+  const p = await primeAuth();
+  if (!p) return {};
+  return { "x-user-principal": encodePrincipal(p) };
+}
+
+async function authedFetch(path: string, init: RequestInit = {}): Promise<Response> {
+  const headers = new Headers(init.headers);
+  const auth = await authHeaders();
+  for (const [k, v] of Object.entries(auth)) headers.set(k, v);
+  return fetch(`${ensureUrl()}${path}`, { ...init, headers });
+}
+
 export async function fetchDecks(): Promise<Deck[]> {
-  const res = await fetch(`${ensureUrl()}/decks`);
+  const res = await authedFetch("/decks");
   if (!res.ok) throw new Error(`GET /decks failed: ${res.status}`);
   return res.json();
 }
 
 export async function fetchCardsForDeck(deckId: number): Promise<Card[]> {
-  const res = await fetch(`${ensureUrl()}/decks/${deckId}/cards`);
+  const res = await authedFetch(`/decks/${deckId}/cards`);
   if (!res.ok) throw new Error(`GET /decks/${deckId}/cards failed: ${res.status}`);
   return res.json();
 }
 
 export async function fetchReviews(limit = 1000): Promise<ReviewEvent[]> {
-  const res = await fetch(`${ensureUrl()}/reviews?limit=${limit}`);
+  const res = await authedFetch(`/reviews?limit=${limit}`);
   if (!res.ok) throw new Error(`GET /reviews failed: ${res.status}`);
   return res.json();
 }
@@ -62,7 +126,7 @@ export async function recordReview(input: {
   rating: number;
   latency_ms?: number | null;
 }): Promise<ReviewEvent> {
-  const res = await fetch(`${ensureUrl()}/reviews`, {
+  const res = await authedFetch("/reviews", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
