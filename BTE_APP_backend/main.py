@@ -240,8 +240,38 @@ def get_behaviors(db: Session = Depends(get_db)):
     return db.query(Behavior).with_entities(Behavior.name, Behavior.symbol, Behavior.body_region, Behavior.description).all()
 
 
+SYSTEM_DECK_BEHAVIORS = ("Behavioral Profiles", "fuzzy")
+SYSTEM_DECK_NUMBERS = ("Numbers", "exact")
+
+
+def _get_or_create_system_deck(
+    db: Session, user_id: int, name: str, match_strategy: str
+) -> Deck:
+    """Find or create one of the built-in decks that shadow-write populates
+    alongside the legacy behaviors/learn_numbers tables. The deck is owned
+    by the current user; it's created inside the caller's open transaction
+    (db.flush() only — no commit here) so a failed dual-insert rolls back
+    the deck row too and leaves the user_id free to retry.
+    """
+    deck = (
+        db.query(Deck)
+        .filter(Deck.user_id == user_id, Deck.name == name)
+        .first()
+    )
+    if deck is not None:
+        return deck
+    deck = Deck(user_id=user_id, name=name, match_strategy=match_strategy)
+    db.add(deck)
+    db.flush()
+    return deck
+
+
 @app.post("/behaviors", response_model=BehaviorOut)
-def add_behavior(behavior: BehaviorIn, db: Session = Depends(get_db)):
+def add_behavior(
+    behavior: BehaviorIn,
+    db: Session = Depends(get_db),
+    user_id: int = Depends(get_current_user_id),
+):
     # Get the next available number
     max_number = db.query(func.max(Behavior.number)).scalar() or 0
     next_number = max_number + 1
@@ -253,14 +283,26 @@ def add_behavior(behavior: BehaviorIn, db: Session = Depends(get_db)):
         body_region=getattr(behavior, 'body_region', None)
     )
     db.add(db_behavior)
-    print("Inserting data:", db_behavior)
     try:
+        # Shadow-write (design doc Phase 1 item 5 / section 1D): dual-insert
+        # into the new cards table alongside the legacy behaviors row, both
+        # under one commit so a failure rolls back both writes.
+        deck = _get_or_create_system_deck(db, user_id, *SYSTEM_DECK_BEHAVIORS)
+        shadow_card = Card(
+            deck_id=deck.id,
+            prompt_text=db_behavior.symbol,
+            answer_text=db_behavior.name,
+            card_metadata={
+                "source": "behaviors",
+                "number": next_number,
+                "body_region": db_behavior.body_region,
+            },
+        )
+        db.add(shadow_card)
         db.commit()
         db.refresh(db_behavior)
-        print("Rows affected:", db.new)
-        print("dbcommit success")
     except Exception as e:
-        print("DB error:", e)
+        logger.exception("POST /behaviors failed; rolling back")
         db.rollback()
         raise HTTPException(
             status_code=400, detail="Behavior already exists or invalid data")
@@ -284,13 +326,32 @@ def get_random_learn_numbers(count: int, db: Session = Depends(get_db)):
     return db.query(LearnNumber).order_by(func.random()).limit(count).all()
 
 @app.post("/learn_numbers", response_model=LearnNumberOut)
-def add_learn_number(learn_number: LearnNumberIn, db: Session = Depends(get_db)):
+def add_learn_number(
+    learn_number: LearnNumberIn,
+    db: Session = Depends(get_db),
+    user_id: int = Depends(get_current_user_id),
+):
     db_learn_number = LearnNumber(number=learn_number.number, name=learn_number.name)
     db.add(db_learn_number)
     try:
+        # Shadow-write into the Numbers deck (Phase 1 item 5). Single
+        # commit covers both the legacy learn_numbers row and the new
+        # cards row.
+        deck = _get_or_create_system_deck(db, user_id, *SYSTEM_DECK_NUMBERS)
+        shadow_card = Card(
+            deck_id=deck.id,
+            prompt_text=str(db_learn_number.number),
+            answer_text=db_learn_number.name,
+            card_metadata={
+                "source": "learn_numbers",
+                "number": db_learn_number.number,
+            },
+        )
+        db.add(shadow_card)
         db.commit()
         db.refresh(db_learn_number)
     except Exception as e:
+        logger.exception("POST /learn_numbers failed; rolling back")
         db.rollback()
         raise HTTPException(status_code=400, detail="Could not add learn number: " + str(e))
     return db_learn_number
