@@ -68,13 +68,33 @@ def run_migrations_offline() -> None:
         context.run_migrations()
 
 
+def _connect_args(url: str) -> dict:
+    """Azure MySQL ("Flexible Server" and Single Server) enforces
+    require_secure_transport=ON, which pymysql needs connect_args={"ssl": ...}
+    to satisfy. Mirrors the main.py handling so alembic and the app agree
+    on connection settings. SQLite + non-Azure MySQL pass through empty.
+    """
+    if not url.startswith("mysql"):
+        return {}
+    host = ""
+    if "@" in url:
+        host = url.rsplit("@", 1)[1].split("/", 1)[0].split(":", 1)[0]
+    is_azure = (
+        os.getenv("CLOUD_PROVIDER", "").lower() == "azure"
+        or host.endswith(".mysql.database.azure.com")
+    )
+    return {"ssl": {"ssl_mode": "REQUIRED"}} if is_azure else {}
+
+
 def run_migrations_online() -> None:
+    url = _build_database_url()
     configuration = config.get_section(config.config_ini_section, {})
-    configuration["sqlalchemy.url"] = _build_database_url()
+    configuration["sqlalchemy.url"] = url
     connectable = engine_from_config(
         configuration,
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
+        connect_args=_connect_args(url),
     )
     with connectable.connect() as connection:
         context.configure(
