@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
-import { useParams } from "next/navigation";
+import React, { Suspense, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { matchAnswer } from "@/lib/match";
 import {
   fetchCardsForDeck,
@@ -11,6 +11,12 @@ import {
   type Card,
   type Deck,
 } from "@/lib/api";
+
+// Moved from src/app/study/[deckId]/page.tsx: Azure Static Web Apps deploys
+// the frontend under `output: 'export'`, which cannot use dynamic path
+// segments without a build-time list of deck ids. Deck ids are per-user
+// and runtime-created, so the route is parameterized by query string
+// instead (/session?deckId=N). Home-page deck tiles link here directly.
 
 function shuffle<T>(array: T[]): T[] {
   const arr = [...array];
@@ -24,9 +30,10 @@ function shuffle<T>(array: T[]): T[] {
 const COUNT_OPTIONS = ["5", "10", "20", "all"] as const;
 type CountOption = (typeof COUNT_OPTIONS)[number];
 
-export default function StudyDeckPage() {
-  const params = useParams<{ deckId: string }>();
-  const deckId = Number(params?.deckId);
+function SessionInner() {
+  const searchParams = useSearchParams();
+  const deckIdRaw = searchParams?.get("deckId");
+  const deckId = deckIdRaw ? Number(deckIdRaw) : NaN;
 
   const [deck, setDeck] = useState<Deck | null>(null);
   const [allCards, setAllCards] = useState<Card[]>([]);
@@ -40,8 +47,6 @@ export default function StudyDeckPage() {
   const [threshold, setThreshold] = useState(80);
   const [loadError, setLoadError] = useState<string | null>(null);
 
-  // Deck metadata. Fetched by filtering the user's deck list — avoids
-  // a new single-deck endpoint for now.
   useEffect(() => {
     if (!Number.isFinite(deckId)) return;
     let cancelled = false;
@@ -113,9 +118,6 @@ export default function StudyDeckPage() {
     setResults(perCard.map((r) => r.correct));
     setChecked(true);
 
-    // Emit a review event per card. FSRS Rating.Good for correct,
-    // Rating.Again for incorrect. Latency is null in batch mode — /walk
-    // (Phase 2) will measure it properly.
     await Promise.allSettled(
       perCard.map(({ card, correct }) =>
         recordReview({
@@ -127,14 +129,20 @@ export default function StudyDeckPage() {
     );
   };
 
-  // Re-evaluate correctness when the fuzzy threshold is adjusted after
-  // checking, without re-POSTing review events.
   useEffect(() => {
     if (!checked || !deck || deck.match_strategy !== "fuzzy") return;
     setResults(
       scores.map((s) => (typeof s === "number" ? s >= threshold : null))
     );
   }, [threshold]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (!Number.isFinite(deckId)) {
+    return (
+      <main className="min-h-screen bg-zinc-900 p-8 font-sans text-amber-400">
+        <p className="text-red-400">Missing or invalid deckId query param.</p>
+      </main>
+    );
+  }
 
   if (loadError) {
     return (
@@ -247,9 +255,7 @@ export default function StudyDeckPage() {
                   />
                   {result !== null && (
                     <div className="mt-2 flex items-center gap-3 text-sm">
-                      <span
-                        className={result ? "text-green-400" : "text-red-400"}
-                      >
+                      <span className={result ? "text-green-400" : "text-red-400"}>
                         {result ? "Correct" : `Answer: ${card.answer_text}`}
                       </span>
                       {typeof score === "number" && (
@@ -273,5 +279,21 @@ export default function StudyDeckPage() {
         </form>
       </div>
     </main>
+  );
+}
+
+// Next.js 15 requires useSearchParams to be inside a <Suspense> boundary
+// so the route can pre-render. The static-export build fails otherwise.
+export default function SessionPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen bg-zinc-900 p-8 font-sans text-amber-400">
+          <p>Loading…</p>
+        </main>
+      }
+    >
+      <SessionInner />
+    </Suspense>
   );
 }
