@@ -224,7 +224,18 @@ def backfill_wrongs_to_review_events(db: Session) -> Tuple[int, int, int]:
 
 def run(user_id: int, dry_run: bool) -> dict:
     url = _build_database_url()
-    engine = create_engine(url, future=True)
+    # Azure MySQL requires SSL (require_secure_transport=ON). Same
+    # detection main.py and alembic/env.py use.
+    connect_args = {}
+    if url.startswith("mysql"):
+        host = url.rsplit("@", 1)[1].split("/", 1)[0].split(":", 1)[0] if "@" in url else ""
+        is_azure = (
+            os.getenv("CLOUD_PROVIDER", "").lower() == "azure"
+            or host.endswith(".mysql.database.azure.com")
+        )
+        if is_azure:
+            connect_args = {"ssl": {"ssl_mode": "REQUIRED"}}
+    engine = create_engine(url, future=True, connect_args=connect_args)
     # Don't run create_all here — alembic owns the schema. Caller must have
     # already run `alembic upgrade head`.
     SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
