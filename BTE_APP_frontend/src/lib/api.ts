@@ -51,6 +51,12 @@ export async function fetchCardsForDeck(deckId: number): Promise<Card[]> {
   return res.json();
 }
 
+export async function fetchReviews(limit = 1000): Promise<ReviewEvent[]> {
+  const res = await fetch(`${ensureUrl()}/reviews?limit=${limit}`);
+  if (!res.ok) throw new Error(`GET /reviews failed: ${res.status}`);
+  return res.json();
+}
+
 export async function recordReview(input: {
   card_id: number;
   rating: number;
