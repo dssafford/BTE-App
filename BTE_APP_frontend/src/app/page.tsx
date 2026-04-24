@@ -69,7 +69,7 @@ export default function Home() {
         </header>
 
         {tileError ? (
-          <p className="text-red-400">Couldn't load decks: {tileError}</p>
+          <p className="text-red-400">Failed to load decks: {tileError}</p>
         ) : tiles === null ? (
           <p className="text-zinc-400">Loading your atlas…</p>
         ) : tiles.length === 0 ? (
@@ -90,7 +90,7 @@ function DeckTile({ metrics }: { metrics: DeckTileMetrics }) {
   const { deck, cardCount, accuracy7d, lastReviewAt } = metrics;
   return (
     <Link
-      href={`/study/${deck.id}`}
+      href={`/session?deckId=${deck.id}`}
       className="block rounded-xl border border-amber-400/60 bg-zinc-800 p-6 transition-transform hover:scale-[1.01]"
       style={{
         opacity: tileOpacity(accuracy7d),
