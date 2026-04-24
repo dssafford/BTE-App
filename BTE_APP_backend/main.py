@@ -1,13 +1,18 @@
-from fastapi import FastAPI, Depends, HTTPException, APIRouter
+from fastapi import FastAPI, Depends, HTTPException, APIRouter, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from pydantic import BaseModel
-from models import Behavior, Base, UserProgress, WrongAnswer, LearnNumber
+from models import Behavior, Base, UserProgress, WrongAnswer, LearnNumber, Deck, Card, ReviewEvent
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime, timedelta
-from schemas import UserProgressIn, UserProgressOut, WrongAnswerIn, WrongAnswerOut, LearnNumberIn, LearnNumberOut
+from schemas import (
+    UserProgressIn, UserProgressOut, WrongAnswerIn, WrongAnswerOut,
+    LearnNumberIn, LearnNumberOut,
+    DeckIn, DeckOut, CardIn, CardOut, ReviewEventIn, ReviewEventOut,
+)
 import os
 import json
 import boto3
@@ -199,6 +204,98 @@ def get_db():
         db.close()
 
 
+def _hash_oid_to_int(oid: str) -> int:
+    """Fold a Microsoft OID (GUID string) into a stable 31-bit positive int.
+    Kept small enough to fit a SQLite/MySQL INTEGER and to avoid sign
+    issues on drivers that interpret the high bit as negative. SHA-256
+    truncation trades reversibility for schema compatibility — fine for
+    Phase 1 because a reverse map isn't required. A proper users table
+    (OID -> surrogate int) is deferred until multi-user ships.
+    """
+    import hashlib
+    digest = hashlib.sha256(oid.encode("utf-8")).digest()
+    return int.from_bytes(digest[:4], "big") & 0x7FFFFFFF
+
+
+def _decode_client_principal(header_value: str) -> dict | None:
+    """Decode the base64-encoded JSON blob that Azure Static Web Apps puts
+    in x-ms-client-principal (and that the frontend mirrors in
+    x-user-principal when the backend isn't behind the SWA linked-API
+    proxy). Returns None if the header is malformed rather than raising,
+    so the caller can choose its own 401 semantics.
+    """
+    import base64
+    import json
+    try:
+        raw = base64.b64decode(header_value)
+        parsed = json.loads(raw)
+        return parsed if isinstance(parsed, dict) else None
+    except Exception:
+        return None
+
+
+def get_current_user_id(request: Request) -> int:
+    """Resolve the current user id from the incoming request (Phase 1 item 9).
+
+    Precedence (production-first):
+      1. x-ms-client-principal     — added by Azure Static Web Apps when
+                                     the backend is reached via SWA's
+                                     linked-API reverse proxy. Trusted.
+      2. x-user-principal          — same shape, but set by the frontend
+                                     when the backend is called directly
+                                     (not through the SWA proxy). Trusted
+                                     only in solo-user deployments; a
+                                     malicious client could spoof this
+                                     header to impersonate another OID.
+                                     Acceptable for the current audience
+                                     of one; a future multi-user pass
+                                     upgrades this to real JWT validation.
+      3. DEV_FALLBACK_USER_ID env  — lets local dev and the existing
+                                     hardcoded frontend quiz flow keep
+                                     working without an auth context.
+      4. Otherwise HTTP 401.
+
+    The returned int is a stable SHA-256 fold of the MS OID so it fits
+    the INTEGER user_id columns already in the schema without a new
+    users table.
+    """
+    for header_name in ("x-ms-client-principal", "x-user-principal"):
+        raw = request.headers.get(header_name)
+        if not raw:
+            continue
+        principal = _decode_client_principal(raw)
+        if not principal:
+            continue
+        oid = principal.get("userId") or principal.get("user_id")
+        if oid:
+            return _hash_oid_to_int(str(oid))
+
+    fallback = os.getenv("DEV_FALLBACK_USER_ID")
+    if fallback:
+        try:
+            return int(fallback)
+        except ValueError:
+            pass
+
+    raise HTTPException(status_code=401, detail="Not authenticated")
+
+
+# Global 500 catcher (design doc section 2B — hybrid pattern: this handles
+# unexpected exceptions, individual endpoints keep raising HTTPException
+# for known 4xx conditions). HTTPException is intercepted by FastAPI's
+# built-in handler before reaching this one, so 4xx bodies still flow
+# through normally.
+@app.exception_handler(Exception)
+async def unhandled_exception_handler(request: Request, exc: Exception):
+    logger.exception(
+        "Unhandled exception on %s %s", request.method, request.url.path
+    )
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal server error"},
+    )
+
+
 @app.get("/", tags=["Root"])
 def root():
     return {"message": "Welcome to the BTE API!"}
@@ -208,8 +305,38 @@ def get_behaviors(db: Session = Depends(get_db)):
     return db.query(Behavior).with_entities(Behavior.name, Behavior.symbol, Behavior.body_region, Behavior.description).all()
 
 
+SYSTEM_DECK_BEHAVIORS = ("Behavioral Profiles", "fuzzy")
+SYSTEM_DECK_NUMBERS = ("Numbers", "exact")
+
+
+def _get_or_create_system_deck(
+    db: Session, user_id: int, name: str, match_strategy: str
+) -> Deck:
+    """Find or create one of the built-in decks that shadow-write populates
+    alongside the legacy behaviors/learn_numbers tables. The deck is owned
+    by the current user; it's created inside the caller's open transaction
+    (db.flush() only — no commit here) so a failed dual-insert rolls back
+    the deck row too and leaves the user_id free to retry.
+    """
+    deck = (
+        db.query(Deck)
+        .filter(Deck.user_id == user_id, Deck.name == name)
+        .first()
+    )
+    if deck is not None:
+        return deck
+    deck = Deck(user_id=user_id, name=name, match_strategy=match_strategy)
+    db.add(deck)
+    db.flush()
+    return deck
+
+
 @app.post("/behaviors", response_model=BehaviorOut)
-def add_behavior(behavior: BehaviorIn, db: Session = Depends(get_db)):
+def add_behavior(
+    behavior: BehaviorIn,
+    db: Session = Depends(get_db),
+    user_id: int = Depends(get_current_user_id),
+):
     # Get the next available number
     max_number = db.query(func.max(Behavior.number)).scalar() or 0
     next_number = max_number + 1
@@ -221,14 +348,26 @@ def add_behavior(behavior: BehaviorIn, db: Session = Depends(get_db)):
         body_region=getattr(behavior, 'body_region', None)
     )
     db.add(db_behavior)
-    print("Inserting data:", db_behavior)
     try:
+        # Shadow-write (design doc Phase 1 item 5 / section 1D): dual-insert
+        # into the new cards table alongside the legacy behaviors row, both
+        # under one commit so a failure rolls back both writes.
+        deck = _get_or_create_system_deck(db, user_id, *SYSTEM_DECK_BEHAVIORS)
+        shadow_card = Card(
+            deck_id=deck.id,
+            prompt_text=db_behavior.symbol,
+            answer_text=db_behavior.name,
+            card_metadata={
+                "source": "behaviors",
+                "number": next_number,
+                "body_region": db_behavior.body_region,
+            },
+        )
+        db.add(shadow_card)
         db.commit()
         db.refresh(db_behavior)
-        print("Rows affected:", db.new)
-        print("dbcommit success")
     except Exception as e:
-        print("DB error:", e)
+        logger.exception("POST /behaviors failed; rolling back")
         db.rollback()
         raise HTTPException(
             status_code=400, detail="Behavior already exists or invalid data")
@@ -252,13 +391,32 @@ def get_random_learn_numbers(count: int, db: Session = Depends(get_db)):
     return db.query(LearnNumber).order_by(func.random()).limit(count).all()
 
 @app.post("/learn_numbers", response_model=LearnNumberOut)
-def add_learn_number(learn_number: LearnNumberIn, db: Session = Depends(get_db)):
+def add_learn_number(
+    learn_number: LearnNumberIn,
+    db: Session = Depends(get_db),
+    user_id: int = Depends(get_current_user_id),
+):
     db_learn_number = LearnNumber(number=learn_number.number, name=learn_number.name)
     db.add(db_learn_number)
     try:
+        # Shadow-write into the Numbers deck (Phase 1 item 5). Single
+        # commit covers both the legacy learn_numbers row and the new
+        # cards row.
+        deck = _get_or_create_system_deck(db, user_id, *SYSTEM_DECK_NUMBERS)
+        shadow_card = Card(
+            deck_id=deck.id,
+            prompt_text=str(db_learn_number.number),
+            answer_text=db_learn_number.name,
+            card_metadata={
+                "source": "learn_numbers",
+                "number": db_learn_number.number,
+            },
+        )
+        db.add(shadow_card)
         db.commit()
         db.refresh(db_learn_number)
     except Exception as e:
+        logger.exception("POST /learn_numbers failed; rolling back")
         db.rollback()
         raise HTTPException(status_code=400, detail="Could not add learn number: " + str(e))
     return db_learn_number
@@ -266,10 +424,130 @@ def add_learn_number(learn_number: LearnNumberIn, db: Session = Depends(get_db))
 @app.get("/version-check")
 def version_check():
     return {
-        "message": "Lambda updated with learn_numbers endpoints", 
+        "message": "Lambda updated with learn_numbers endpoints",
         "timestamp": datetime.utcnow().isoformat(),
         "has_learn_numbers": True
     }
+
+
+# --- Deck / Card / Review endpoints (Phase 1 deck-agnostic schema) ---
+
+@app.get("/decks", response_model=List[DeckOut])
+def list_decks(
+    db: Session = Depends(get_db),
+    user_id: int = Depends(get_current_user_id),
+):
+    return (
+        db.query(Deck)
+        .filter(Deck.user_id == user_id)
+        .order_by(Deck.created_at.asc())
+        .all()
+    )
+
+
+@app.post("/decks", response_model=DeckOut, status_code=201)
+def create_deck(
+    deck_in: DeckIn,
+    db: Session = Depends(get_db),
+    user_id: int = Depends(get_current_user_id),
+):
+    deck = Deck(
+        user_id=user_id,
+        name=deck_in.name,
+        match_strategy=deck_in.match_strategy,
+        render_config=deck_in.render_config,
+    )
+    db.add(deck)
+    db.commit()
+    db.refresh(deck)
+    return deck
+
+
+@app.get("/decks/{deck_id}/cards", response_model=List[CardOut])
+def list_cards_in_deck(
+    deck_id: int,
+    db: Session = Depends(get_db),
+    user_id: int = Depends(get_current_user_id),
+):
+    deck = db.query(Deck).filter(Deck.id == deck_id).first()
+    if deck is None:
+        raise HTTPException(status_code=404, detail="Deck not found")
+    if deck.user_id != user_id:
+        raise HTTPException(status_code=403, detail="Deck belongs to another user")
+    return (
+        db.query(Card)
+        .filter(Card.deck_id == deck_id)
+        .order_by(Card.id.asc())
+        .all()
+    )
+
+
+@app.post("/cards", response_model=CardOut, status_code=201)
+def create_card(
+    card_in: CardIn,
+    db: Session = Depends(get_db),
+    user_id: int = Depends(get_current_user_id),
+):
+    deck = db.query(Deck).filter(Deck.id == card_in.deck_id).first()
+    if deck is None:
+        raise HTTPException(status_code=404, detail="Deck not found")
+    if deck.user_id != user_id:
+        raise HTTPException(status_code=403, detail="Deck belongs to another user")
+    card = Card(
+        deck_id=card_in.deck_id,
+        prompt_text=card_in.prompt_text,
+        answer_text=card_in.answer_text,
+        card_metadata=card_in.card_metadata,
+    )
+    db.add(card)
+    db.commit()
+    db.refresh(card)
+    return card
+
+
+@app.post("/reviews", response_model=ReviewEventOut, status_code=201)
+def record_review(
+    review_in: ReviewEventIn,
+    db: Session = Depends(get_db),
+    user_id: int = Depends(get_current_user_id),
+):
+    card = db.query(Card).filter(Card.id == review_in.card_id).first()
+    if card is None:
+        raise HTTPException(status_code=404, detail="Card not found")
+    # Cross-user review events aren't blocked on the server — FSRS is
+    # per-user and a user reviewing someone else's card is nonsensical
+    # but not dangerous; the review_events.user_id keeps the two users
+    # isolated in every downstream query.
+    event = ReviewEvent(
+        user_id=user_id,
+        card_id=review_in.card_id,
+        rating=review_in.rating,
+        latency_ms=review_in.latency_ms,
+    )
+    db.add(event)
+    db.commit()
+    db.refresh(event)
+    return event
+
+
+@app.get("/reviews", response_model=List[ReviewEventOut])
+def list_reviews(
+    limit: int = 500,
+    db: Session = Depends(get_db),
+    user_id: int = Depends(get_current_user_id),
+):
+    if limit <= 0 or limit > 5000:
+        raise HTTPException(
+            status_code=400, detail="limit must be between 1 and 5000"
+        )
+    return (
+        db.query(ReviewEvent)
+        .filter(ReviewEvent.user_id == user_id)
+        .order_by(ReviewEvent.reviewed_at.desc())
+        .limit(limit)
+        .all()
+    )
+
 
 router = APIRouter()
 

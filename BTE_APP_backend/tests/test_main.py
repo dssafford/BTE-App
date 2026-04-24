@@ -1,9 +1,11 @@
 from fastapi.testclient import TestClient
-from BTE_App.main import app
+
+from main import app
 
 client = TestClient(app)
 
-def test_read_main():
+
+def test_root():
     response = client.get("/")
     assert response.status_code == 200
-    assert response.json() == {"message": "Hello World"}
+    assert response.json() == {"message": "Welcome to the BTE API!"}

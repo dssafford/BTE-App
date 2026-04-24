@@ -1,0 +1,1508 @@
+{
+  "deck_name": "Navy SEAL Leadership",
+  "match_strategy": "fuzzy",
+  "render_config": {
+    "fields": [
+      "source",
+      "category"
+    ]
+  },
+  "cards": [
+    {
+      "prompt": "What is Extreme Ownership?",
+      "answer": "Take complete responsibility for everything in your world",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What does 'Discipline Equals Freedom' mean?",
+      "answer": "Structured daily habits create the freedom to perform at your best",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What does 'Embrace the Suck' mean?",
+      "answer": "Discomfort is not a signal to stop\u2014it's a signal you're growing",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What is the 40% Rule?",
+      "answer": "When your mind says you're done, you're only at 40% of your actual capacity",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "Why 'Make Your Bed' each morning?",
+      "answer": "Start the day by completing a small task with precision to build momentum",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "mantra"
+      }
+    },
+    {
+      "prompt": "What is Decentralized Command?",
+      "answer": "Push decision-making authority to the people closest to the problem",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What is the SEAL rule about communication complexity?",
+      "answer": "If a plan can't be explained simply, it's too complicated",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What does 'Default Aggressive' mean?",
+      "answer": "When in doubt, take action\u2014bias toward movement over paralysis",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What is 'Prioritize and Execute'?",
+      "answer": "Identify the highest-priority problem, solve it, then move to the next",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What is the SEAL view on teamwork vs. individual glory?",
+      "answer": "The mission always comes before the individual",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What is box breathing?",
+      "answer": "4-count inhale, 4-count hold, 4-count exhale, 4-count hold",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What does 'Check Your Ego' mean?",
+      "answer": "Ego prevents learning and destroys trust\u2014pursue truth, not self-protection",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What is the SEAL saying about plans and reality?",
+      "answer": "No plan survives first contact with the enemy",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "mantra"
+      }
+    },
+    {
+      "prompt": "Why is physical fitness foundational for leaders?",
+      "answer": "It's the foundation for mental toughness and stress management",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What principle captures continuous 1% improvement?",
+      "answer": "Relentless self-improvement (Kaizen)",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What is mental rehearsal / visualization called in SEAL culture?",
+      "answer": "Chair flying",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "acronym"
+      }
+    },
+    {
+      "prompt": "What does 'Lead Up the Chain' mean?",
+      "answer": "Communicate ground truth to leaders even without being asked",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What is an After-Action Review (AAR)?",
+      "answer": "A brutally honest debrief of what went right, wrong, and what to change",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "acronym"
+      }
+    },
+    {
+      "prompt": "What is situational awareness?",
+      "answer": "Constantly scanning your environment to anticipate what's coming",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What is compartmentalization under stress?",
+      "answer": "Strategic sequencing of what gets your attention when",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What is the 'swim buddy' system?",
+      "answer": "Accountability partnership\u2014you're never alone and always have someone's back",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What is emotional control under fire?",
+      "answer": "Feeling strong emotions without being controlled by them",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "How do SEALs build resilience?",
+      "answer": "Systematic exposure to increasing levels of controlled stress",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What is communication redundancy?",
+      "answer": "Never have a single point of communication failure",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What does 'Standards, Not Moods' mean?",
+      "answer": "Performance is governed by standards, not how you feel that day",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "mantra"
+      }
+    },
+    {
+      "prompt": "What does 'Win the Morning' mean?",
+      "answer": "How you start the day determines its trajectory",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "mantra"
+      }
+    },
+    {
+      "prompt": "Why do SEALs act on incomplete information?",
+      "answer": "Make good decisions with 60-70% of information and adjust as you learn",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What does 'Never Ring the Bell' mean?",
+      "answer": "Decide you will not quit before the challenge begins",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "mantra"
+      }
+    },
+    {
+      "prompt": "What is controlled aggression?",
+      "answer": "Bringing intensity with precision and judgment",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "Why must you know your 'Why'?",
+      "answer": "When suffering peaks, purpose carries you through\u2014not technique",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What are micro-goals under stress?",
+      "answer": "Break overwhelming challenges into the smallest possible next step",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What does 'Train Like You Fight' mean?",
+      "answer": "Practice conditions should mirror performance conditions",
+      "metadata": {
+        "source": "Module 1: Leadership Foundations",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What are the two components that build trust on a SEAL team?",
+      "answer": "Competence and character",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is economy of motion?",
+      "answer": "No wasted movement, energy, or words\u2014every action serves the objective",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "Why do SEALs say 'Rest Is a Weapon'?",
+      "answer": "Sleep and recovery are force multipliers, not indulgences",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "mantra"
+      }
+    },
+    {
+      "prompt": "What is 'Violence of Action'?",
+      "answer": "Execute with overwhelming speed and force when committed",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What reduces fear more than anything else?",
+      "answer": "Preparation",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What does 'Protect the Asset' mean for a leader?",
+      "answer": "Taking care of yourself is a prerequisite for serving others",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What does ROE stand for?",
+      "answer": "Rules of Engagement",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "acronym"
+      }
+    },
+    {
+      "prompt": "What is tactical patience?",
+      "answer": "The discipline to act at the right moment, not the first moment",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "Why do SEALs master basics before advanced tactics?",
+      "answer": "Advanced techniques built on weak basics collapse under pressure",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What does 'Leave every place better than you found it' mean?",
+      "answer": "Your greatest impact is often what remains after you've moved on",
+      "metadata": {
+        "source": "50 SEAL Principles",
+        "category": "mantra"
+      }
+    },
+    {
+      "prompt": "What question separates reactive from structured leadership?",
+      "answer": "Which side of the door do you want to be on?",
+      "metadata": {
+        "source": "Module 1: Leadership Foundations",
+        "category": "mantra"
+      }
+    },
+    {
+      "prompt": "What does SEAL training call unresolved small issues?",
+      "answer": "Ankle biters",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "acronym"
+      }
+    },
+    {
+      "prompt": "What are the 3 pillars of Personal Readiness?",
+      "answer": "Foundation, Mental Preparation, Leadership Presence",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is emotional contagion?",
+      "answer": "The transfer of mindset through expression, posture, and tone",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What are red-line indicators?",
+      "answer": "Early warning signs that stress is starting to affect performance",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "acronym"
+      }
+    },
+    {
+      "prompt": "What are the 4 channels of red-line indicators?",
+      "answer": "Physical, Emotional, Cognitive, Behavioral",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What are the 3 stress patterns of red-line indicators?",
+      "answer": "Running hot, Running cold, Early warning",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What does 'running hot' look like under stress?",
+      "answer": "Energy spikes into intensity, anger, or overdrive",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "scenario"
+      }
+    },
+    {
+      "prompt": "What does 'running cold' look like under stress?",
+      "answer": "Withdrawing, shutting down, or avoiding decisions",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "scenario"
+      }
+    },
+    {
+      "prompt": "What is the Exhale Extension reset?",
+      "answer": "Inhale 2 seconds, exhale 8 seconds through pursed lips",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is the Label and Release technique?",
+      "answer": "Silently name the emotion to shift from amygdala to prefrontal cortex",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is the Rule of Three under cognitive stress?",
+      "answer": "Write down exactly three priorities and refuse to think about a fourth",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is the Gap Check cognitive reset?",
+      "answer": "Pause and ask 'What is one piece of data I am missing?'",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is the Wait for the Breath behavioral reset?",
+      "answer": "Wait until the other person finishes and takes one full breath before responding",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is chair flying?",
+      "answer": "Mental visualization rehearsal of every detail of an upcoming scenario",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "acronym"
+      }
+    },
+    {
+      "prompt": "When should you schedule a chair flying rehearsal?",
+      "answer": "24 to 48 hours before the actual event",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "scenario"
+      }
+    },
+    {
+      "prompt": "What are the 3 dimensions of Leadership Presence?",
+      "answer": "Physical, Relational, Communicative",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What does C3+ stand for?",
+      "answer": "Courage, Compassion, and Communication",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "acronym"
+      }
+    },
+    {
+      "prompt": "What is the '+' in C3+?",
+      "answer": "The Contributor mindset",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "acronym"
+      }
+    },
+    {
+      "prompt": "What does Courage mean in C3+?",
+      "answer": "Speaking truth and taking principled risks for the team",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What does Compassion mean in C3+?",
+      "answer": "Seeing and developing potential in others",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What does Communication mean in C3+?",
+      "answer": "Creating shared understanding and psychological safety",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What is the Consumer mindset?",
+      "answer": "What's in it for me?",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is the Contributor mindset?",
+      "answer": "What do they need from me?",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is the SEAL planning mantra?",
+      "answer": "Plan your dive, dive your plan",
+      "metadata": {
+        "source": "Module 3: Planning",
+        "category": "mantra"
+      }
+    },
+    {
+      "prompt": "What does 'In combat, you don't rise to the occasion. You sink to the level of your training' mean?",
+      "answer": "Preparation defines performance under pressure",
+      "metadata": {
+        "source": "Module 3: Planning",
+        "category": "mantra"
+      }
+    },
+    {
+      "prompt": "What are the 3 Core Tools of SEAL planning?",
+      "answer": "Commander's Intent, H-Hour Planning, Ends-Ways-Means",
+      "metadata": {
+        "source": "Module 3: Planning",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is Commander's Intent?",
+      "answer": "A short statement of why an initiative matters and what success looks like",
+      "metadata": {
+        "source": "Module 3: Planning",
+        "category": "acronym"
+      }
+    },
+    {
+      "prompt": "What are the 2 parts of Commander's Intent?",
+      "answer": "Purpose (why it matters) and End State (observable success)",
+      "metadata": {
+        "source": "Module 3: Planning",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is H-Hour Planning?",
+      "answer": "A reverse-timeline method that maps every step backward from execution",
+      "metadata": {
+        "source": "Module 3: Planning",
+        "category": "acronym"
+      }
+    },
+    {
+      "prompt": "What is the Ends-Ways-Means framework?",
+      "answer": "Alignment check between objectives, strategies, and resources",
+      "metadata": {
+        "source": "Module 3: Planning",
+        "category": "acronym"
+      }
+    },
+    {
+      "prompt": "What are the 'Ends' in Ends-Ways-Means?",
+      "answer": "What you want to achieve (objectives)",
+      "metadata": {
+        "source": "Module 3: Planning",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What are the 'Ways' in Ends-Ways-Means?",
+      "answer": "How you'll achieve it (strategies)",
+      "metadata": {
+        "source": "Module 3: Planning",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What are the 'Means' in Ends-Ways-Means?",
+      "answer": "The resources you have (people, time, money, tools)",
+      "metadata": {
+        "source": "Module 3: Planning",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is an 'Unfunded Plan' in Ends-Ways-Means?",
+      "answer": "Ends and Ways exist, but the Means are missing",
+      "metadata": {
+        "source": "Module 3: Planning",
+        "category": "scenario"
+      }
+    },
+    {
+      "prompt": "What are the 5 Standards of Executing Your Mission?",
+      "answer": "Clarity, Completeness, Simplicity, Flexibility, Accountability",
+      "metadata": {
+        "source": "Module 3: Planning",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is Planning Pitfall #1 \u2014 Activities Replace Outcomes?",
+      "answer": "Plans describe tasks, not results",
+      "metadata": {
+        "source": "Module 3: Planning",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is Planning Pitfall #2 \u2014 Nobody Owns the Whole Thing?",
+      "answer": "Accountability is spread across 'the leadership team'",
+      "metadata": {
+        "source": "Module 3: Planning",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is Planning Pitfall #3 \u2014 Critical Path Hidden in Complexity?",
+      "answer": "Dependencies are buried inside long chains of approvals",
+      "metadata": {
+        "source": "Module 3: Planning",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is Planning Pitfall #4 \u2014 Resources Live in a Fantasyland?",
+      "answer": "The plan requires resources that exist only in theory",
+      "metadata": {
+        "source": "Module 3: Planning",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is Planning Pitfall #6 \u2014 No Shared Understanding?",
+      "answer": "Three team members give three different descriptions of the plan",
+      "metadata": {
+        "source": "Module 3: Planning",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is the Diagnostic Question to pressure-test any plan?",
+      "answer": "What specifically would have to be true for this plan to work?",
+      "metadata": {
+        "source": "Module 3: Planning",
+        "category": "mantra"
+      }
+    },
+    {
+      "prompt": "What is the rule of three for planning?",
+      "answer": "Three phases, three milestones per phase, three success factors on one page",
+      "metadata": {
+        "source": "Module 3: Planning",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What does 'Your enemy gets a vote' mean?",
+      "answer": "Outside forces will shape the outcome no matter how careful your preparation",
+      "metadata": {
+        "source": "Module 4: Decision Making",
+        "category": "mantra"
+      }
+    },
+    {
+      "prompt": "What are the 3 tools for decision-making under ambiguity?",
+      "answer": "Go/No-Go Criteria, Branch-Sequel-Bump Plans, After-Action Reviews",
+      "metadata": {
+        "source": "Module 4: Decision Making",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What are Go/No-Go Criteria?",
+      "answer": "Clear, measurable rules set in advance to proceed, adjust, or stop",
+      "metadata": {
+        "source": "Module 4: Decision Making",
+        "category": "acronym"
+      }
+    },
+    {
+      "prompt": "What are the 3 options Go/No-Go actually offers?",
+      "answer": "Proceed as planned, proceed with changes, pause or stop",
+      "metadata": {
+        "source": "Module 4: Decision Making",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What 3 traps do Go/No-Go criteria prevent?",
+      "answer": "Sunk-Cost Spiral, Optimism Override, Fake Deadlines",
+      "metadata": {
+        "source": "Module 4: Decision Making",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is Sunk-Cost Spiral?",
+      "answer": "Continuing only because you've already spent time or money",
+      "metadata": {
+        "source": "Module 4: Decision Making",
+        "category": "scenario"
+      }
+    },
+    {
+      "prompt": "What is a Branch Plan?",
+      "answer": "Alternative route to the same goal when an obstacle blocks the original path",
+      "metadata": {
+        "source": "Module 4: Decision Making",
+        "category": "acronym"
+      }
+    },
+    {
+      "prompt": "What is a Sequel Plan?",
+      "answer": "Follow-on actions for different possible outcomes",
+      "metadata": {
+        "source": "Module 4: Decision Making",
+        "category": "acronym"
+      }
+    },
+    {
+      "prompt": "What is a Bump Plan?",
+      "answer": "Emergency move that abandons the goal to preserve resources",
+      "metadata": {
+        "source": "Module 4: Decision Making",
+        "category": "acronym"
+      }
+    },
+    {
+      "prompt": "When do you use a Branch Plan?",
+      "answer": "When the destination still matters but the path must change",
+      "metadata": {
+        "source": "Module 4: Decision Making",
+        "category": "scenario"
+      }
+    },
+    {
+      "prompt": "When do you use a Bump Plan?",
+      "answer": "When the plan cannot be salvaged and priority shifts to survival",
+      "metadata": {
+        "source": "Module 4: Decision Making",
+        "category": "scenario"
+      }
+    },
+    {
+      "prompt": "What is the SEAL principle about seniority and being right?",
+      "answer": "Never too senior to be wrong, never too junior to be right",
+      "metadata": {
+        "source": "Module 4: Decision Making",
+        "category": "mantra"
+      }
+    },
+    {
+      "prompt": "What is the 2-to-3 Rule for seeking input?",
+      "answer": "Pick 2-3 people with different perspectives for balanced, fast decisions",
+      "metadata": {
+        "source": "Module 4: Decision Making",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What are 3 phrases that unlock truth from a team?",
+      "answer": "I need your pushback, What am I missing, Give me the 10% disaster scenario",
+      "metadata": {
+        "source": "Module 4: Decision Making",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What are the 3 steps of an AAR Lite?",
+      "answer": "Reconstruct intent, Record reality, Write lessons",
+      "metadata": {
+        "source": "Module 4: Decision Making",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What format do AAR lessons take?",
+      "answer": "When [condition], Do [action], So that [outcome]",
+      "metadata": {
+        "source": "Module 4: Decision Making",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is the SEAL radio rule?",
+      "answer": "Press to speak, release to listen\u2014one voice at a time",
+      "metadata": {
+        "source": "Module 5: Communications",
+        "category": "mantra"
+      }
+    },
+    {
+      "prompt": "What are the 3 principles of SEAL communication?",
+      "answer": "Radical Simplicity, Truth Through Trust, Standardized Clarity",
+      "metadata": {
+        "source": "Module 5: Communications",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What does BLUF stand for?",
+      "answer": "Bottom Line Up Front",
+      "metadata": {
+        "source": "Module 5: Communications",
+        "category": "acronym"
+      }
+    },
+    {
+      "prompt": "What is the 7 Words or Less rule?",
+      "answer": "Compress critical communication to seven words maximum",
+      "metadata": {
+        "source": "Module 5: Communications",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is the 1-3-1 Format?",
+      "answer": "One main point, three supporting details, one clear next step",
+      "metadata": {
+        "source": "Module 5: Communications",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What does FRAGO stand for?",
+      "answer": "Fragmentary Order",
+      "metadata": {
+        "source": "Module 5: Communications",
+        "category": "acronym"
+      }
+    },
+    {
+      "prompt": "What is a FRAGO?",
+      "answer": "A short update communicating only what has changed from the original plan",
+      "metadata": {
+        "source": "Module 5: Communications",
+        "category": "acronym"
+      }
+    },
+    {
+      "prompt": "What are the 3 parts of a FRAGO?",
+      "answer": "What changed, Impact, New direction",
+      "metadata": {
+        "source": "Module 5: Communications",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is the Commander's Intent template for delegation?",
+      "answer": "Achieve [end state] by [date] while [constraint]",
+      "metadata": {
+        "source": "Module 5: Communications",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is a battle rhythm?",
+      "answer": "A structured schedule of meetings and decision points that keeps people aligned",
+      "metadata": {
+        "source": "Module 5: Communications",
+        "category": "acronym"
+      }
+    },
+    {
+      "prompt": "What is the core SEAL listening principle?",
+      "answer": "Listen to understand, not to respond",
+      "metadata": {
+        "source": "Module 5: Communications",
+        "category": "mantra"
+      }
+    },
+    {
+      "prompt": "What is subjective listening?",
+      "answer": "Filtering everything through your own priorities, experience, and emotions",
+      "metadata": {
+        "source": "Module 5: Communications",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is objective listening?",
+      "answer": "Receiving information as spoken without immediate judgment",
+      "metadata": {
+        "source": "Module 5: Communications",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is the Processing Pause listening technique?",
+      "answer": "Count 'one Mississippi, two Mississippi' before responding",
+      "metadata": {
+        "source": "Module 5: Communications",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is the Read-Back Protocol?",
+      "answer": "Paraphrase to confirm understanding before moving on",
+      "metadata": {
+        "source": "Module 5: Communications",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is Truth Progression?",
+      "answer": "A method for building communication that flows up as easily as it flows down",
+      "metadata": {
+        "source": "Module 5: Communications",
+        "category": "acronym"
+      }
+    },
+    {
+      "prompt": "What is Stage 1 of Truth Progression?",
+      "answer": "Operational Observations\u2014safe, fact-based updates",
+      "metadata": {
+        "source": "Module 5: Communications",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is Stage 2 of Truth Progression?",
+      "answer": "Collaborative Input\u2014share interpretation, invite perspective",
+      "metadata": {
+        "source": "Module 5: Communications",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is Stage 3 of Truth Progression?",
+      "answer": "Strategic Dialogue\u2014connect input to goals, risks, opportunities",
+      "metadata": {
+        "source": "Module 5: Communications",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is the 'communication tax'?",
+      "answer": "Time wasted clarifying miscommunication\u2014nearly a full workweek each month",
+      "metadata": {
+        "source": "Module 5: Communications",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What does 'Clarity gives direction, acknowledgment gives energy' mean?",
+      "answer": "Recognition makes people push harder and endure longer",
+      "metadata": {
+        "source": "Module 5: Communications",
+        "category": "mantra"
+      }
+    },
+    {
+      "prompt": "What 3 things should leader acknowledgment do?",
+      "answer": "Notice effort, Recognize growth, Communicate belief",
+      "metadata": {
+        "source": "Module 5: Communications",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is decentralized command?",
+      "answer": "Leaders set intent and boundaries; team members own the execution",
+      "metadata": {
+        "source": "Module 6: Delegation",
+        "category": "acronym"
+      }
+    },
+    {
+      "prompt": "What are the 4 Barriers to Delegation?",
+      "answer": "Lack of trust, Fear of losing control, Perfectionism, Unclear expectations",
+      "metadata": {
+        "source": "Module 6: Delegation",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is the Trust Trap?",
+      "answer": "Leaders who review every piece of work train teams to wait for approval",
+      "metadata": {
+        "source": "Module 6: Delegation",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What does RACI stand for?",
+      "answer": "Responsible, Accountable, Consulted, Informed",
+      "metadata": {
+        "source": "Module 6: Delegation",
+        "category": "acronym"
+      }
+    },
+    {
+      "prompt": "What is the Pregame Pattern of approval addiction?",
+      "answer": "People rehearse with you before the 'real' meeting",
+      "metadata": {
+        "source": "Module 6: Delegation",
+        "category": "scenario"
+      }
+    },
+    {
+      "prompt": "What is the CC Epidemic?",
+      "answer": "Your inbox fills with 'for awareness' messages signaling decision uncertainty",
+      "metadata": {
+        "source": "Module 6: Delegation",
+        "category": "scenario"
+      }
+    },
+    {
+      "prompt": "What is the Revision Reflex?",
+      "answer": "Rewriting work that already meets the standard",
+      "metadata": {
+        "source": "Module 6: Delegation",
+        "category": "scenario"
+      }
+    },
+    {
+      "prompt": "What coaching phrase reinforces ownership after bad news?",
+      "answer": "Thanks for raising this early. What help do you need?",
+      "metadata": {
+        "source": "Module 6: Delegation",
+        "category": "scenario"
+      }
+    },
+    {
+      "prompt": "What is a 'mistake round' in meetings?",
+      "answer": "Start meetings by sharing one of your own misses to normalize candor",
+      "metadata": {
+        "source": "Module 6: Delegation",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is a leverage role?",
+      "answer": "A position whose work many others depend on for system-wide impact",
+      "metadata": {
+        "source": "Module 6: Delegation",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What coaching question helps someone step into ownership?",
+      "answer": "What would success look like if you owned this result from beginning to end?",
+      "metadata": {
+        "source": "Module 6: Delegation",
+        "category": "scenario"
+      }
+    },
+    {
+      "prompt": "What coaching question shifts tasks to outcomes?",
+      "answer": "If we complete every task but the customer sees no improvement, what happened?",
+      "metadata": {
+        "source": "Module 6: Delegation",
+        "category": "scenario"
+      }
+    },
+    {
+      "prompt": "What coaching question builds decision confidence?",
+      "answer": "If you had to decide right now, which way would you lean?",
+      "metadata": {
+        "source": "Module 6: Delegation",
+        "category": "scenario"
+      }
+    },
+    {
+      "prompt": "What is the Brief-Back Method?",
+      "answer": "Ask the person to repeat the plan back in their own words",
+      "metadata": {
+        "source": "Module 6: Delegation",
+        "category": "acronym"
+      }
+    },
+    {
+      "prompt": "What is the SEAL saying about lessons learned?",
+      "answer": "Many lessons were written in blood\u2014repeating them is unacceptable",
+      "metadata": {
+        "source": "Module 7: Feedback and Debriefs",
+        "category": "mantra"
+      }
+    },
+    {
+      "prompt": "What's the difference between 'lessons learned' and 'lessons identified'?",
+      "answer": "Identified means noted; learned means captured, shared, and applied",
+      "metadata": {
+        "source": "Module 7: Feedback and Debriefs",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What is the 4-Part Debrief?",
+      "answer": "What happened? Why? What worked? What must change next time?",
+      "metadata": {
+        "source": "Module 7: Feedback and Debriefs",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "How long does a 4-Part Debrief take?",
+      "answer": "15 minutes or less",
+      "metadata": {
+        "source": "Module 7: Feedback and Debriefs",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is the 3-Question Filter for lessons?",
+      "answer": "Could other teams face this? Does it show a process flaw? Would sharing save time?",
+      "metadata": {
+        "source": "Module 7: Feedback and Debriefs",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is the 3-Month Test?",
+      "answer": "Would this lesson save another team three months of work?",
+      "metadata": {
+        "source": "Module 7: Feedback and Debriefs",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What 3 signals track whether lessons produce impact?",
+      "answer": "Problems avoided, Time saved, Lessons shared",
+      "metadata": {
+        "source": "Module 7: Feedback and Debriefs",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What shift defines the intelligence mindset?",
+      "answer": "Treating mistakes as raw material that makes the whole organization stronger",
+      "metadata": {
+        "source": "Module 7: Feedback and Debriefs",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What does 'Ground truth beats rank' mean?",
+      "answer": "What counts is the observation, not the rank of the person who speaks",
+      "metadata": {
+        "source": "Module 7: Feedback and Debriefs",
+        "category": "mantra"
+      }
+    },
+    {
+      "prompt": "What is the SEAL saying about the goal of all leaders?",
+      "answer": "To work themselves out of a job",
+      "metadata": {
+        "source": "Module 8: Developing Future Leaders",
+        "category": "mantra"
+      }
+    },
+    {
+      "prompt": "What is dynamic subordination?",
+      "answer": "The person closest to the problem leads until the situation changes",
+      "metadata": {
+        "source": "Module 8: Developing Future Leaders",
+        "category": "acronym"
+      }
+    },
+    {
+      "prompt": "What are the 6 SEAL practices for developing leaders?",
+      "answer": "Develop under pressure, Model, Direct feedback, Challenge with support, Empower, Stay humble",
+      "metadata": {
+        "source": "Module 8: Developing Future Leaders",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is the Cascade Model of leadership development?",
+      "answer": "Each leader develops two more within six months, multiplying capacity",
+      "metadata": {
+        "source": "Module 8: Developing Future Leaders",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What 3 monthly tracking questions reinforce the cascade?",
+      "answer": "Who are you developing? What have they taken on? What was their last decision?",
+      "metadata": {
+        "source": "Module 8: Developing Future Leaders",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What are the 3 growth traps that stall leadership development?",
+      "answer": "Jumping in too fast, Delegating without clarity, Focusing on favorites",
+      "metadata": {
+        "source": "Module 8: Developing Future Leaders",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is the 5-step Direct Feedback sequence?",
+      "answer": "State facts, Ask their process, Spot gaps, Explore alternatives, End with action",
+      "metadata": {
+        "source": "Module 8: Developing Future Leaders",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What does Admiral McRaven say about being in charge?",
+      "answer": "You may be in charge, but it's never about you",
+      "metadata": {
+        "source": "Module 8: Developing Future Leaders",
+        "category": "mantra"
+      }
+    },
+    {
+      "prompt": "How is leadership legacy measured according to Rear Admiral Davids?",
+      "answer": "By what happens when you leave\u2014does the system get stronger or fall apart?",
+      "metadata": {
+        "source": "Module 8: Developing Future Leaders",
+        "category": "mantra"
+      }
+    },
+    {
+      "prompt": "What 3 humility self-audit questions should you ask monthly?",
+      "answer": "When did I ask input? What am I learning? Where am I relying on old answers?",
+      "metadata": {
+        "source": "Module 8: Developing Future Leaders",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is the progressive decision authority approach?",
+      "answer": "Start with reversible low-stakes decisions, widen responsibility as judgment grows",
+      "metadata": {
+        "source": "Module 8: Developing Future Leaders",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What Navy SEAL Ethos line covers taking charge in absence of orders?",
+      "answer": "In the absence of orders I will take charge, lead my teammates",
+      "metadata": {
+        "source": "Module 9: Your Leadership Playbook",
+        "category": "mantra"
+      }
+    },
+    {
+      "prompt": "What Navy SEAL Ethos line addresses quitting?",
+      "answer": "I will never quit. I persevere and thrive on adversity",
+      "metadata": {
+        "source": "Module 9: Your Leadership Playbook",
+        "category": "mantra"
+      }
+    },
+    {
+      "prompt": "What Navy SEAL Ethos line captures integrity?",
+      "answer": "My word is my bond",
+      "metadata": {
+        "source": "Module 9: Your Leadership Playbook",
+        "category": "mantra"
+      }
+    },
+    {
+      "prompt": "What Navy SEAL Ethos line covers emotional control?",
+      "answer": "The ability to control my emotions and actions sets me apart",
+      "metadata": {
+        "source": "Module 9: Your Leadership Playbook",
+        "category": "mantra"
+      }
+    },
+    {
+      "prompt": "What is Get Comfortable Being Uncomfortable?",
+      "answer": "Expanding the range of conditions under which you can function effectively",
+      "metadata": {
+        "source": "Module 1: Leadership Foundations",
+        "category": "mantra"
+      }
+    },
+    {
+      "prompt": "What is the 'Wait 5' Rule?",
+      "answer": "Wait 5 seconds before announcing a decision in high-pressure meetings",
+      "metadata": {
+        "source": "redline work",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What question does the 'Wait 5' anchor use?",
+      "answer": "What is the one thing I'm overlooking right now?",
+      "metadata": {
+        "source": "redline work",
+        "category": "scenario"
+      }
+    },
+    {
+      "prompt": "What is the Cadence Check behavioral reset?",
+      "answer": "Drop volume 10% and speak at half speed, articulating word endings",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is the Commander's Intent Reset for micromanagement?",
+      "answer": "State only the end state, then physically lean back in your chair",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is the hidden cost of Consumer mindset on teams?",
+      "answer": "Creates scarcity, keeps score, protects position",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What does the Contributor mindset create for teams?",
+      "answer": "Abundance, gives without keeping score, builds through others",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is the Isometrics Grounding reset?",
+      "answer": "Push feet to floor and grip chair bottom for 10 seconds, repeat 3x",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is the Value Recall emotional reset?",
+      "answer": "Ask how a leader with your core value would respond right now",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is the Supportive Query emotional reset?",
+      "answer": "Ask: What part of this process is most challenging for you right now?",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is the External Anchor cognitive reset?",
+      "answer": "Describe three physical details of an object in the room to yourself",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is a 'Pivot Protocol' when plans change?",
+      "answer": "Spot change, check target, adjust steps, make the call, tell the team",
+      "metadata": {
+        "source": "Module 3: Planning",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What SEAL principle says where authority should live?",
+      "answer": "Authority shifts to the lowest capable level while maintaining alignment",
+      "metadata": {
+        "source": "Module 6: Delegation",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What does 'fix the system, not the person' mean?",
+      "answer": "Repeated feedback signals a system problem, not an individual problem",
+      "metadata": {
+        "source": "Module 7: Feedback and Debriefs",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "What 3 shifts define the intelligence mindset?",
+      "answer": "Recognize patterns, Use the 3-Month Test, Turn problems into system fixes",
+      "metadata": {
+        "source": "Module 7: Feedback and Debriefs",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is deliberate practice?",
+      "answer": "Structured training that moves beyond casual repetition to targeted skill building",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "Why does mental rehearsal count as deliberate practice?",
+      "answer": "Mental rehearsal activates the same neural pathways as physical practice",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "principle"
+      }
+    },
+    {
+      "prompt": "How long should a full deliberate-practice chair flying rehearsal take?",
+      "answer": "10 to 15 minutes",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is Step 1 of the 5-step deliberate-practice chair flying process?",
+      "answer": "Set the scene with sensory anchors (sound, smell, touch)",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is Step 2 of the 5-step deliberate-practice chair flying process?",
+      "answer": "Rehearse your sequence in real time, no skipping or summarizing",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is Step 3 of the 5-step deliberate-practice chair flying process?",
+      "answer": "Practice what-ifs and recoveries, pair each with a physical reset cue",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is Step 4 of the 5-step deliberate-practice chair flying process?",
+      "answer": "Manage your state with anchored breathing like box breathing",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is Step 5 of the 5-step deliberate-practice chair flying process?",
+      "answer": "Run variations under different conditions and reactions",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is Session 1 of reset-protocol deliberate practice?",
+      "answer": "Low-stakes anchoring, practice resets in daily routines when calm",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is Session 3 of reset-protocol deliberate practice?",
+      "answer": "Calendar cues, embed reset reminders in meeting invites",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "framework"
+      }
+    },
+    {
+      "prompt": "What is Session 4 of reset-protocol deliberate practice?",
+      "answer": "End-of-week AAR, track one reset that worked and one you missed",
+      "metadata": {
+        "source": "Module 2: Personal Readiness",
+        "category": "framework"
+      }
+    }
+  ]
+}
