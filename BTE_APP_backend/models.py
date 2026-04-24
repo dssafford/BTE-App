@@ -1,11 +1,26 @@
-from sqlalchemy import Column, Integer, String, Float, Text, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, Text, DateTime, ForeignKey, Enum, JSON, func
+from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
+from enum import IntEnum
 import uuid
 from typing import Optional
 from pydantic import BaseModel
 
 Base = declarative_base()
+
+
+# FSRS Rating values as emitted by ts-fsrs (open-spaced-repetition/ts-fsrs).
+# Stored as an int on review_events.rating to stay client/server symmetric
+# without a native enum type that would need its own migration path.
+class Rating(IntEnum):
+    AGAIN = 1
+    HARD = 2
+    GOOD = 3
+    EASY = 4
+
+
+MATCH_STRATEGIES = ("exact", "fuzzy", "multi_choice")
 
 
 from sqlalchemy import String
@@ -82,3 +97,60 @@ class LearnNumber(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     number = Column(Integer, nullable=False)
     name = Column(String(100), nullable=False)
+
+
+class Deck(Base):
+    __tablename__ = "decks"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, nullable=False, index=True)
+    name = Column(String(100), nullable=False)
+    match_strategy = Column(
+        Enum(*MATCH_STRATEGIES, name="deck_match_strategy"),
+        nullable=False,
+    )
+    render_config = Column(JSON, nullable=True)
+    created_at = Column(DateTime, nullable=False, server_default=func.now())
+
+    cards = relationship("Card", back_populates="deck", cascade="all, delete-orphan")
+
+
+class Card(Base):
+    __tablename__ = "cards"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    deck_id = Column(
+        Integer,
+        ForeignKey("decks.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    prompt_text = Column(Text, nullable=False)
+    answer_text = Column(Text, nullable=False)
+    # Stored under the SQL column `metadata` (design doc section 1/4A), but
+    # exposed as `card_metadata` in Python because `metadata` is reserved on
+    # SQLAlchemy's declarative Base for the MetaData() registry.
+    card_metadata = Column("metadata", JSON, nullable=False)
+    created_at = Column(DateTime, nullable=False, server_default=func.now())
+
+    deck = relationship("Deck", back_populates="cards")
+    review_events = relationship(
+        "ReviewEvent", back_populates="card", cascade="all, delete-orphan"
+    )
+
+
+class ReviewEvent(Base):
+    __tablename__ = "review_events"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, nullable=False)
+    card_id = Column(
+        Integer,
+        ForeignKey("cards.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    rating = Column(Integer, nullable=False)
+    reviewed_at = Column(DateTime, nullable=False, server_default=func.now())
+    latency_ms = Column(Integer, nullable=True)
+
+    card = relationship("Card", back_populates="review_events")
