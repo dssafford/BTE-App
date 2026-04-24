@@ -1,0 +1,36 @@
+# Top-level ignores for the BTE monorepo. Per-subdir .gitignore files in
+# BTE_APP_backend/ and BTE_APP_frontend/ still apply for framework-specific
+# rules.
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.pytest_cache/
+
+# IDE / editor
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+
+# Env + secrets
+.env
+.env.*
+!.env.example
+
+# Deploy artifacts (lambda/zip/tar)
+lambda_deploy.zip
+lambda_build/
+deploy.tar.gz
+
+# Sync-conflict droppings from Syncthing / Resilio (recurring sibling of
+# the file they collide with — never belong in git)
+*.sync-conflict-*
+
+# Ad-hoc local-only scratch
+vim_command_history.txt
