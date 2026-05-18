@@ -35,14 +35,11 @@ export default function NavBar() {
       .catch(err => console.error('Auth check failed:', err));
   }, []);
 
+  // Slim global nav — per-deck links live on the Cartographer home tiles
+  // (`/`) and on the in-page <DeckSwitcher> inside a study session.
   const links = [
     { href: "/", label: "Home" },
-    { href: "/quiz", label: "Quiz" },
     { href: "/history", label: "History" },
-    { href: "/study", label: "Study" },
-    { href: "/wrongs", label: "Wrongs" },
-    { href: "/numbers/study", label: "Numbers Study" },
-    { href: "/numbers/quiz", label: "Numbers Quiz" },
   ];
 
   return (

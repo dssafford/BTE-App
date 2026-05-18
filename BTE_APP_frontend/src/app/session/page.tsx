@@ -11,6 +11,7 @@ import {
   type Card,
   type Deck,
 } from "@/lib/api";
+import DeckSwitcher from "@/app/components/DeckSwitcher";
 
 // Moved from src/app/study/[deckId]/page.tsx: Azure Static Web Apps deploys
 // the frontend under `output: 'export'`, which cannot use dynamic path
@@ -36,6 +37,7 @@ function SessionInner() {
   const deckId = deckIdRaw ? Number(deckIdRaw) : NaN;
 
   const [deck, setDeck] = useState<Deck | null>(null);
+  const [allDecks, setAllDecks] = useState<Deck[]>([]);
   const [allCards, setAllCards] = useState<Card[]>([]);
   const [cards, setCards] = useState<Card[]>([]);
   const [answers, setAnswers] = useState<string[]>([]);
@@ -62,6 +64,7 @@ function SessionInner() {
           setLoadError(`Deck ${deckId} not found.`);
           return;
         }
+        setAllDecks(decks);
         setDeck(found);
         setAllCards(deckCards);
       } catch (err) {
@@ -163,11 +166,14 @@ function SessionInner() {
   return (
     <main className="min-h-screen bg-zinc-900 p-4 md:p-8 font-sans text-amber-400">
       <div className="mx-auto my-8 max-w-3xl rounded-xl bg-zinc-800 p-4 shadow-lg shadow-amber-400/10 sm:p-8">
-        <header className="mb-6 flex items-baseline justify-between">
-          <h1 className="text-3xl font-bold">{deck.name}</h1>
-          <span className="text-sm text-amber-300">
-            {allCards.length} cards · match: {deck.match_strategy}
-          </span>
+        <header className="mb-6 flex flex-wrap items-baseline justify-between gap-3">
+          <div className="flex items-baseline gap-3">
+            <h1 className="text-3xl font-bold">{deck.name}</h1>
+            <span className="text-sm text-amber-300">
+              {allCards.length} cards · match: {deck.match_strategy}
+            </span>
+          </div>
+          <DeckSwitcher currentDeckId={deck.id} decks={allDecks} />
         </header>
 
         <div className="mb-6 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
