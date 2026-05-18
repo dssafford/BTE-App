@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { fetchCardsForDeck, fetchDecks, fetchReviews, type Card } from "@/lib/api";
+import { fetchDecks, fetchReviews } from "@/lib/api";
 import {
   computeDeckTileMetrics,
   tileGlow,
@@ -36,16 +36,15 @@ export default function Home() {
     let cancelled = false;
     (async () => {
       try {
+        // Two requests total (was 2 + one /cards request per deck). Card
+        // counts live on each deck row; review->deck attribution comes
+        // from ev.deck_id. See PR #8.
         const [decks, reviews] = await Promise.all([
           fetchDecks(),
           fetchReviews(5000),
         ]);
-        const cardsPerDeck: Card[][] = await Promise.all(
-          decks.map((d) => fetchCardsForDeck(d.id))
-        );
-        const allCards = cardsPerDeck.flat();
         if (cancelled) return;
-        setTiles(computeDeckTileMetrics(decks, allCards, reviews));
+        setTiles(computeDeckTileMetrics(decks, reviews));
       } catch (err) {
         if (cancelled) return;
         setTileError(err instanceof Error ? err.message : String(err));

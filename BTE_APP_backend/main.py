@@ -437,12 +437,28 @@ def list_decks(
     db: Session = Depends(get_db),
     user_id: int = Depends(get_current_user_id),
 ):
-    return (
-        db.query(Deck)
+    # Single GROUP BY query — avoids the home page's previous N+1 pattern
+    # (one /decks/{id}/cards request per deck just to count cards).
+    rows = (
+        db.query(Deck, func.count(Card.id).label("card_count"))
+        .outerjoin(Card, Card.deck_id == Deck.id)
         .filter(Deck.user_id == user_id)
+        .group_by(Deck.id)
         .order_by(Deck.created_at.asc())
         .all()
     )
+    return [
+        {
+            "id": deck.id,
+            "user_id": deck.user_id,
+            "name": deck.name,
+            "match_strategy": deck.match_strategy,
+            "render_config": deck.render_config,
+            "created_at": deck.created_at,
+            "card_count": int(count or 0),
+        }
+        for deck, count in rows
+    ]
 
 
 @app.post("/decks", response_model=DeckOut, status_code=201)
@@ -540,13 +556,30 @@ def list_reviews(
         raise HTTPException(
             status_code=400, detail="limit must be between 1 and 5000"
         )
-    return (
-        db.query(ReviewEvent)
+    # JOIN to cards so the Cartographer can attribute each review to a
+    # deck without re-fetching the full card list. Orphan reviews (card
+    # deleted) get filtered out by the INNER JOIN — matches the previous
+    # client-side behavior of skipping unknown card_ids.
+    rows = (
+        db.query(ReviewEvent, Card.deck_id)
+        .join(Card, Card.id == ReviewEvent.card_id)
         .filter(ReviewEvent.user_id == user_id)
         .order_by(ReviewEvent.reviewed_at.desc())
         .limit(limit)
         .all()
     )
+    return [
+        {
+            "id": ev.id,
+            "user_id": ev.user_id,
+            "card_id": ev.card_id,
+            "rating": ev.rating,
+            "reviewed_at": ev.reviewed_at,
+            "latency_ms": ev.latency_ms,
+            "deck_id": deck_id,
+        }
+        for ev, deck_id in rows
+    ]
 
 
 router = APIRouter()
