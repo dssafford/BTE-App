@@ -30,6 +30,37 @@ function shuffle<T>(array: T[]): T[] {
 
 const COUNT_OPTIONS = ["5", "10", "20", "all"] as const;
 type CountOption = (typeof COUNT_OPTIONS)[number];
+type Mode = "study" | "quiz";
+
+function ModeToggle({ mode, onChange }: { mode: Mode; onChange: (m: Mode) => void }) {
+  return (
+    <div
+      role="tablist"
+      aria-label="Session mode"
+      className="inline-flex rounded-md border border-amber-400/40 bg-zinc-700 p-0.5 text-sm font-semibold"
+    >
+      {(["study", "quiz"] as Mode[]).map((m) => {
+        const active = mode === m;
+        return (
+          <button
+            key={m}
+            type="button"
+            role="tab"
+            aria-selected={active}
+            onClick={() => onChange(m)}
+            className={
+              active
+                ? "rounded bg-amber-400 px-3 py-1 text-zinc-900"
+                : "rounded px-3 py-1 text-amber-400 hover:bg-zinc-600"
+            }
+          >
+            {m === "study" ? "Study" : "Quiz"}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
 
 function SessionInner() {
   const searchParams = useSearchParams();
@@ -48,6 +79,10 @@ function SessionInner() {
   const [randomize, setRandomize] = useState(true);
   const [threshold, setThreshold] = useState(80);
   const [loadError, setLoadError] = useState<string | null>(null);
+  // Mode toggle: "quiz" preserves the existing behavior (type → check →
+  // record review). "study" just reveals each card's answer alongside
+  // the prompt — no input, no submit, no review_event recorded.
+  const [mode, setMode] = useState<Mode>("quiz");
 
   useEffect(() => {
     if (!Number.isFinite(deckId)) return;
@@ -173,7 +208,10 @@ function SessionInner() {
               {allCards.length} cards · match: {deck.match_strategy}
             </span>
           </div>
-          <DeckSwitcher currentDeckId={deck.id} decks={allDecks} />
+          <div className="flex items-center gap-3">
+            <ModeToggle mode={mode} onChange={setMode} />
+            <DeckSwitcher currentDeckId={deck.id} decks={allDecks} />
+          </div>
         </header>
 
         <div className="mb-6 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
@@ -204,11 +242,17 @@ function SessionInner() {
             className="rounded-md bg-amber-400 px-4 py-2 font-semibold text-zinc-900 hover:bg-amber-300"
             disabled={allCards.length === 0}
           >
-            {cards.length > 0 ? "New Session" : "Start"}
+            {cards.length > 0
+              ? mode === "study"
+                ? "New Set"
+                : "New Quiz"
+              : mode === "study"
+                ? "Show Cards"
+                : "Start Quiz"}
           </button>
         </div>
 
-        {deck.match_strategy === "fuzzy" && cards.length > 0 && (
+        {mode === "quiz" && deck.match_strategy === "fuzzy" && cards.length > 0 && (
           <div className="mb-6 flex items-center gap-3 text-sm">
             <label htmlFor="threshold">Fuzzy threshold:</label>
             <input
@@ -250,31 +294,39 @@ function SessionInner() {
                       </span>
                     )}
                   </div>
-                  <input
-                    type="text"
-                    value={answers[i] ?? ""}
-                    onChange={(e) => onAnswerChange(i, e.target.value)}
-                    autoFocus={i === 0}
-                    className="w-full rounded-md border border-amber-400 bg-zinc-800 px-4 py-2 text-lg focus:outline-none focus:ring-2 focus:ring-amber-400"
-                    placeholder="Your answer…"
-                    aria-label={`Answer for card ${i + 1}`}
-                  />
-                  {result !== null && (
-                    <div className="mt-2 flex items-center gap-3 text-sm">
-                      <span className={result ? "text-green-400" : "text-red-400"}>
-                        {result ? "Correct" : `Answer: ${card.answer_text}`}
-                      </span>
-                      {typeof score === "number" && (
-                        <span className="text-amber-300">score {score}</span>
+                  {mode === "study" ? (
+                    <p className="rounded-md bg-zinc-800 px-4 py-2 text-lg text-amber-200">
+                      {card.answer_text}
+                    </p>
+                  ) : (
+                    <>
+                      <input
+                        type="text"
+                        value={answers[i] ?? ""}
+                        onChange={(e) => onAnswerChange(i, e.target.value)}
+                        autoFocus={i === 0}
+                        className="w-full rounded-md border border-amber-400 bg-zinc-800 px-4 py-2 text-lg focus:outline-none focus:ring-2 focus:ring-amber-400"
+                        placeholder="Your answer…"
+                        aria-label={`Answer for card ${i + 1}`}
+                      />
+                      {result !== null && (
+                        <div className="mt-2 flex items-center gap-3 text-sm">
+                          <span className={result ? "text-green-400" : "text-red-400"}>
+                            {result ? "Correct" : `Answer: ${card.answer_text}`}
+                          </span>
+                          {typeof score === "number" && (
+                            <span className="text-amber-300">score {score}</span>
+                          )}
+                        </div>
                       )}
-                    </div>
+                    </>
                   )}
                 </li>
               );
             })}
           </ol>
 
-          {cards.length > 0 && !checked && (
+          {mode === "quiz" && cards.length > 0 && !checked && (
             <button
               type="submit"
               className="mt-6 w-full rounded-md bg-amber-400 px-6 py-3 text-lg font-bold text-zinc-900 hover:bg-amber-300"

@@ -12,6 +12,9 @@ export interface Deck {
   match_strategy: "exact" | "fuzzy" | "multi_choice";
   render_config: Record<string, unknown> | null;
   created_at: string;
+  // Populated by GET /decks (server-side COUNT). Older API responses
+  // omit this — treat as 0 / unknown in the UI.
+  card_count?: number | null;
 }
 
 export interface Card {
@@ -30,6 +33,9 @@ export interface ReviewEvent {
   rating: number;
   reviewed_at: string;
   latency_ms: number | null;
+  // Populated by GET /reviews (JOIN to cards). Older API responses
+  // omit this — Cartographer falls back to ignoring the review.
+  deck_id?: number | null;
 }
 
 function ensureUrl(): string {

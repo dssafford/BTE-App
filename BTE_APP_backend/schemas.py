@@ -93,6 +93,11 @@ class DeckOut(BaseModel):
     match_strategy: MatchStrategy
     render_config: Optional[Dict[str, Any]] = None
     created_at: datetime
+    # Populated by list_decks via a JOIN+COUNT so the Cartographer home
+    # can render card counts without making one /cards request per deck.
+    # Optional so create_deck (which returns the ORM row directly) and any
+    # other caller that doesn't compute it can stay simple.
+    card_count: Optional[int] = None
 
     class Config:
         orm_mode = True
@@ -137,6 +142,11 @@ class ReviewEventOut(BaseModel):
     rating: int
     reviewed_at: datetime
     latency_ms: Optional[int] = None
+    # Populated by list_reviews via a JOIN to cards so the Cartographer
+    # can attribute reviews to decks without a separate cards round-trip.
+    # Optional so record_review (which returns the ORM event directly)
+    # stays simple.
+    deck_id: Optional[int] = None
 
     class Config:
         orm_mode = True

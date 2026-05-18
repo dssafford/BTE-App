@@ -6,7 +6,7 @@
 // proper) is deferred to a separate design doc per the Phase 3 plan;
 // this module is the minimal-version stepping stone.
 
-import type { Card, Deck, ReviewEvent } from "./api";
+import type { Deck, ReviewEvent } from "./api";
 
 const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
 
@@ -20,27 +20,27 @@ export interface DeckTileMetrics {
   lastReviewAt: string | null;
 }
 
+// Card count comes from deck.card_count (server-side COUNT) and per-deck
+// review attribution comes from ev.deck_id (server-side JOIN). The
+// previous signature took a `cards: Card[]` parameter and the home page
+// had to fetch every card just to render tiles — see PR #8 for the
+// before/after.
 export function computeDeckTileMetrics(
   decks: Deck[],
-  cards: Card[],
   reviews: ReviewEvent[],
   now: Date = new Date()
 ): DeckTileMetrics[] {
-  const cardToDeck = new Map<number, number>();
-  for (const c of cards) cardToDeck.set(c.id, c.deck_id);
-
-  const cardCountByDeck = new Map<number, number>();
-  for (const c of cards) {
-    cardCountByDeck.set(c.deck_id, (cardCountByDeck.get(c.deck_id) ?? 0) + 1);
-  }
-
   const cutoff = now.getTime() - SEVEN_DAYS_MS;
   const totals = new Map<number, { total: number; correct: number }>();
   const lastReview = new Map<number, number>();
+  const knownDeckIds = new Set(decks.map((d) => d.id));
 
   for (const ev of reviews) {
-    const deckId = cardToDeck.get(ev.card_id);
-    if (deckId === undefined) continue;
+    const deckId = ev.deck_id;
+    // Reviews from older API responses (or for cards in decks the user
+    // doesn't own) are skipped — matches the previous behavior of
+    // ignoring card_ids that weren't in the fetched cards list.
+    if (deckId == null || !knownDeckIds.has(deckId)) continue;
 
     const ts = new Date(ev.reviewed_at).getTime();
     if (Number.isNaN(ts)) continue;
@@ -65,7 +65,7 @@ export function computeDeckTileMetrics(
     const last = lastReview.get(deck.id);
     return {
       deck,
-      cardCount: cardCountByDeck.get(deck.id) ?? 0,
+      cardCount: deck.card_count ?? 0,
       accuracy7d:
         bucket && bucket.total > 0
           ? Math.round((bucket.correct / bucket.total) * 100) / 100
@@ -75,11 +75,14 @@ export function computeDeckTileMetrics(
   });
 }
 
-// Tile opacity: accuracy 0 -> 0.30 (dim but legible), accuracy 1 -> 1.0.
-// Never-reviewed decks get 0.40 so they're visible but clearly "unlit".
+// Tile opacity: kept high so every tile reads clearly against the
+// dark zinc-800 background. Accuracy still nudges brightness — 0% -> 0.85,
+// 100% -> 1.0 — but the freshness signal lives mainly in the border glow
+// so we don't fight legibility. Never-reviewed decks land at 0.90 (just
+// slightly dimmer than a 100% deck, not "greyed out").
 export function tileOpacity(accuracy: number | null): number {
-  if (accuracy === null) return 0.4;
-  return 0.3 + 0.7 * Math.max(0, Math.min(1, accuracy));
+  if (accuracy === null) return 0.9;
+  return 0.85 + 0.15 * Math.max(0, Math.min(1, accuracy));
 }
 
 // Border-glow intensity from last-review recency. Returns a CSS-ready
