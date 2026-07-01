@@ -16,6 +16,8 @@ from schemas import (
 import os
 import json
 import boto3
+import subprocess
+from pathlib import Path
 from urllib.parse import quote_plus
 from botocore.exceptions import ClientError
 from mangum import Mangum
@@ -28,6 +30,44 @@ load_dotenv()
 # Add logging configuration
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+
+def _resolve_git_sha() -> str:
+    """Identify the deployed commit. Resolved once at startup.
+
+    Deploy packages exclude .git (see .funcignore), so runtime git is
+    unavailable in the cloud. Resolution order:
+      1. GIT_SHA / SCM_COMMIT_ID env var (set in CI or Function App settings)
+      2. version.txt baked into the package at build time
+      3. local git (dev only) -> "unknown" if all else fails
+    """
+    for var in ("GIT_SHA", "SCM_COMMIT_ID"):
+        val = os.getenv(var)
+        if val:
+            return val.strip()[:12]
+
+    version_file = Path(__file__).resolve().parent / "version.txt"
+    if version_file.is_file():
+        sha = version_file.read_text().strip()
+        if sha:
+            return sha[:12]
+
+    backend_dir = Path(__file__).resolve().parent
+    if (backend_dir / ".git").exists() or (backend_dir.parent / ".git").exists():
+        try:
+            sha = subprocess.check_output(
+                ["git", "rev-parse", "--short=12", "HEAD"],
+                cwd=str(backend_dir), stderr=subprocess.DEVNULL, timeout=2,
+            ).decode().strip()
+            if sha:
+                return sha
+        except Exception:
+            pass
+
+    return "unknown"
+
+
+GIT_SHA = _resolve_git_sha()
 
 # --- Database Configuration ---
 
@@ -425,6 +465,7 @@ def add_learn_number(
 def version_check():
     return {
         "message": "Lambda updated with learn_numbers endpoints",
+        "git_sha": GIT_SHA,
         "timestamp": datetime.utcnow().isoformat(),
         "has_learn_numbers": True
     }

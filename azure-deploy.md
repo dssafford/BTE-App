@@ -113,6 +113,10 @@ az functionapp config appsettings set \
 ```bash
 cd BTE_APP_backend
 
+# Stamp the deployed commit so GET /version-check reports it.
+# (.git is excluded from the package, so the SHA must be baked in now.)
+git rev-parse --short=12 HEAD > version.txt
+
 # Deploy to Azure Functions
 func azure functionapp publish $FUNCTION_APP_NAME
 
@@ -125,6 +129,12 @@ az functionapp deployment source config-zip \
   --name $FUNCTION_APP_NAME \
   --src ../deploy.zip
 ```
+
+> `version.txt` is a build artifact (gitignored). Alternatively, set a
+> `GIT_SHA` app setting instead of baking the file:
+> `az functionapp config appsettings set --name $FUNCTION_APP_NAME \`
+> `  --resource-group $RESOURCE_GROUP --settings GIT_SHA=$(git rev-parse --short=12 HEAD)`
+> After deploying, verify with `curl https://$BACKEND_URL/api/version-check`.
 
 ### 6. Test Backend
 

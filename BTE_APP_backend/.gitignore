@@ -17,6 +17,9 @@
 lambda_build/
 lambda_deploy/
 
+# Build-time commit stamp baked into deploy package (see azure-deploy.md)
+version.txt
+
 # testing
 /coverage
 
