@@ -3,6 +3,7 @@
 import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { matchAnswer } from "@/lib/match";
+import { getChoices, getExplanation, shuffleChoices } from "@/lib/choices";
 import {
   fetchCardsForDeck,
   fetchDecks,
@@ -74,6 +75,10 @@ function SessionInner() {
   const [answers, setAnswers] = useState<string[]>([]);
   const [scores, setScores] = useState<(number | null)[]>([]);
   const [results, setResults] = useState<(boolean | null)[]>([]);
+  // Shuffled once per session start so the correct answer's position
+  // varies; null for cards without usable metadata.choices (those fall
+  // back to the free-text input).
+  const [choiceOrders, setChoiceOrders] = useState<(string[] | null)[]>([]);
   const [checked, setChecked] = useState(false);
   const [countOption, setCountOption] = useState<CountOption>("10");
   const [randomize, setRandomize] = useState(true);
@@ -129,6 +134,12 @@ function SessionInner() {
       countOption === "all" ? source.length : Math.min(Number(countOption), source.length);
     const picked = source.slice(0, n);
     setCards(picked);
+    setChoiceOrders(
+      picked.map((c) => {
+        const choices = getChoices(c);
+        return choices ? shuffleChoices(choices) : null;
+      })
+    );
     setAnswers(Array(picked.length).fill(""));
     setScores(Array(picked.length).fill(null));
     setResults(Array(picked.length).fill(null));
@@ -149,6 +160,7 @@ function SessionInner() {
         userAnswer: answers[i] ?? "",
         correctAnswer: c.answer_text,
         fuzzyThreshold: threshold,
+        choices: choiceOrders[i] ?? undefined,
       });
       return { card: c, correct: r.correct, score: r.score };
     });
@@ -295,27 +307,62 @@ function SessionInner() {
                     )}
                   </div>
                   {mode === "study" ? (
-                    <p className="rounded-md bg-zinc-800 px-4 py-2 text-lg text-amber-200">
-                      {card.answer_text}
-                    </p>
+                    <div className="rounded-md bg-zinc-800 px-4 py-2">
+                      <p className="text-lg text-amber-200">{card.answer_text}</p>
+                      {getExplanation(card) && (
+                        <p className="mt-1 text-sm text-amber-200/80">
+                          {getExplanation(card)}
+                        </p>
+                      )}
+                    </div>
                   ) : (
                     <>
-                      <input
-                        type="text"
-                        value={answers[i] ?? ""}
-                        onChange={(e) => onAnswerChange(i, e.target.value)}
-                        autoFocus={i === 0}
-                        className="w-full rounded-md border border-amber-400 bg-zinc-800 px-4 py-2 text-lg focus:outline-none focus:ring-2 focus:ring-amber-400"
-                        placeholder="Your answer…"
-                        aria-label={`Answer for card ${i + 1}`}
-                      />
+                      {deck.match_strategy === "multi_choice" && choiceOrders[i] ? (
+                        <fieldset
+                          className="space-y-2"
+                          disabled={checked}
+                          aria-label={`Choices for card ${i + 1}`}
+                        >
+                          {choiceOrders[i]!.map((choice) => (
+                            <label
+                              key={choice}
+                              className="flex cursor-pointer items-start gap-3 rounded-md border border-amber-400/40 bg-zinc-800 px-4 py-2 text-base hover:border-amber-400"
+                            >
+                              <input
+                                type="radio"
+                                name={`card-${i}`}
+                                value={choice}
+                                checked={answers[i] === choice}
+                                onChange={() => onAnswerChange(i, choice)}
+                                className="mt-1 h-4 w-4 accent-amber-400"
+                              />
+                              <span>{choice}</span>
+                            </label>
+                          ))}
+                        </fieldset>
+                      ) : (
+                        <input
+                          type="text"
+                          value={answers[i] ?? ""}
+                          onChange={(e) => onAnswerChange(i, e.target.value)}
+                          autoFocus={i === 0}
+                          className="w-full rounded-md border border-amber-400 bg-zinc-800 px-4 py-2 text-lg focus:outline-none focus:ring-2 focus:ring-amber-400"
+                          placeholder="Your answer…"
+                          aria-label={`Answer for card ${i + 1}`}
+                        />
+                      )}
                       {result !== null && (
-                        <div className="mt-2 flex items-center gap-3 text-sm">
-                          <span className={result ? "text-green-400" : "text-red-400"}>
-                            {result ? "Correct" : `Answer: ${card.answer_text}`}
-                          </span>
-                          {typeof score === "number" && (
-                            <span className="text-amber-300">score {score}</span>
+                        <div className="mt-2 text-sm">
+                          <div className="flex items-center gap-3">
+                            <span className={result ? "text-green-400" : "text-red-400"}>
+                              {result ? "Correct" : `Answer: ${card.answer_text}`}
+                            </span>
+                            {typeof score === "number" && (
+                              <span className="text-amber-300">score {score}</span>
+                            )}
+                          </div>
+                          {getExplanation(card) && (
+                            <p className="mt-1 text-amber-200">{getExplanation(card)}</p>
                           )}
                         </div>
                       )}
