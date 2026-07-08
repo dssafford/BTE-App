@@ -155,12 +155,22 @@ function SessionInner() {
   const checkAnswers = async () => {
     if (!deck) return;
     const perCard = cards.map((c, i) => {
+      // When a multi_choice card's metadata.choices was invalid, the radio
+      // fieldset falls back to a free-text input (choiceOrders[i] is null).
+      // matchAnswer's multi_choice branch requires the correct answer to be
+      // present in `choices`, so pass a single-element list containing the
+      // correct answer rather than leaving it undefined (which defaults to
+      // [] and would make even a byte-perfect answer score incorrect).
+      const choices =
+        deck.match_strategy === "multi_choice" && choiceOrders[i] === null
+          ? [c.answer_text]
+          : (choiceOrders[i] ?? undefined);
       const r = matchAnswer({
         strategy: deck.match_strategy,
         userAnswer: answers[i] ?? "",
         correctAnswer: c.answer_text,
         fuzzyThreshold: threshold,
-        choices: choiceOrders[i] ?? undefined,
+        choices,
       });
       return { card: c, correct: r.correct, score: r.score };
     });

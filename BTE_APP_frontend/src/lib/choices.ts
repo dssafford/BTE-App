@@ -13,6 +13,7 @@ export function getChoices(card: Card): string[] | null {
     (c): c is string => typeof c === "string" && c.trim().length > 0
   );
   if (strings.length !== raw.length) return null;
+  if (new Set(raw).size !== raw.length) return null;
   return strings;
 }
 

@@ -101,6 +101,16 @@ describe("multi_choice quiz rendering", () => {
     expect(screen.getByRole("textbox")).toBeInTheDocument();
     expect(screen.queryAllByRole("radio")).toHaveLength(0);
   });
+
+  it("scores a correctly typed answer on the fallback text input as correct", async () => {
+    await startQuiz([mcCard({ metadata: { source: "arc_foundations", number: 1 } })]);
+    await userEvent.type(screen.getByRole("textbox"), "tool_use");
+    await userEvent.click(screen.getByRole("button", { name: /Check Answers/i }));
+    expect(await screen.findByText("Correct")).toBeInTheDocument();
+    expect(recordReview).toHaveBeenCalledWith(
+      expect.objectContaining({ card_id: 10, rating: 3 })
+    );
+  });
 });
 
 describe("study mode", () => {

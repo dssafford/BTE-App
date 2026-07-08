@@ -38,6 +38,10 @@ describe("getChoices", () => {
   it("returns null when choices contains empty strings", () => {
     expect(getChoices(makeCard({ choices: ["a", "  "] }))).toBeNull();
   });
+
+  it("returns null when choices contains duplicate strings", () => {
+    expect(getChoices(makeCard({ choices: ["a", "b", "a", "c"] }))).toBeNull();
+  });
 });
 
 describe("getExplanation", () => {
