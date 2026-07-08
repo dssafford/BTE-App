@@ -116,6 +116,31 @@ def test_source_and_explanation(cards):
         )
 
 
+def test_answer_not_systematically_longest(cards):
+    """A quiz is compromised if the correct choice is reliably the longest
+    one. Allow it to happen sometimes (accurate answers are often wordier)
+    but cap the rate globally and per domain."""
+    global_hits = 0
+    per_domain = {}
+    per_domain_totals = {}
+    for c in cards:
+        domain = c["metadata"]["domain"]
+        per_domain_totals[domain] = per_domain_totals.get(domain, 0) + 1
+        lengths = [len(ch) for ch in c["metadata"]["choices"]]
+        longest = max(lengths)
+        if len(c["answer"]) == longest and lengths.count(longest) == 1:
+            global_hits += 1
+            per_domain[domain] = per_domain.get(domain, 0) + 1
+    assert global_hits / len(cards) <= 0.40, (
+        f"answer is strictly longest in {global_hits}/{len(cards)} cards"
+    )
+    for domain, total in per_domain_totals.items():
+        hits = per_domain.get(domain, 0)
+        assert hits / total <= 0.50, (
+            f"{domain}: answer strictly longest in {hits}/{total} cards"
+        )
+
+
 def test_prompts_nonempty_and_unique(cards):
     prompts = [c["prompt"] for c in cards]
     assert all(isinstance(p, str) and p.strip() for p in prompts)
