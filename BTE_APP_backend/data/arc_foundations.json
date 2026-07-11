@@ -5107,6 +5107,618 @@
         ],
         "explanation": "The guide recommends rendering content in the format naturally suited to it, tables for financial data, prose for news, structured lists for technical findings; forcing any single uniform format across all content types obscures rather than clarifies the material."
       }
+    },
+    {
+      "prompt": "Which domain carries the single largest share of the exam?",
+      "answer": "Agentic Architecture and Orchestration",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 1,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0001 · Exam Blueprint",
+        "choices": [
+          "Context Management and Reliability",
+          "Prompt Engineering and Structured Output",
+          "Agentic Architecture and Orchestration",
+          "Claude Code Configuration and Workflows"
+        ],
+        "explanation": "Agentic Architecture &amp; Orchestration is 27% — the biggest slice and the most scenario-heavy. It's where your study should start."
+      }
+    },
+    {
+      "prompt": "Roughly what combined weight do the top three domains cover?",
+      "answer": "About sixty-seven",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 2,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0001 · Exam Blueprint",
+        "choices": [
+          "About forty percent",
+          "About sixty-seven",
+          "About eighty-eight",
+          "About fifty-two"
+        ],
+        "explanation": "27 + 20 + 20 = 67%. Agentic, Claude Code, and Prompting together nearly reach the 72% pass line on their own — hence the study order."
+      }
+    },
+    {
+      "prompt": "What scaled score do you need to pass the CCA-F?",
+      "answer": "Seven hundred twenty",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 3,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0001 · Exam Blueprint",
+        "choices": [
+          "Seven hundred twenty",
+          "Six hundred eighty",
+          "Eight hundred fifty",
+          "Seven hundred fifty"
+        ],
+        "explanation": "720 out of 1000. It's a scaled score, not a raw percent-correct — items are weighted. Aim well above it (850+) for a safe first-attempt pass."
+      }
+    },
+    {
+      "prompt": "Which pair are the two SMALLEST domains by weight?",
+      "answer": "Tool Design with MCP and Context Management",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 4,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0001 · Exam Blueprint",
+        "choices": [
+          "Prompt Engineering and Agentic Architecture",
+          "Claude Code Config and Prompt Engineering",
+          "Tool Design with MCP and Context Management",
+          "Agentic Architecture and Context Management"
+        ],
+        "explanation": "Tools/MCP (18%) and Context Management (15%) are the lightest — still ~20 questions combined, so not ignorable, just second in line."
+      }
+    },
+    {
+      "prompt": "In the loop, whose job is it to actually execute the tool's code?",
+      "answer": "Your own code runs it",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 5,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0002 · Build the Tool Loop",
+        "choices": [
+          "The Claude model runs it",
+          "Your own code runs it",
+          "The API server runs it",
+          "The tool schema runs it"
+        ],
+        "explanation": "The model only emits a <code>tool_use</code> request matching the schema. YOUR code runs the function and returns a <code>tool_result</code>. The model never executes anything."
+      }
+    },
+    {
+      "prompt": "What stop_reason signals that the model is requesting a tool call?",
+      "answer": "The value tool_use",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 6,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0002 · Build the Tool Loop",
+        "choices": [
+          "The value end_turn",
+          "The value max_tokens",
+          "The value tool_use",
+          "The value stop_seq"
+        ],
+        "explanation": "<code>stop_reason: \"tool_use\"</code> means the response contains one or more tool_use blocks you must fulfil. Anything else (usually <code>end_turn</code>) means it answered — exit the loop."
+      }
+    },
+    {
+      "prompt": "After a tool call, what must you add to messages before the next request?",
+      "answer": "Both assistant then result",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 7,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0002 · Build the Tool Loop",
+        "choices": [
+          "Only the tool_result block",
+          "Only the assistant content",
+          "Both assistant then result",
+          "Neither, just re-ask it"
+        ],
+        "explanation": "Append BOTH: the assistant's turn (its tool_use request) AND a user turn with the tool_result. Skip the assistant turn and the API rejects the conversation as malformed."
+      }
+    },
+    {
+      "prompt": "What most reliably guarantees the model returns schema-valid JSON?",
+      "answer": "A tool schema plus tool_choice",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 8,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0002 · Build the Tool Loop",
+        "choices": [
+          "Asking politely within the prompt",
+          "Setting the temperature down to zero",
+          "A tool schema plus tool_choice",
+          "Parsing prose with a regex"
+        ],
+        "explanation": "Forcing a tool via <code>tool_choice</code> makes the model's <code>input</code> conform to your <code>input_schema</code>. Prompt-only requests drift; this is structurally guaranteed."
+      }
+    },
+    {
+      "prompt": "What does an eval fundamentally give you that ad-hoc testing does not?",
+      "answer": "An objective number to compare versions",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 9,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0003 · Run an Eval",
+        "choices": [
+          "A faster model to run the prompt",
+          "An objective number to compare versions",
+          "A prompt that can never fail again",
+          "A way to remove the grader entirely"
+        ],
+        "explanation": "An eval scores outputs across a dataset and averages them, so you can compare prompt versions <em>numerically</em>. Ad-hoc testing gives you a vibe, not a metric."
+      }
+    },
+    {
+      "prompt": "\"Is the output valid, parseable JSON?\" — which grader fits best?",
+      "answer": "A code grader validates it",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 10,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0003 · Run an Eval",
+        "choices": [
+          "A human grader reviews it",
+          "A model grader judges it",
+          "A code grader validates it",
+          "No grader is needed here"
+        ],
+        "explanation": "Syntax validity is deterministic, so a <em>code</em> grader (<code>json.loads</code> → 10/0) is exact and free. Save the model grader for judgment calls like task-following."
+      }
+    },
+    {
+      "prompt": "Why ask a model grader for reasoning BEFORE it outputs the score?",
+      "answer": "Without it, it defaults near six",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 11,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0003 · Run an Eval",
+        "choices": [
+          "It makes the response much shorter",
+          "Without it, it defaults near six",
+          "It lets you skip the code grader",
+          "It forces the output into pure JSON"
+        ],
+        "explanation": "Reasoning first (strengths/weaknesses) forces genuine assessment. Skip it and the model lazily clusters everything around a middling ~6, so the eval can't discriminate."
+      }
+    },
+    {
+      "prompt": "When iterating, what makes a prompt's eval score actually useful?",
+      "answer": "That you can move it by editing",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 12,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0003 · Run an Eval",
+        "choices": [
+          "That the score is above eight",
+          "That the score never changes at all",
+          "That you can move it by editing",
+          "That the grader is always a human"
+        ],
+        "explanation": "The absolute value isn't good or bad. What matters is that changing the prompt <em>moves the number</em> — eval is the instrument you steer by, not a final verdict."
+      }
+    },
+    {
+      "prompt": "Which opening line best follows the clear-and-direct technique?",
+      "answer": "Create a 30-minute workout plan for beginners",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 13,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0004 · Prompt Engineering",
+        "choices": [
+          "Do you know much about workout routines?",
+          "Create a 30-minute workout plan for beginners",
+          "I was wondering about fitness and workouts",
+          "What sort of workout might be good for me?"
+        ],
+        "explanation": "A direct <em>instruction</em> led by an action verb (&lsquo;Create&rsquo;) with a specific task beats any question or vague musing. The first line sets everything up."
+      }
+    },
+    {
+      "prompt": "Claude keeps missing sarcasm in social posts. Best fix?",
+      "answer": "Give examples of sarcasm labeled negative",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 14,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0004 · Prompt Engineering",
+        "choices": [
+          "Tell it to be more careful with sarcasm",
+          "Make the prompt longer with instructions",
+          "Give examples of sarcasm labeled negative",
+          "Ask it to guess when things are sarcastic"
+        ],
+        "explanation": "Sarcasm is a corner case — <em>show</em> it with input/output examples (multi-shot), don't <em>tell</em> it to try harder. Examples teach edge cases instructions can't."
+      }
+    },
+    {
+      "prompt": "Which pair of specificity tools should you use, and when?",
+      "answer": "Guidelines always; process steps for complex tasks",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 15,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0004 · Prompt Engineering",
+        "choices": [
+          "Process steps always; guidelines only rarely",
+          "Guidelines always; process steps for complex tasks",
+          "Only one of them, never combine the two",
+          "Guidelines for tone; process steps for length"
+        ],
+        "explanation": "Output guidelines belong in nearly every prompt (your consistency safety-net). Add process steps when the task needs multi-angle reasoning. Pros combine both."
+      }
+    },
+    {
+      "prompt": "What is the main purpose of XML tags in a prompt?",
+      "answer": "To bound content and clarify its structure",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 16,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0004 · Prompt Engineering",
+        "choices": [
+          "To cut the token count of the prompt",
+          "To speed up the model's processing time",
+          "To make the prompt look more professional",
+          "To bound content and clarify its structure"
+        ],
+        "explanation": "Descriptive tags (<code>&lt;athlete_information&gt;</code>) delimit interpolated data from instructions so Claude parses structure correctly — most valuable as prompts grow complex."
+      }
+    },
+    {
+      "prompt": "What scaled score is required to pass the CCA-F exam?",
+      "answer": "A score of 720 / 1000",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 17,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0005 · Checkpoint Review",
+        "choices": [
+          "A score of 650 / 1000",
+          "A score of 720 / 1000",
+          "A score of 800 / 1000",
+          "A score of 900 / 1000"
+        ],
+        "explanation": "720 out of 1000 passes. Remember it's a scaled score (weighted), not a raw percentage of questions correct."
+      }
+    },
+    {
+      "prompt": "In the agent loop, which stop_reason means Claude is requesting a tool?",
+      "answer": "The value tool_use",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 18,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0005 · Checkpoint Review",
+        "choices": [
+          "The value end_turn",
+          "The value max_tokens",
+          "The value tool_use",
+          "The value stop_seq"
+        ],
+        "explanation": "stop_reason of tool_use means the response holds tool_use blocks you must fulfil and feed back. Anything else (usually end_turn) means it answered — exit the loop."
+      }
+    },
+    {
+      "prompt": "Which single domain carries the largest share of the exam?",
+      "answer": "Agentic Architecture, 27%",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 19,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0005 · Checkpoint Review",
+        "choices": [
+          "Prompt Engineering, at 20%",
+          "Tool Design and MCP, 18%",
+          "Claude Code Workflows, 20%",
+          "Agentic Architecture, 27%"
+        ],
+        "explanation": "Agentic Architecture & Orchestration is the biggest at 27%. With Claude Code (20%) and Prompting (20%), the top three are ~67% of the score."
+      }
+    },
+    {
+      "prompt": "You need to check whether output is valid JSON. Which grader fits?",
+      "answer": "A code grader validates it",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 20,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0005 · Checkpoint Review",
+        "choices": [
+          "A human grader reviews it",
+          "A model grader judges it",
+          "A code grader validates it",
+          "No grader is needed here"
+        ],
+        "explanation": "Syntax validity is deterministic, so a code grader (json.loads → 10/0) is exact and free. Reserve the model grader for judgment like task-following."
+      }
+    },
+    {
+      "prompt": "Why ask a model grader for reasoning BEFORE the score?",
+      "answer": "Without it, it defaults near six",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 21,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0005 · Checkpoint Review",
+        "choices": [
+          "It makes responses much shorter",
+          "Without it, it defaults near six",
+          "It lets you drop the code grader",
+          "It forces output into pure JSON"
+        ],
+        "explanation": "Reasoning first (strengths/weaknesses) forces real assessment. Skip it and the model clusters everything near a middling six, so the eval can't discriminate."
+      }
+    },
+    {
+      "prompt": "What is the single defining line between an agent and a workflow?",
+      "answer": "Whether the model or code controls flow",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 22,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0006 · Agentic Topologies",
+        "choices": [
+          "Whether the system calls any tools",
+          "Whether the model or code controls flow",
+          "Whether the output is JSON or prose",
+          "Whether more than one model is used"
+        ],
+        "explanation": "A <strong>workflow</strong> runs a developer-defined path; an <strong>agent</strong> lets the model direct its own steps and stopping point. Tools, JSON, and model count are all orthogonal to that split."
+      }
+    },
+    {
+      "prompt": "A task splits into independent parts that can run at once. Best shape?",
+      "answer": "Orchestrator-workers with fan-out",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 23,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0006 · Agentic Topologies",
+        "choices": [
+          "Prompt chaining across fixed steps",
+          "Evaluator-optimizer with a rubric",
+          "Orchestrator-workers with fan-out",
+          "A single autonomous tool loop"
+        ],
+        "explanation": "Independent, parallelizable subtasks call for <strong>orchestrator-workers</strong>: decompose, fan out to isolated contexts, synthesize. Wall-clock is the slowest worker, not the sum."
+      }
+    },
+    {
+      "prompt": "Your 002 meal-plan eval (generate, grade, revise) is which topology?",
+      "answer": "Evaluator-optimizer reflection",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 24,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0006 · Agentic Topologies",
+        "choices": [
+          "Routing by input category",
+          "Evaluator-optimizer reflection",
+          "Orchestrator-workers fan-out",
+          "Autonomous agent tool loop"
+        ],
+        "explanation": "Generate → score against a rubric → revise is the <strong>evaluator-optimizer</strong> loop. You ran it open-loop (you were the optimizer); build 06 closes it."
+      }
+    },
+    {
+      "prompt": "Which trait most signals you need an autonomous agent, not a workflow?",
+      "answer": "The path can't be known upfront",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 25,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0006 · Agentic Topologies",
+        "choices": [
+          "The output must be valid JSON",
+          "The steps are known in advance",
+          "The path can't be known upfront",
+          "The task uses exactly one tool"
+        ],
+        "explanation": "Autonomous <strong>agents</strong> earn their cost only when the control flow can't be predetermined. If the steps are knowable, a workflow is simpler, cheaper, and easier to test."
+      }
+    },
+    {
+      "prompt": "Why give each orchestrator worker only its own subtask, not the whole goal?",
+      "answer": "Isolated context scales and focuses",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 26,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0006 · Agentic Topologies",
+        "choices": [
+          "It makes the workers run slower",
+          "Isolated context scales and focuses",
+          "The API forbids sharing the goal",
+          "It guarantees valid JSON output"
+        ],
+        "explanation": "Isolated context keeps each worker's window small (the job can exceed one context) and its reasoning focused, with no cross-talk. Sharing everything reinflates context and invites drift."
+      }
+    },
+    {
+      "prompt": "A task must extract numbers, normalize them, sort them, then render a table — each step needs the previous step's clean output. Best pattern?",
+      "answer": "Chain the four steps in sequence",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 27,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0006 · Basic Workflows",
+        "choices": [
+          "Parallelize the four steps as inputs",
+          "Chain the four steps in sequence",
+          "Route each step to a specialist",
+          "Ask one prompt to do all four"
+        ],
+        "explanation": "Each step <em>depends</em> on the last, so they must run in order — that's prompt-chaining. Parallel needs independent subtasks; one big prompt fumbles the multi-step transform."
+      }
+    },
+    {
+      "prompt": "You must run the same impact analysis over four independent stakeholder groups, and you want all four back fast. Best pattern?",
+      "answer": "Parallelize one prompt over the inputs",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 28,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0006 · Basic Workflows",
+        "choices": [
+          "Chain them so each builds on prior",
+          "Route each to a different specialist",
+          "Parallelize one prompt over the inputs",
+          "Combine all four into one prompt"
+        ],
+        "explanation": "Independent subtasks you all want → parallelization (same prompt, many inputs, concurrently). It trades cost (N calls at once) to hide latency. No step depends on another, so chaining would only add delay."
+      }
+    },
+    {
+      "prompt": "Your router keeps sending password-reset tickets to the billing specialist. What is the root-cause fix?",
+      "answer": "Improve the selector's classification prompt",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 29,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0006 · Basic Workflows",
+        "choices": [
+          "Add a fallback catch-all support route",
+          "Retry the routing call a few times",
+          "Improve the selector's classification prompt",
+          "Lengthen each specialist's own prompt"
+        ],
+        "explanation": "Routing quality <em>is</em> classifier quality — a mis-route means the selector prompt is weak. Fix the classification (the root cause); a fallback route or retries just bolt a layer onto a broken selector."
+      }
+    },
+    {
+      "prompt": "What actually makes these three 'workflows' rather than 'agents'?",
+      "answer": "You define the control flow in code",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 30,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0006 · Basic Workflows",
+        "choices": [
+          "They call the model more than once",
+          "You define the control flow in code",
+          "They always emit structured output",
+          "They run all their steps at once"
+        ],
+        "explanation": "A workflow is a graph you draw; an agent is a loop the model drives. Here you wired the edges before runtime — the model only fills each node. Multiple calls and structured output aren't the distinction."
+      }
+    },
+    {
+      "prompt": "Compared with a single prompt, what does prompt-chaining primarily trade away?",
+      "answer": "Added latency from serial steps",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 31,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0006 · Basic Workflows",
+        "choices": [
+          "Added latency from serial steps",
+          "All ability to return valid JSON",
+          "Lower accuracy on each subtask",
+          "Higher token cost per single call"
+        ],
+        "explanation": "Chaining runs steps in series, so latency stacks — that's the trade for higher accuracy on decomposable tasks. It doesn't lose JSON or accuracy; per-call cost is roughly unchanged."
+      }
+    },
+    {
+      "prompt": "A coding task changes a different, unpredictable set of files each run — you cannot list the subtasks ahead of time. Best pattern?",
+      "answer": "Orchestrator-workers, subtasks at runtime",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 32,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0007 · Advanced Patterns",
+        "choices": [
+          "Route to a fixed set of file handlers",
+          "Orchestrator-workers, subtasks at runtime",
+          "Parallelize a known list of file edits",
+          "Chain the file edits in a fixed order"
+        ],
+        "explanation": "Subtasks unknowable in advance → the orchestrator must generate them per input. Routing and parallel both assume a fixed, pre-known set of paths; a chain assumes a fixed order."
+      }
+    },
+    {
+      "prompt": "A translation misses nuance first pass, a critic can name what to fix, and quality clearly improves with revision. Best pattern?",
+      "answer": "Evaluator-optimizer, loop until it passes",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 33,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0007 · Advanced Patterns",
+        "choices": [
+          "Chain: translate, then polish, then ship",
+          "Evaluator-optimizer, loop until it passes",
+          "Parallel: translate three ways at once",
+          "Route to a specialist translator prompt"
+        ],
+        "explanation": "A clear quality signal plus gains from revision is the exact fit for evaluator-optimizer: generate, judge, refine, repeat until PASS. A chain runs a fixed number of steps and never loops back on a critique."
+      }
+    },
+    {
+      "prompt": "Your evaluator-optimizer loop occasionally runs forever in production. Root-cause fix?",
+      "answer": "Add a maximum-iteration cap to the loop",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 34,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0007 · Advanced Patterns",
+        "choices": [
+          "Switch the generator to a bigger model",
+          "Make the evaluator grade more leniently",
+          "Add a maximum-iteration cap to the loop",
+          "Retry the whole loop from the beginning"
+        ],
+        "explanation": "The cookbook exits only on PASS, so a generator that never satisfies the judge loops forever. A max-iteration cap is the structural fix; a bigger model or lenient judge just masks a missing stop guard."
+      }
+    },
+    {
+      "prompt": "You want evaluator-optimizer but cannot clearly state what a 'good' output is. What does that tell you?",
+      "answer": "The pattern won't help — no quality signal",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 35,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0007 · Advanced Patterns",
+        "choices": [
+          "Use a stronger model as the evaluator",
+          "The pattern won't help — no quality signal",
+          "Add more workers to the orchestrator step",
+          "Run more iterations to make up for it"
+        ],
+        "explanation": "The pattern depends on the evaluator applying real criteria. No articulable standard of 'good' means the judge can't judge and the loop is theater — no model size or iteration count rescues it."
+      }
+    },
+    {
+      "prompt": "What actually separates orchestrator-workers from parallelization?",
+      "answer": "The orchestrator decides the subtasks itself",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 36,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0007 · Advanced Patterns",
+        "choices": [
+          "The orchestrator decides the subtasks itself",
+          "Parallelization is always the faster option",
+          "The orchestrator is capped at two workers",
+          "Parallelization needs an evaluator to merge"
+        ],
+        "explanation": "Parallelization runs work you already divided; the orchestrator divides it for you at runtime, per input. That runtime decomposition — not speed, worker count, or merging — is the distinction."
+      }
     }
   ]
 }

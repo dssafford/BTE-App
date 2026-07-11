@@ -49,8 +49,21 @@ def deck():
 
 
 @pytest.fixture(scope="module")
-def cards(deck):
+def all_cards(deck):
     return deck["cards"]
+
+
+@pytest.fixture(scope="module")
+def cards(all_cards):
+    """The original 300 study-guide cards. Course-quiz cards (source
+    'cca_course_quiz') carry their own invariants — see the CourseQuiz
+    tests below."""
+    return [c for c in all_cards if c["metadata"]["source"] == "arc_foundations"]
+
+
+@pytest.fixture(scope="module")
+def course_cards(all_cards):
+    return [c for c in all_cards if c["metadata"]["source"] == "cca_course_quiz"]
 
 
 def test_deck_header(deck):
@@ -141,7 +154,38 @@ def test_answer_not_systematically_longest(cards):
         )
 
 
-def test_prompts_nonempty_and_unique(cards):
-    prompts = [c["prompt"] for c in cards]
+def test_prompts_nonempty_and_unique(all_cards):
+    prompts = [c["prompt"] for c in all_cards]
     assert all(isinstance(p, str) and p.strip() for p in prompts)
-    assert len(set(prompts)) == 300, "duplicate prompts found"
+    assert len(set(prompts)) == len(prompts), "duplicate prompts found"
+
+
+def test_no_unknown_sources(all_cards):
+    assert {c["metadata"]["source"] for c in all_cards} == {
+        "arc_foundations",
+        "cca_course_quiz",
+    }
+
+
+# --- Course-quiz cards (extracted from the CCA-F course lesson quizzes;
+# recall-style floor questions, deduped against the checkpoint-review
+# lesson's repeats) ---
+
+
+def test_course_quiz_count(course_cards):
+    assert len(course_cards) == 36
+
+
+def test_course_quiz_structure(course_cards):
+    numbers = []
+    for c in course_cards:
+        m = c["metadata"]
+        choices = m["choices"]
+        assert isinstance(choices, list) and len(choices) == 4, m["number"]
+        assert len(set(choices)) == 4, m["number"]
+        assert c["answer"] in choices, m["number"]
+        assert isinstance(m["explanation"], str) and m["explanation"].strip()
+        assert m["domain"] == "CCA-F Course Quiz"
+        assert isinstance(m["subdomain"], str) and m["subdomain"].strip()
+        numbers.append(m["number"])
+    assert sorted(numbers) == list(range(1, 37))
