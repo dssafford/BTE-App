@@ -5719,6 +5719,142 @@
         ],
         "explanation": "Parallelization runs work you already divided; the orchestrator divides it for you at runtime, per input. That runtime decomposition — not speed, worker count, or merging — is the distinction."
       }
+    },
+    {
+      "prompt": "You're building a material designer app: users upload part images and get a recommendation from six material types. Your single prompt embeds detailed criteria for all six materials, and results are inconsistent — Claude seems to under-apply some criteria. What is the best fix?",
+      "answer": "Split into parallel requests, each evaluating the part against one material's specialized criteria, then aggregate the analyses in a final step",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 37,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Course Material · Parallelization Workflows",
+        "choices": [
+          "Split into parallel requests, each evaluating the part against one material's specialized criteria, then aggregate the analyses in a final step",
+          "Add an instruction telling Claude to be thorough and consider every material's criteria equally before answering",
+          "Increase max_tokens so Claude has enough room to reason through all six materials' criteria in one response",
+          "Ask Claude to think step-by-step through the six materials in a fixed order within the same single request"
+        ],
+        "explanation": "Cramming all criteria into one request forces the model to juggle competing considerations at once. Parallelization gives each material a focused evaluation and an aggregation step makes the final call; 'be thorough' instructions and more tokens are band-aids on the overloaded single prompt."
+      }
+    },
+    {
+      "prompt": "A teammate sketches a parallelization workflow on the whiteboard. Which sequence correctly describes the pattern?",
+      "answer": "Split one task into focused sub-tasks, run the sub-tasks simultaneously, then aggregate their results into a final decision",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 38,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Course Material · Parallelization Workflows",
+        "choices": [
+          "Split one task into focused sub-tasks, run the sub-tasks simultaneously, then aggregate their results into a final decision",
+          "Run the full task once, ask a second model instance to critique it, then run the full task again with the critique",
+          "Classify the input first, then route it to exactly one specialized prompt that produces the final answer",
+          "Chain focused prompts sequentially so each step's output becomes the next step's input until a final answer emerges"
+        ],
+        "explanation": "Parallelization is split → run in parallel → aggregate. The routing option describes a routing workflow, the sequential option describes prompt chaining, and critique-and-retry is an evaluator-optimizer loop — all different patterns."
+      }
+    },
+    {
+      "prompt": "While implementing parallel material evaluations, a developer insists every parallel branch must use an identical prompt so results stay comparable. What is the correct guidance?",
+      "answer": "Parallel sub-tasks may each use a specialized prompt, tool set, or evaluation criteria — they only need to contribute a distinct analysis the aggregator can compare",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 39,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Course Material · Parallelization Workflows",
+        "choices": [
+          "Parallel sub-tasks may each use a specialized prompt, tool set, or evaluation criteria — they only need to contribute a distinct analysis the aggregator can compare",
+          "All branches must share one prompt template, varying only a material-name placeholder, or the aggregation step becomes invalid",
+          "Branches must be identical and any specialization should instead be moved into the final aggregation prompt",
+          "Specialized branches are only allowed when each branch also uses a different model to avoid shared bias"
+        ],
+        "explanation": "The sub-tasks in a parallelization workflow don't need to be identical — specialization per branch is the point. The aggregator compares the independent analyses; it doesn't require uniform prompts."
+      }
+    },
+    {
+      "prompt": "In the material-designer example, why does evaluating one material per request outperform one mega-prompt holding all six materials' criteria?",
+      "answer": "Each request concentrates the model's attention on one aspect, avoiding the competing considerations that degrade analysis in a combined prompt",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 40,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Course Material · Parallelization Workflows",
+        "choices": [
+          "Each request concentrates the model's attention on one aspect, avoiding the competing considerations that degrade analysis in a combined prompt",
+          "Splitting the work reduces total token usage because the criteria are shorter in each request",
+          "Parallel requests are processed by faster model instances, so each analysis gets more compute",
+          "It avoids context-window limits, which are the main reason mega-prompts fail for this task"
+        ],
+        "explanation": "The benefit is focused attention: one specialized evaluation per request reduces the cognitive load of balancing many criteria simultaneously. Total tokens actually go up across parallel calls, and the mega-prompt's problem here is attention, not the context limit or compute speed."
+      }
+    },
+    {
+      "prompt": "Your parallelized material workflow performs well except the metal evaluation, which keeps overrating corrosion-prone parts. What does the parallel structure let you do?",
+      "answer": "Refine and test the metal evaluation prompt independently, without touching the other materials' prompts",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 41,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Course Material · Parallelization Workflows",
+        "choices": [
+          "Refine and test the metal evaluation prompt independently, without touching the other materials' prompts",
+          "Rewrite the aggregation prompt to down-weight the metal analysis whenever corrosion appears in the input",
+          "Regenerate all material prompts together so the criteria stay stylistically consistent across branches",
+          "Add a global instruction to every branch reminding the model to consider corrosion risk carefully"
+        ],
+        "explanation": "Independent optimization is a core benefit: each branch's prompt can be improved and tested in isolation. Down-weighting in the aggregator or adding global instructions papers over the one faulty branch instead of fixing it."
+      }
+    },
+    {
+      "prompt": "Product asks you to add glass as a seventh material to the parallelized designer. What does this require?",
+      "answer": "Add one new parallel request with glass-specific criteria; existing branch prompts stay unchanged",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 42,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Course Material · Parallelization Workflows",
+        "choices": [
+          "Add one new parallel request with glass-specific criteria; existing branch prompts stay unchanged",
+          "Rework the shared mega-prompt so glass criteria don't interfere with the other six materials' criteria",
+          "Re-tune every existing branch because adding a material changes the balance of the combined evaluation",
+          "Convert the workflow into a decision tree that eliminates materials one at a time to keep latency flat"
+        ],
+        "explanation": "Scalability is a key benefit of parallelization: new options are added as new independent branches without rewriting existing prompts or worrying about criteria interference. The other options reintroduce exactly the coupling the pattern removes."
+      }
+    },
+    {
+      "prompt": "Which task is the best candidate for a parallelization workflow?",
+      "answer": "A decision that decomposes into independent evaluations across different domains of expertise, whose results are then compared",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 43,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Course Material · Parallelization Workflows",
+        "choices": [
+          "A decision that decomposes into independent evaluations across different domains of expertise, whose results are then compared",
+          "A pipeline where each step's output is required as the input to the next step",
+          "A single-fact lookup that one small prompt already answers reliably",
+          "A task whose sub-steps must observe each other's intermediate reasoning to stay consistent"
+        ],
+        "explanation": "Parallelization fits when sub-tasks can operate independently and each contributes a distinct analysis. Sequentially dependent steps call for chaining, and tasks that are already simple gain nothing from the extra structure."
+      }
+    },
+    {
+      "prompt": "All six material evaluations have returned in your parallelized workflow. What does the aggregation step do?",
+      "answer": "Sends the individual analyses back to the model with a request to compare them and produce the final material recommendation",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 44,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Course Material · Parallelization Workflows",
+        "choices": [
+          "Sends the individual analyses back to the model with a request to compare them and produce the final material recommendation",
+          "Selects whichever branch produced the longest and most detailed analysis as the winner",
+          "Applies string-matching majority vote across the branch outputs without another model call",
+          "Returns the first branch response that arrived, since parallel workflows optimize for latency"
+        ],
+        "explanation": "Aggregation is itself a model step: the collected analyses are fed back to Claude to weigh and compare before the final recommendation. Length, arrival order, and naive voting ignore the content of the specialized analyses."
+      }
     }
   ]
 }

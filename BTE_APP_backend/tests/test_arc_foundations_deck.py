@@ -173,7 +173,7 @@ def test_no_unknown_sources(all_cards):
 
 
 def test_course_quiz_count(course_cards):
-    assert len(course_cards) == 36
+    assert len(course_cards) == 44
 
 
 def test_course_quiz_structure(course_cards):
@@ -188,4 +188,4 @@ def test_course_quiz_structure(course_cards):
         assert m["domain"] == "CCA-F Course Quiz"
         assert isinstance(m["subdomain"], str) and m["subdomain"].strip()
         numbers.append(m["number"])
-    assert sorted(numbers) == list(range(1, 37))
+    assert sorted(numbers) == list(range(1, 45))
