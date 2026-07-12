@@ -5107,6 +5107,1604 @@
         ],
         "explanation": "The guide recommends rendering content in the format naturally suited to it, tables for financial data, prose for news, structured lists for technical findings; forcing any single uniform format across all content types obscures rather than clarifies the material."
       }
+    },
+    {
+      "prompt": "Which domain carries the single largest share of the exam?",
+      "answer": "Agentic Architecture and Orchestration",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 1,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0001 · Exam Blueprint",
+        "choices": [
+          "Context Management and Reliability",
+          "Prompt Engineering and Structured Output",
+          "Agentic Architecture and Orchestration",
+          "Claude Code Configuration and Workflows"
+        ],
+        "explanation": "Agentic Architecture &amp; Orchestration is 27% — the biggest slice and the most scenario-heavy. It's where your study should start."
+      }
+    },
+    {
+      "prompt": "Roughly what combined weight do the top three domains cover?",
+      "answer": "About sixty-seven",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 2,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0001 · Exam Blueprint",
+        "choices": [
+          "About forty percent",
+          "About sixty-seven",
+          "About eighty-eight",
+          "About fifty-two"
+        ],
+        "explanation": "27 + 20 + 20 = 67%. Agentic, Claude Code, and Prompting together nearly reach the 72% pass line on their own — hence the study order."
+      }
+    },
+    {
+      "prompt": "What scaled score do you need to pass the CCA-F?",
+      "answer": "Seven hundred twenty",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 3,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0001 · Exam Blueprint",
+        "choices": [
+          "Seven hundred twenty",
+          "Six hundred eighty",
+          "Eight hundred fifty",
+          "Seven hundred fifty"
+        ],
+        "explanation": "720 out of 1000. It's a scaled score, not a raw percent-correct — items are weighted. Aim well above it (850+) for a safe first-attempt pass."
+      }
+    },
+    {
+      "prompt": "Which pair are the two SMALLEST domains by weight?",
+      "answer": "Tool Design with MCP and Context Management",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 4,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0001 · Exam Blueprint",
+        "choices": [
+          "Prompt Engineering and Agentic Architecture",
+          "Claude Code Config and Prompt Engineering",
+          "Tool Design with MCP and Context Management",
+          "Agentic Architecture and Context Management"
+        ],
+        "explanation": "Tools/MCP (18%) and Context Management (15%) are the lightest — still ~20 questions combined, so not ignorable, just second in line."
+      }
+    },
+    {
+      "prompt": "In the loop, whose job is it to actually execute the tool's code?",
+      "answer": "Your own code runs it",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 5,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0002 · Build the Tool Loop",
+        "choices": [
+          "The Claude model runs it",
+          "Your own code runs it",
+          "The API server runs it",
+          "The tool schema runs it"
+        ],
+        "explanation": "The model only emits a <code>tool_use</code> request matching the schema. YOUR code runs the function and returns a <code>tool_result</code>. The model never executes anything."
+      }
+    },
+    {
+      "prompt": "What stop_reason signals that the model is requesting a tool call?",
+      "answer": "The value tool_use",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 6,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0002 · Build the Tool Loop",
+        "choices": [
+          "The value end_turn",
+          "The value max_tokens",
+          "The value tool_use",
+          "The value stop_seq"
+        ],
+        "explanation": "<code>stop_reason: \"tool_use\"</code> means the response contains one or more tool_use blocks you must fulfil. Anything else (usually <code>end_turn</code>) means it answered — exit the loop."
+      }
+    },
+    {
+      "prompt": "After a tool call, what must you add to messages before the next request?",
+      "answer": "Both assistant then result",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 7,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0002 · Build the Tool Loop",
+        "choices": [
+          "Only the tool_result block",
+          "Only the assistant content",
+          "Both assistant then result",
+          "Neither, just re-ask it"
+        ],
+        "explanation": "Append BOTH: the assistant's turn (its tool_use request) AND a user turn with the tool_result. Skip the assistant turn and the API rejects the conversation as malformed."
+      }
+    },
+    {
+      "prompt": "What most reliably guarantees the model returns schema-valid JSON?",
+      "answer": "A tool schema plus tool_choice",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 8,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0002 · Build the Tool Loop",
+        "choices": [
+          "Asking politely within the prompt",
+          "Setting the temperature down to zero",
+          "A tool schema plus tool_choice",
+          "Parsing prose with a regex"
+        ],
+        "explanation": "Forcing a tool via <code>tool_choice</code> makes the model's <code>input</code> conform to your <code>input_schema</code>. Prompt-only requests drift; this is structurally guaranteed."
+      }
+    },
+    {
+      "prompt": "What does an eval fundamentally give you that ad-hoc testing does not?",
+      "answer": "An objective number to compare versions",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 9,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0003 · Run an Eval",
+        "choices": [
+          "A faster model to run the prompt",
+          "An objective number to compare versions",
+          "A prompt that can never fail again",
+          "A way to remove the grader entirely"
+        ],
+        "explanation": "An eval scores outputs across a dataset and averages them, so you can compare prompt versions <em>numerically</em>. Ad-hoc testing gives you a vibe, not a metric."
+      }
+    },
+    {
+      "prompt": "\"Is the output valid, parseable JSON?\" — which grader fits best?",
+      "answer": "A code grader validates it",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 10,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0003 · Run an Eval",
+        "choices": [
+          "A human grader reviews it",
+          "A model grader judges it",
+          "A code grader validates it",
+          "No grader is needed here"
+        ],
+        "explanation": "Syntax validity is deterministic, so a <em>code</em> grader (<code>json.loads</code> → 10/0) is exact and free. Save the model grader for judgment calls like task-following."
+      }
+    },
+    {
+      "prompt": "Why ask a model grader for reasoning BEFORE it outputs the score?",
+      "answer": "Without it, it defaults near six",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 11,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0003 · Run an Eval",
+        "choices": [
+          "It makes the response much shorter",
+          "Without it, it defaults near six",
+          "It lets you skip the code grader",
+          "It forces the output into pure JSON"
+        ],
+        "explanation": "Reasoning first (strengths/weaknesses) forces genuine assessment. Skip it and the model lazily clusters everything around a middling ~6, so the eval can't discriminate."
+      }
+    },
+    {
+      "prompt": "When iterating, what makes a prompt's eval score actually useful?",
+      "answer": "That you can move it by editing",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 12,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0003 · Run an Eval",
+        "choices": [
+          "That the score is above eight",
+          "That the score never changes at all",
+          "That you can move it by editing",
+          "That the grader is always a human"
+        ],
+        "explanation": "The absolute value isn't good or bad. What matters is that changing the prompt <em>moves the number</em> — eval is the instrument you steer by, not a final verdict."
+      }
+    },
+    {
+      "prompt": "Which opening line best follows the clear-and-direct technique?",
+      "answer": "Create a 30-minute workout plan for beginners",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 13,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0004 · Prompt Engineering",
+        "choices": [
+          "Do you know much about workout routines?",
+          "Create a 30-minute workout plan for beginners",
+          "I was wondering about fitness and workouts",
+          "What sort of workout might be good for me?"
+        ],
+        "explanation": "A direct <em>instruction</em> led by an action verb (&lsquo;Create&rsquo;) with a specific task beats any question or vague musing. The first line sets everything up."
+      }
+    },
+    {
+      "prompt": "Claude keeps missing sarcasm in social posts. Best fix?",
+      "answer": "Give examples of sarcasm labeled negative",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 14,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0004 · Prompt Engineering",
+        "choices": [
+          "Tell it to be more careful with sarcasm",
+          "Make the prompt longer with instructions",
+          "Give examples of sarcasm labeled negative",
+          "Ask it to guess when things are sarcastic"
+        ],
+        "explanation": "Sarcasm is a corner case — <em>show</em> it with input/output examples (multi-shot), don't <em>tell</em> it to try harder. Examples teach edge cases instructions can't."
+      }
+    },
+    {
+      "prompt": "Which pair of specificity tools should you use, and when?",
+      "answer": "Guidelines always; process steps for complex tasks",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 15,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0004 · Prompt Engineering",
+        "choices": [
+          "Process steps always; guidelines only rarely",
+          "Guidelines always; process steps for complex tasks",
+          "Only one of them, never combine the two",
+          "Guidelines for tone; process steps for length"
+        ],
+        "explanation": "Output guidelines belong in nearly every prompt (your consistency safety-net). Add process steps when the task needs multi-angle reasoning. Pros combine both."
+      }
+    },
+    {
+      "prompt": "What is the main purpose of XML tags in a prompt?",
+      "answer": "To bound content and clarify its structure",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 16,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0004 · Prompt Engineering",
+        "choices": [
+          "To cut the token count of the prompt",
+          "To speed up the model's processing time",
+          "To make the prompt look more professional",
+          "To bound content and clarify its structure"
+        ],
+        "explanation": "Descriptive tags (<code>&lt;athlete_information&gt;</code>) delimit interpolated data from instructions so Claude parses structure correctly — most valuable as prompts grow complex."
+      }
+    },
+    {
+      "prompt": "What scaled score is required to pass the CCA-F exam?",
+      "answer": "A score of 720 / 1000",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 17,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0005 · Checkpoint Review",
+        "choices": [
+          "A score of 650 / 1000",
+          "A score of 720 / 1000",
+          "A score of 800 / 1000",
+          "A score of 900 / 1000"
+        ],
+        "explanation": "720 out of 1000 passes. Remember it's a scaled score (weighted), not a raw percentage of questions correct."
+      }
+    },
+    {
+      "prompt": "In the agent loop, which stop_reason means Claude is requesting a tool?",
+      "answer": "The value tool_use",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 18,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0005 · Checkpoint Review",
+        "choices": [
+          "The value end_turn",
+          "The value max_tokens",
+          "The value tool_use",
+          "The value stop_seq"
+        ],
+        "explanation": "stop_reason of tool_use means the response holds tool_use blocks you must fulfil and feed back. Anything else (usually end_turn) means it answered — exit the loop."
+      }
+    },
+    {
+      "prompt": "Which single domain carries the largest share of the exam?",
+      "answer": "Agentic Architecture, 27%",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 19,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0005 · Checkpoint Review",
+        "choices": [
+          "Prompt Engineering, at 20%",
+          "Tool Design and MCP, 18%",
+          "Claude Code Workflows, 20%",
+          "Agentic Architecture, 27%"
+        ],
+        "explanation": "Agentic Architecture & Orchestration is the biggest at 27%. With Claude Code (20%) and Prompting (20%), the top three are ~67% of the score."
+      }
+    },
+    {
+      "prompt": "You need to check whether output is valid JSON. Which grader fits?",
+      "answer": "A code grader validates it",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 20,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0005 · Checkpoint Review",
+        "choices": [
+          "A human grader reviews it",
+          "A model grader judges it",
+          "A code grader validates it",
+          "No grader is needed here"
+        ],
+        "explanation": "Syntax validity is deterministic, so a code grader (json.loads → 10/0) is exact and free. Reserve the model grader for judgment like task-following."
+      }
+    },
+    {
+      "prompt": "Why ask a model grader for reasoning BEFORE the score?",
+      "answer": "Without it, it defaults near six",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 21,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0005 · Checkpoint Review",
+        "choices": [
+          "It makes responses much shorter",
+          "Without it, it defaults near six",
+          "It lets you drop the code grader",
+          "It forces output into pure JSON"
+        ],
+        "explanation": "Reasoning first (strengths/weaknesses) forces real assessment. Skip it and the model clusters everything near a middling six, so the eval can't discriminate."
+      }
+    },
+    {
+      "prompt": "What is the single defining line between an agent and a workflow?",
+      "answer": "Whether the model or code controls flow",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 22,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0006 · Agentic Topologies",
+        "choices": [
+          "Whether the system calls any tools",
+          "Whether the model or code controls flow",
+          "Whether the output is JSON or prose",
+          "Whether more than one model is used"
+        ],
+        "explanation": "A <strong>workflow</strong> runs a developer-defined path; an <strong>agent</strong> lets the model direct its own steps and stopping point. Tools, JSON, and model count are all orthogonal to that split."
+      }
+    },
+    {
+      "prompt": "A task splits into independent parts that can run at once. Best shape?",
+      "answer": "Orchestrator-workers with fan-out",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 23,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0006 · Agentic Topologies",
+        "choices": [
+          "Prompt chaining across fixed steps",
+          "Evaluator-optimizer with a rubric",
+          "Orchestrator-workers with fan-out",
+          "A single autonomous tool loop"
+        ],
+        "explanation": "Independent, parallelizable subtasks call for <strong>orchestrator-workers</strong>: decompose, fan out to isolated contexts, synthesize. Wall-clock is the slowest worker, not the sum."
+      }
+    },
+    {
+      "prompt": "Your 002 meal-plan eval (generate, grade, revise) is which topology?",
+      "answer": "Evaluator-optimizer reflection",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 24,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0006 · Agentic Topologies",
+        "choices": [
+          "Routing by input category",
+          "Evaluator-optimizer reflection",
+          "Orchestrator-workers fan-out",
+          "Autonomous agent tool loop"
+        ],
+        "explanation": "Generate → score against a rubric → revise is the <strong>evaluator-optimizer</strong> loop. You ran it open-loop (you were the optimizer); build 06 closes it."
+      }
+    },
+    {
+      "prompt": "Which trait most signals you need an autonomous agent, not a workflow?",
+      "answer": "The path can't be known upfront",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 25,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0006 · Agentic Topologies",
+        "choices": [
+          "The output must be valid JSON",
+          "The steps are known in advance",
+          "The path can't be known upfront",
+          "The task uses exactly one tool"
+        ],
+        "explanation": "Autonomous <strong>agents</strong> earn their cost only when the control flow can't be predetermined. If the steps are knowable, a workflow is simpler, cheaper, and easier to test."
+      }
+    },
+    {
+      "prompt": "Why give each orchestrator worker only its own subtask, not the whole goal?",
+      "answer": "Isolated context scales and focuses",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 26,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0006 · Agentic Topologies",
+        "choices": [
+          "It makes the workers run slower",
+          "Isolated context scales and focuses",
+          "The API forbids sharing the goal",
+          "It guarantees valid JSON output"
+        ],
+        "explanation": "Isolated context keeps each worker's window small (the job can exceed one context) and its reasoning focused, with no cross-talk. Sharing everything reinflates context and invites drift."
+      }
+    },
+    {
+      "prompt": "A task must extract numbers, normalize them, sort them, then render a table — each step needs the previous step's clean output. Best pattern?",
+      "answer": "Chain the four steps in sequence",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 27,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0006 · Basic Workflows",
+        "choices": [
+          "Parallelize the four steps as inputs",
+          "Chain the four steps in sequence",
+          "Route each step to a specialist",
+          "Ask one prompt to do all four"
+        ],
+        "explanation": "Each step <em>depends</em> on the last, so they must run in order — that's prompt-chaining. Parallel needs independent subtasks; one big prompt fumbles the multi-step transform."
+      }
+    },
+    {
+      "prompt": "You must run the same impact analysis over four independent stakeholder groups, and you want all four back fast. Best pattern?",
+      "answer": "Parallelize one prompt over the inputs",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 28,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0006 · Basic Workflows",
+        "choices": [
+          "Chain them so each builds on prior",
+          "Route each to a different specialist",
+          "Parallelize one prompt over the inputs",
+          "Combine all four into one prompt"
+        ],
+        "explanation": "Independent subtasks you all want → parallelization (same prompt, many inputs, concurrently). It trades cost (N calls at once) to hide latency. No step depends on another, so chaining would only add delay."
+      }
+    },
+    {
+      "prompt": "Your router keeps sending password-reset tickets to the billing specialist. What is the root-cause fix?",
+      "answer": "Improve the selector's classification prompt",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 29,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0006 · Basic Workflows",
+        "choices": [
+          "Add a fallback catch-all support route",
+          "Retry the routing call a few times",
+          "Improve the selector's classification prompt",
+          "Lengthen each specialist's own prompt"
+        ],
+        "explanation": "Routing quality <em>is</em> classifier quality — a mis-route means the selector prompt is weak. Fix the classification (the root cause); a fallback route or retries just bolt a layer onto a broken selector."
+      }
+    },
+    {
+      "prompt": "What actually makes these three 'workflows' rather than 'agents'?",
+      "answer": "You define the control flow in code",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 30,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0006 · Basic Workflows",
+        "choices": [
+          "They call the model more than once",
+          "You define the control flow in code",
+          "They always emit structured output",
+          "They run all their steps at once"
+        ],
+        "explanation": "A workflow is a graph you draw; an agent is a loop the model drives. Here you wired the edges before runtime — the model only fills each node. Multiple calls and structured output aren't the distinction."
+      }
+    },
+    {
+      "prompt": "Compared with a single prompt, what does prompt-chaining primarily trade away?",
+      "answer": "Added latency from serial steps",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 31,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0006 · Basic Workflows",
+        "choices": [
+          "Added latency from serial steps",
+          "All ability to return valid JSON",
+          "Lower accuracy on each subtask",
+          "Higher token cost per single call"
+        ],
+        "explanation": "Chaining runs steps in series, so latency stacks — that's the trade for higher accuracy on decomposable tasks. It doesn't lose JSON or accuracy; per-call cost is roughly unchanged."
+      }
+    },
+    {
+      "prompt": "A coding task changes a different, unpredictable set of files each run — you cannot list the subtasks ahead of time. Best pattern?",
+      "answer": "Orchestrator-workers, subtasks at runtime",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 32,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0007 · Advanced Patterns",
+        "choices": [
+          "Route to a fixed set of file handlers",
+          "Orchestrator-workers, subtasks at runtime",
+          "Parallelize a known list of file edits",
+          "Chain the file edits in a fixed order"
+        ],
+        "explanation": "Subtasks unknowable in advance → the orchestrator must generate them per input. Routing and parallel both assume a fixed, pre-known set of paths; a chain assumes a fixed order."
+      }
+    },
+    {
+      "prompt": "A translation misses nuance first pass, a critic can name what to fix, and quality clearly improves with revision. Best pattern?",
+      "answer": "Evaluator-optimizer, loop until it passes",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 33,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0007 · Advanced Patterns",
+        "choices": [
+          "Chain: translate, then polish, then ship",
+          "Evaluator-optimizer, loop until it passes",
+          "Parallel: translate three ways at once",
+          "Route to a specialist translator prompt"
+        ],
+        "explanation": "A clear quality signal plus gains from revision is the exact fit for evaluator-optimizer: generate, judge, refine, repeat until PASS. A chain runs a fixed number of steps and never loops back on a critique."
+      }
+    },
+    {
+      "prompt": "Your evaluator-optimizer loop occasionally runs forever in production. Root-cause fix?",
+      "answer": "Add a maximum-iteration cap to the loop",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 34,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0007 · Advanced Patterns",
+        "choices": [
+          "Switch the generator to a bigger model",
+          "Make the evaluator grade more leniently",
+          "Add a maximum-iteration cap to the loop",
+          "Retry the whole loop from the beginning"
+        ],
+        "explanation": "The cookbook exits only on PASS, so a generator that never satisfies the judge loops forever. A max-iteration cap is the structural fix; a bigger model or lenient judge just masks a missing stop guard."
+      }
+    },
+    {
+      "prompt": "You want evaluator-optimizer but cannot clearly state what a 'good' output is. What does that tell you?",
+      "answer": "The pattern won't help — no quality signal",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 35,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0007 · Advanced Patterns",
+        "choices": [
+          "Use a stronger model as the evaluator",
+          "The pattern won't help — no quality signal",
+          "Add more workers to the orchestrator step",
+          "Run more iterations to make up for it"
+        ],
+        "explanation": "The pattern depends on the evaluator applying real criteria. No articulable standard of 'good' means the judge can't judge and the loop is theater — no model size or iteration count rescues it."
+      }
+    },
+    {
+      "prompt": "What actually separates orchestrator-workers from parallelization?",
+      "answer": "The orchestrator decides the subtasks itself",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 36,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Lesson 0007 · Advanced Patterns",
+        "choices": [
+          "The orchestrator decides the subtasks itself",
+          "Parallelization is always the faster option",
+          "The orchestrator is capped at two workers",
+          "Parallelization needs an evaluator to merge"
+        ],
+        "explanation": "Parallelization runs work you already divided; the orchestrator divides it for you at runtime, per input. That runtime decomposition — not speed, worker count, or merging — is the distinction."
+      }
+    },
+    {
+      "prompt": "You're building a material designer app: users upload part images and get a recommendation from six material types. Your single prompt embeds detailed criteria for all six materials, and results are inconsistent — Claude seems to under-apply some criteria. What is the best fix?",
+      "answer": "Split into parallel requests, each evaluating the part against one material's specialized criteria, then aggregate the analyses in a final step",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 37,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Course Material · Parallelization Workflows",
+        "choices": [
+          "Split into parallel requests, each evaluating the part against one material's specialized criteria, then aggregate the analyses in a final step",
+          "Add an instruction telling Claude to be thorough and consider every material's criteria equally before answering",
+          "Increase max_tokens so Claude has enough room to reason through all six materials' criteria in one response",
+          "Ask Claude to think step-by-step through the six materials in a fixed order within the same single request"
+        ],
+        "explanation": "Cramming all criteria into one request forces the model to juggle competing considerations at once. Parallelization gives each material a focused evaluation and an aggregation step makes the final call; 'be thorough' instructions and more tokens are band-aids on the overloaded single prompt."
+      }
+    },
+    {
+      "prompt": "A teammate sketches a parallelization workflow on the whiteboard. Which sequence correctly describes the pattern?",
+      "answer": "Split one task into focused sub-tasks, run the sub-tasks simultaneously, then aggregate their results into a final decision",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 38,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Course Material · Parallelization Workflows",
+        "choices": [
+          "Split one task into focused sub-tasks, run the sub-tasks simultaneously, then aggregate their results into a final decision",
+          "Run the full task once, ask a second model instance to critique it, then run the full task again with the critique",
+          "Classify the input first, then route it to exactly one specialized prompt that produces the final answer",
+          "Chain focused prompts sequentially so each step's output becomes the next step's input until a final answer emerges"
+        ],
+        "explanation": "Parallelization is split → run in parallel → aggregate. The routing option describes a routing workflow, the sequential option describes prompt chaining, and critique-and-retry is an evaluator-optimizer loop — all different patterns."
+      }
+    },
+    {
+      "prompt": "While implementing parallel material evaluations, a developer insists every parallel branch must use an identical prompt so results stay comparable. What is the correct guidance?",
+      "answer": "Parallel sub-tasks may each use a specialized prompt, tool set, or evaluation criteria — they only need to contribute a distinct analysis the aggregator can compare",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 39,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Course Material · Parallelization Workflows",
+        "choices": [
+          "Parallel sub-tasks may each use a specialized prompt, tool set, or evaluation criteria — they only need to contribute a distinct analysis the aggregator can compare",
+          "All branches must share one prompt template, varying only a material-name placeholder, or the aggregation step becomes invalid",
+          "Branches must be identical and any specialization should instead be moved into the final aggregation prompt",
+          "Specialized branches are only allowed when each branch also uses a different model to avoid shared bias"
+        ],
+        "explanation": "The sub-tasks in a parallelization workflow don't need to be identical — specialization per branch is the point. The aggregator compares the independent analyses; it doesn't require uniform prompts."
+      }
+    },
+    {
+      "prompt": "In the material-designer example, why does evaluating one material per request outperform one mega-prompt holding all six materials' criteria?",
+      "answer": "Each request concentrates the model's attention on one aspect, avoiding the competing considerations that degrade analysis in a combined prompt",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 40,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Course Material · Parallelization Workflows",
+        "choices": [
+          "Each request concentrates the model's attention on one aspect, avoiding the competing considerations that degrade analysis in a combined prompt",
+          "Splitting the work reduces total token usage because the criteria are shorter in each request",
+          "Parallel requests are processed by faster model instances, so each analysis gets more compute",
+          "It avoids context-window limits, which are the main reason mega-prompts fail for this task"
+        ],
+        "explanation": "The benefit is focused attention: one specialized evaluation per request reduces the cognitive load of balancing many criteria simultaneously. Total tokens actually go up across parallel calls, and the mega-prompt's problem here is attention, not the context limit or compute speed."
+      }
+    },
+    {
+      "prompt": "Your parallelized material workflow performs well except the metal evaluation, which keeps overrating corrosion-prone parts. What does the parallel structure let you do?",
+      "answer": "Refine and test the metal evaluation prompt independently, without touching the other materials' prompts",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 41,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Course Material · Parallelization Workflows",
+        "choices": [
+          "Refine and test the metal evaluation prompt independently, without touching the other materials' prompts",
+          "Rewrite the aggregation prompt to down-weight the metal analysis whenever corrosion appears in the input",
+          "Regenerate all material prompts together so the criteria stay stylistically consistent across branches",
+          "Add a global instruction to every branch reminding the model to consider corrosion risk carefully"
+        ],
+        "explanation": "Independent optimization is a core benefit: each branch's prompt can be improved and tested in isolation. Down-weighting in the aggregator or adding global instructions papers over the one faulty branch instead of fixing it."
+      }
+    },
+    {
+      "prompt": "Product asks you to add glass as a seventh material to the parallelized designer. What does this require?",
+      "answer": "Add one new parallel request with glass-specific criteria; existing branch prompts stay unchanged",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 42,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Course Material · Parallelization Workflows",
+        "choices": [
+          "Add one new parallel request with glass-specific criteria; existing branch prompts stay unchanged",
+          "Rework the shared mega-prompt so glass criteria don't interfere with the other six materials' criteria",
+          "Re-tune every existing branch because adding a material changes the balance of the combined evaluation",
+          "Convert the workflow into a decision tree that eliminates materials one at a time to keep latency flat"
+        ],
+        "explanation": "Scalability is a key benefit of parallelization: new options are added as new independent branches without rewriting existing prompts or worrying about criteria interference. The other options reintroduce exactly the coupling the pattern removes."
+      }
+    },
+    {
+      "prompt": "Which task is the best candidate for a parallelization workflow?",
+      "answer": "A decision that decomposes into independent evaluations across different domains of expertise, whose results are then compared",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 43,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Course Material · Parallelization Workflows",
+        "choices": [
+          "A decision that decomposes into independent evaluations across different domains of expertise, whose results are then compared",
+          "A pipeline where each step's output is required as the input to the next step",
+          "A single-fact lookup that one small prompt already answers reliably",
+          "A task whose sub-steps must observe each other's intermediate reasoning to stay consistent"
+        ],
+        "explanation": "Parallelization fits when sub-tasks can operate independently and each contributes a distinct analysis. Sequentially dependent steps call for chaining, and tasks that are already simple gain nothing from the extra structure."
+      }
+    },
+    {
+      "prompt": "All six material evaluations have returned in your parallelized workflow. What does the aggregation step do?",
+      "answer": "Sends the individual analyses back to the model with a request to compare them and produce the final material recommendation",
+      "metadata": {
+        "source": "cca_course_quiz",
+        "number": 44,
+        "domain": "CCA-F Course Quiz",
+        "subdomain": "Course Material · Parallelization Workflows",
+        "choices": [
+          "Sends the individual analyses back to the model with a request to compare them and produce the final material recommendation",
+          "Selects whichever branch produced the longest and most detailed analysis as the winner",
+          "Applies string-matching majority vote across the branch outputs without another model call",
+          "Returns the first branch response that arrived, since parallel workflows optimize for latency"
+        ],
+        "explanation": "Aggregation is itself a model step: the collected analyses are fed back to Claude to weigh and compare before the final recommendation. Length, arrival order, and naive voting ignore the content of the specialized analyses."
+      }
+    },
+    {
+      "prompt": "A monorepo lead wants every engineer to inherit the same Bash permission allowlist the moment they clone the repo, with no manual setup per person. Which file should hold those settings?",
+      "answer": ".claude/settings.json, committed to the repo",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 1,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Scope map",
+        "choices": [
+          ".claude/settings.json, committed to the repo",
+          "~/.claude/settings.json, synced via each engineer's dotfiles",
+          ".claude/settings.local.json, committed to the repo",
+          "A note in CLAUDE.md describing the desired permissions"
+        ],
+        "explanation": "Project-scoped settings.json is committed and shared automatically; settings.local.json is meant to be gitignored, and user settings don't travel with the repo clone."
+      }
+    },
+    {
+      "prompt": "A contractor isn't following the team's 'always use pytest' convention even though it's documented, because they added the rule to ~/.claude/CLAUDE.md instead of the repo's memory file. Where should the rule move to fix this for everyone working in the repo?",
+      "answer": "./CLAUDE.md at the project root, committed to the repo",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 2,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Scope map",
+        "choices": [
+          "./CLAUDE.md at the project root, committed to the repo",
+          "~/.claude/CLAUDE.md, kept personal but synced via dotfiles",
+          "CLAUDE.local.md, gitignored in this repo",
+          "A pinned message at the start of every session"
+        ],
+        "explanation": "Project memory at ./CLAUDE.md is committed and shared with everyone in the repo; the user-level file only follows the individual who wrote it."
+      }
+    },
+    {
+      "prompt": "A designer wrote a /changelog slash command they use for personal workflow only and don't want showing up for every engineer who clones the repo. Which location keeps it private to them but usable in any project?",
+      "answer": "~/.claude/commands/changelog.md",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 3,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Scope map",
+        "choices": [
+          "~/.claude/commands/changelog.md",
+          ".claude/commands/changelog.md, committed",
+          ".claude/commands/changelog.local.md",
+          "Inside .mcp.json under a commands key"
+        ],
+        "explanation": "Slash commands only have project and personal scopes (no local variant); ~/.claude/commands is the personal, cross-project location."
+      }
+    },
+    {
+      "prompt": "An engineer built a skill encoding a company-wide deployment checklist and wants it invocable by name in every repo they personally work in across the org, not just this one. Where does it belong?",
+      "answer": "~/.claude/skills/deploy/SKILL.md",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 4,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Scope map",
+        "choices": [
+          ".claude/skills/deploy/SKILL.md in this repo only",
+          "~/.claude/skills/deploy/SKILL.md",
+          ".claude/skills/deploy/SKILL.local.md",
+          "A skills array inside .mcp.json"
+        ],
+        "explanation": "Skills follow the user-vs-project split like commands and agents; ~/.claude/skills/<name>/SKILL.md is personal and follows the engineer across all their projects."
+      }
+    },
+    {
+      "prompt": "A team wants a 'database-migration-reviewer' subagent available to anyone who clones this specific repo, version-controlled alongside the code it reviews. Which path satisfies that?",
+      "answer": ".claude/agents/database-migration-reviewer.md, committed",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 5,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Scope map",
+        "choices": [
+          "~/.claude/agents/database-migration-reviewer.md, so it follows just this engineer",
+          ".claude/agents/database-migration-reviewer.md, committed",
+          ".claude/agents/database-migration-reviewer.local.md",
+          "A prose description inside CLAUDE.md"
+        ],
+        "explanation": "Subagents follow project/personal scope like commands and skills; the committed .claude/agents/*.md path ships with the repo for the whole team."
+      }
+    },
+    {
+      "prompt": "One engineer wants a hook that pops a desktop notification on their own machine when a subagent finishes, without imposing it on teammates who share the repo. Where should this hook be configured?",
+      "answer": ".claude/settings.local.json's hooks section, gitignored",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 6,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Scope map",
+        "choices": [
+          ".claude/settings.local.json's hooks section, gitignored",
+          ".claude/settings.json's hooks section, committed and shared with the whole team",
+          "~/.claude/CLAUDE.md as a written instruction",
+          ".mcp.json's hooks section"
+        ],
+        "explanation": "Hooks live inside settings.json files; settings.local.json is the gitignored, repo-scoped, personal-only variant, exactly matching 'just me, just here.'"
+      }
+    },
+    {
+      "prompt": "A new hire, expecting everything shared to live under .claude/, searches for the team's MCP server configuration in .claude/mcp.json and finds nothing there. Where does the shared, version-controlled MCP config actually live?",
+      "answer": ".mcp.json at the repository root, outside .claude/",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 7,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Scope map",
+        "choices": [
+          ".claude/mcp/servers.json",
+          ".mcp.json at the repository root, outside .claude/",
+          "~/.claude.json, scoped to the project, since MCP config always defaults to a personal location",
+          "An mcpServers key inside .claude/settings.json"
+        ],
+        "explanation": "MCP is the named oddball in the scope map: the shared/project file is .mcp.json at repo root, not nested under .claude/ like everything else."
+      }
+    },
+    {
+      "prompt": "A tech lead is teaching a new teammate the naming convention for config scope. Which summary matches the pattern used throughout the reference?",
+      "answer": ".claude/ in the repo is shared with the team, ~/.claude/ is personal and follows you everywhere, and *.local.* is this repo but private",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 8,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Scope map",
+        "choices": [
+          ".claude/ in the repo is shared with the team, ~/.claude/ is personal and follows you everywhere, and *.local.* is this repo but private",
+          ".claude/ always means personal, and ~/.claude/ always means shared with the team",
+          "Any gitignored file automatically syncs to every teammate's machine the moment someone else runs git pull, regardless of directory",
+          "*.local.* files are committed but silently ignored by Claude Code at runtime"
+        ],
+        "explanation": "This is the stated pattern: repo .claude/ = shared, ~/.claude/ = personal across projects, *.local.* = this repo but gitignored/private."
+      }
+    },
+    {
+      "prompt": "A developer finds a stale CLAUDE.local.md file sitting in an old feature branch and asks what scope it represents today. What's the accurate characterization?",
+      "answer": "A legacy local/gitignored project-memory file, scoped to this repo",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 9,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Scope map",
+        "choices": [
+          "The current recommended way to store personal, repo-specific memory",
+          "A legacy local/gitignored project-memory file, scoped to this repo",
+          "The shared, committed project memory file that replaced CLAUDE.md",
+          "Equivalent to ~/.claude/CLAUDE.md, applying across all projects"
+        ],
+        "explanation": "The scope map lists CLAUDE.local.md as the (legacy) local variant of project memory — repo-scoped, gitignored, and not the current primary mechanism."
+      }
+    },
+    {
+      "prompt": "An enterprise admin has pushed a managed, system-level policy disabling a tool. A project's .claude/settings.local.json explicitly allows that same tool. What happens when it's invoked?",
+      "answer": "The managed policy wins — it overrides every other scope",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 10,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Settings precedence",
+        "choices": [
+          "Claude asks the user to resolve the conflict",
+          "The local settings win, since local is most specific to the current work",
+          "The managed policy wins — it overrides every other scope",
+          "Whichever file was modified most recently wins"
+        ],
+        "explanation": "Managed/enterprise policy sits above Local, Project, and User in precedence and cannot be overridden by any of them."
+      }
+    },
+    {
+      "prompt": "A repo's committed .claude/settings.json denies a Bash command, but one engineer's gitignored .claude/settings.local.json allows that same command. No managed policy is involved. Which setting applies for that engineer?",
+      "answer": "The local settings.local.json rule",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 11,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Settings precedence",
+        "choices": [
+          "The local settings.local.json rule",
+          "The shared settings.json rule, since team-wide config always wins",
+          "Neither — Claude asks the engineer to confirm each time",
+          "Whichever rule appears first alphabetically in the merged config"
+        ],
+        "explanation": "Precedence is Managed > Local > Project > User — the counter-intuitive part is that the gitignored local file outranks the shared, committed project file."
+      }
+    },
+    {
+      "prompt": "A contractor's personal ~/.claude/settings.json allows a tool that the project's committed .claude/settings.json denies, with no managed or local override present. Which one governs?",
+      "answer": "The project's settings.json, since project outranks user scope",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 12,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Settings precedence",
+        "choices": [
+          "The project's settings.json, since project outranks user scope",
+          "The user's settings.json, since personal preferences take priority",
+          "Neither — Claude asks for confirmation since they conflict",
+          "The tool is allowed since at least one scope permits it"
+        ],
+        "explanation": "In the precedence order Managed > Local > Project > User, project settings beat user settings whenever there's no local or managed override in play."
+      }
+    },
+    {
+      "prompt": "Ranking from highest to lowest precedence, which ordering of Managed, Local project, Project (shared), and User settings is correct?",
+      "answer": "Managed > Local project > Project (shared) > User",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 13,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Settings precedence",
+        "choices": [
+          "Managed > Local project > Project (shared) > User",
+          "Managed > Project (shared) > Local project > User",
+          "Local project > Managed > Project (shared) > User",
+          "User > Project (shared) > Local project > Managed"
+        ],
+        "explanation": "The documented order is Managed > Local > Project > User; local project settings rank second, above the shared project file and user settings."
+      }
+    },
+    {
+      "prompt": "A platform team asks which single scope truly cannot be overridden by anything else, including a developer's own local settings file. What's the answer?",
+      "answer": "Managed/enterprise policy, set at the system level",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 14,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Settings precedence",
+        "choices": [
+          ".claude/settings.local.json, since local settings are evaluated last and always take final say",
+          "Managed/enterprise policy, set at the system level",
+          ".claude/settings.json",
+          "~/.claude/settings.json"
+        ],
+        "explanation": "Managed policy (plist/registry-level) is described as beating everything, with no scope able to override it."
+      }
+    },
+    {
+      "prompt": "A junior engineer reasons: 'the team's shared settings.json denies rm -rf, but my personal ~/.claude/settings.json allows it — since these conflict, Claude must not know which I meant, so it'll just ask me before running the command.' Is this reasoning correct?",
+      "answer": "No — the action is denied outright: deny wins over allow, and project scope also outranks user scope, so there's no fallback to asking",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 15,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Settings precedence",
+        "choices": [
+          "No — the action is denied outright: deny wins over allow, and project scope also outranks user scope, so there's no fallback to asking",
+          "Yes — whenever two scopes disagree about a rule, Claude is designed to pause the run and explicitly ask the user which one should apply",
+          "No — the action is allowed, because personal preferences override team defaults",
+          "Yes, but only when the conflicting rule involves a destructive command like rm"
+        ],
+        "explanation": "This is a named exam trap: resolution is deterministic, not a fallback to asking. Deny beats allow, and project beats user, so the command is simply denied."
+      }
+    },
+    {
+      "prompt": "Which statement correctly describes what Local project scope (.claude/settings.local.json) beats and loses to in the precedence hierarchy?",
+      "answer": "It beats Project (shared) and User settings, but loses to Managed policy",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 16,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Settings precedence",
+        "choices": [
+          "It beats Project (shared) and User settings, but loses to Managed policy",
+          "It beats only User settings, but loses to Project (shared) settings, which is why teams are cautioned against relying on it",
+          "It beats Managed policy but loses to Project (shared) settings",
+          "It beats nothing; all scopes are merged with equal weight"
+        ],
+        "explanation": "Local project ranks second overall: above Project and User, but below Managed, which nothing can override."
+      }
+    },
+    {
+      "prompt": "A repo's permission config has a broad Bash(rm:*) rule set to deny, plus a narrower Bash(rm -rf ./tmp/*:*) rule set to allow, meant to let a cleanup script run. When that script executes rm -rf ./tmp/cache, what happens?",
+      "answer": "The command is denied — a broad deny beats a narrower allow that also matches",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 17,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Permissions",
+        "choices": [
+          "The command is denied — a broad deny beats a narrower allow that also matches",
+          "The command is allowed, since the narrower tmp-directory rule is treated as a more precise, and therefore winning, match",
+          "Claude asks for confirmation, since two rules match the same command",
+          "The command is allowed in CI runs but denied on local machines"
+        ],
+        "explanation": "The reference is explicit: a broad deny beats a narrower allow that also matches, regardless of how specific the allow rule is."
+      }
+    },
+    {
+      "prompt": "When a tool call matches multiple permission rules across the deny, ask, and allow categories, in what order does Claude Code evaluate them?",
+      "answer": "deny, then ask, then allow — first match wins",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 18,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Permissions",
+        "choices": [
+          "allow, then ask, then deny — last match wins",
+          "deny, then ask, then allow — first match wins",
+          "ask, then deny, then allow — most specific match wins",
+          "Rules are evaluated alphabetically by pattern"
+        ],
+        "explanation": "Rules evaluate in the order deny -> ask -> allow, with the first match winning."
+      }
+    },
+    {
+      "prompt": "A team wants git status commands to run without ever prompting, but wants a confirmation prompt before any git push, even though a broader rule would otherwise permit it silently. Which combination of permission types achieves this?",
+      "answer": "allow for Bash(git status:*), and ask for Bash(git push:*)",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 19,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Permissions",
+        "choices": [
+          "allow for Bash(git status:*), and ask for Bash(git push:*)",
+          "allow for both commands, trusting Claude's judgment on push",
+          "deny for Bash(git push:*), and allow for Bash(git status:*)",
+          "ask for both git status and git push, to be safe"
+        ],
+        "explanation": "allow pre-approves so Claude never asks; ask forces a confirmation even when a broader rule would otherwise permit the action silently. Denying push would block it entirely, not just require confirmation."
+      }
+    },
+    {
+      "prompt": "A security-conscious lead wants to guarantee Claude can never read the repo's .env file, no matter what allow rules exist elsewhere in project or user settings. Which permission type accomplishes that?",
+      "answer": "deny for Read(./.env)",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 20,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Permissions",
+        "choices": [
+          "deny for Read(./.env)",
+          "ask for Read(./.env), so a human confirms each read",
+          "allow for Read(./.env), with a comment warning against misuse",
+          "Remove .env from the repo so Claude can't see it"
+        ],
+        "explanation": "deny is described as a hard block that overrides any allow rule — the exact tool for guaranteeing secrets can never be read regardless of other scopes."
+      }
+    },
+    {
+      "prompt": "Which rule-shape syntax correctly scopes a permission entry to only npm test invocations?",
+      "answer": "Bash(npm run test:*)",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 21,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Permissions",
+        "choices": [
+          "npm(test:*)",
+          "Bash(npm run test:*)",
+          "Tool:Bash=npm-test-only, a shorthand a few teams mistakenly expect to work",
+          "allow-bash npm test"
+        ],
+        "explanation": "The documented rule shape is Tool(specifier:pattern), matching examples like Bash(npm run test:*)."
+      }
+    },
+    {
+      "prompt": "A team lead wants Claude to edit files and run safe commands without prompting for each one during a session, while still reviewing a diff before anything is committed. Which permission mode best fits?",
+      "answer": "acceptEdits, which allows edits without per-file prompts",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 22,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Permissions",
+        "choices": [
+          "bypassPermissions, since it lets everything through fastest",
+          "acceptEdits, which allows edits without per-file prompts",
+          "plan mode, which never lets Claude touch files",
+          "default mode, which behaves identically to acceptEdits"
+        ],
+        "explanation": "acceptEdits is the mode built for exactly this: edits proceed without per-file confirmation while other actions still follow normal permission rules, unlike bypassPermissions which skips checks entirely."
+      }
+    },
+    {
+      "prompt": "An engineer sets permission mode to bypassPermissions on a shared CI runner just to 'stop the constant prompts.' What's the concern with that choice?",
+      "answer": "It skips all permission checks, so deny rules protecting secrets and prod stop applying too",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 23,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Permissions",
+        "choices": [
+          "There's no concern; bypassPermissions is the recommended CI mode",
+          "It skips all permission checks, so deny rules protecting secrets and prod stop applying too",
+          "It only affects Read-type tools, not Bash or Write, so it's considered safe for most CI pipelines",
+          "It requires a managed policy to be active first, so it will silently no-op"
+        ],
+        "explanation": "bypassPermissions is flagged as dangerous precisely because it skips all checks — including the deny rules meant to protect secrets and production resources."
+      }
+    },
+    {
+      "prompt": "A project-level deny rule for Bash(rm:*) and a user-level allow rule for the same pattern both exist, with no managed or local override. Which rule governs, and why?",
+      "answer": "The project-level deny, reinforced by both deny-over-allow evaluation and project-over-user scope precedence",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 24,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Permissions",
+        "choices": [
+          "The project-level deny, reinforced by both deny-over-allow evaluation and project-over-user scope precedence",
+          "The user-level allow, since user settings are most specific to the individual",
+          "Neither applies; Claude asks the user to pick one interactively",
+          "Both apply simultaneously, splitting behavior by read versus write"
+        ],
+        "explanation": "Two independent rules point the same direction here: deny beats allow in evaluation order, and project scope beats user scope in precedence."
+      }
+    },
+    {
+      "prompt": "A team wants to guarantee Claude can never modify a specific config file, even if the model 'forgets' an instruction mid-session. Which hook event should this be wired to, and why?",
+      "answer": "PreToolUse, because it fires before the tool runs and can block the action outright",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 25,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Hooks",
+        "choices": [
+          "PostToolUse, because it can inspect the completed write and automatically revert it after the fact",
+          "PreToolUse, because it fires before the tool runs and can block the action outright",
+          "SessionStart, because it can remind Claude not to touch the file",
+          "Notification, because it can alert the team when the file changes"
+        ],
+        "explanation": "PreToolUse is the one event that fires before the tool executes and can block it (exit code 2 or a JSON permissionDecision of deny), making the guarantee real rather than best-effort."
+      }
+    },
+    {
+      "prompt": "A hook author writes a PostToolUse hook that detects any change Claude makes to .env and restores the original from git. Why is this weaker than using a PreToolUse hook for the same goal?",
+      "answer": "PostToolUse fires after the tool already ran, so the write already happened — it's reacting, not preventing",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 26,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Hooks",
+        "choices": [
+          "PostToolUse hooks cannot access the file system at all",
+          "PostToolUse fires after the tool already ran, so the write already happened — it's reacting, not preventing",
+          "PostToolUse hooks are scoped only to Read-type tool calls and never fire for Write, Edit, or similar operations",
+          "There's no real difference; both approaches are equally reliable"
+        ],
+        "explanation": "The reference calls this out directly: to hard-block .env edits, use a PreToolUse hook; a PostToolUse 'revert after' is a band-aid because the write already happened by the time it fires."
+      }
+    },
+    {
+      "prompt": "Which hook event fires when the user submits a prompt, and is capable of rejecting or modifying that prompt before Claude ever sees it?",
+      "answer": "UserPromptSubmit",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 27,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Hooks",
+        "choices": [
+          "PreToolUse",
+          "SessionStart, which only fires once at the very beginning of a session",
+          "UserPromptSubmit",
+          "Stop"
+        ],
+        "explanation": "UserPromptSubmit fires on prompt submission and can reject or modify it, per the reference table."
+      }
+    },
+    {
+      "prompt": "A team wants to inject fresh context, like the current git branch and open PR list, at the very start of every session. Which hook event is designed for this, and can it block anything?",
+      "answer": "SessionStart — it fires when the session begins but cannot block anything",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 28,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Hooks",
+        "choices": [
+          "SessionStart — it fires when the session begins but cannot block anything",
+          "PreToolUse — it fires before tools run and can block execution",
+          "PreCompact — it fires before compaction and can block context loss",
+          "Stop — it fires when the agent finishes a turn and can force continuation"
+        ],
+        "explanation": "SessionStart is used to inject context at session start and is marked as unable to block, unlike PreToolUse or Stop."
+      }
+    },
+    {
+      "prompt": "An engineer wants a hook that can force the main agent to keep working instead of ending its turn prematurely. Which event supports that?",
+      "answer": "Stop / SubagentStop, since it fires when a turn ends and can force continuation",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 29,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Hooks",
+        "choices": [
+          "PostToolUse, since it runs after every tool call",
+          "Notification, since it can interrupt with a message",
+          "Stop / SubagentStop, since it fires when a turn ends and can force continuation",
+          "UserPromptSubmit, since it intercepts before the prompt is processed"
+        ],
+        "explanation": "Stop/SubagentStop fires when the main or sub agent ends a turn and is the event marked as able to force continuation."
+      }
+    },
+    {
+      "prompt": "Per the hook reference table, which pair of events fires purely to notify or react, with no ability to block or modify anything?",
+      "answer": "Notification and PreCompact",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 30,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Hooks",
+        "choices": [
+          "PreToolUse and UserPromptSubmit",
+          "PostToolUse and Stop",
+          "Notification and PreCompact",
+          "SessionStart and PreToolUse"
+        ],
+        "explanation": "The reference groups Notification and PreCompact together in one row, both marked 'no' for blocking capability."
+      }
+    },
+    {
+      "prompt": "What two concrete mechanisms let a PreToolUse hook actually block a tool call, per the reference?",
+      "answer": "Exiting with code 2, or emitting JSON with \"permissionDecision\": \"deny\"",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 31,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Hooks",
+        "choices": [
+          "Returning an HTTP 403 status code, or setting a special CLAUDE_BLOCK environment variable",
+          "Exiting with code 2, or emitting JSON with \"permissionDecision\": \"deny\"",
+          "Writing to stderr, or renaming the target file",
+          "Raising a Python exception, or calling sys.exit(0)"
+        ],
+        "explanation": "The block mechanism is explicitly documented as exit code 2 or JSON output containing \"permissionDecision\": \"deny\"."
+      }
+    },
+    {
+      "prompt": "A team debates where hook definitions actually live in the config layout. Per the reference, where are hooks configured?",
+      "answer": "Inside settings.json files — project, user, or local",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 32,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Hooks",
+        "choices": [
+          "In a dedicated .claude/hooks.json file, separate from settings",
+          "Inside settings.json files — project, user, or local",
+          "Inside CLAUDE.md, as a special 'hooks:' frontmatter block",
+          "Inside .mcp.json, alongside MCP server definitions"
+        ],
+        "explanation": "Hooks are configured in settings.json, which is why the scope map lists hooks as 'in .claude/settings.json' / '~/.claude/settings.json' / 'settings.local.json' rather than a separate file type."
+      }
+    },
+    {
+      "prompt": "A team wants a /release slash command every engineer gets automatically right after cloning the repo. Where should the file live?",
+      "answer": ".claude/commands/release.md, committed to the repo",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 33,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Slash commands & skills",
+        "choices": [
+          "~/.claude/commands/release.md, since committing doesn't matter for personal files",
+          ".claude/commands/release.md, committed to the repo",
+          ".claude/commands/release.local.md, gitignored per engineer",
+          "Inside .mcp.json under a commands section"
+        ],
+        "explanation": "Project command scope is .claude/commands/name.md — committed, so the whole team gets it automatically on clone."
+      }
+    },
+    {
+      "prompt": "A slash command author wants to grab the entire string of arguments the user typed after the command name as one blob, rather than splitting it into pieces. Which variable does that?",
+      "answer": "$ARGUMENTS",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 34,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Slash commands & skills",
+        "choices": [
+          "$1",
+          "$ARGS[] (a JavaScript-style array some authors expect)",
+          "$ARGUMENTS",
+          "$INPUT"
+        ],
+        "explanation": "$ARGUMENTS represents the whole argument string, while $1, $2, etc. are the positional pieces."
+      }
+    },
+    {
+      "prompt": "An author wants their slash command to accept two separate positional values, like /deploy staging v2, and reference them independently in the command body. Which syntax does that?",
+      "answer": "$1 and $2",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 35,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Slash commands & skills",
+        "choices": [
+          "$ARGUMENTS, split by a custom parser the author writes",
+          "$1 and $2",
+          "{{arg1}} and {{arg2}}",
+          "process.argv[1] and process.argv[2]"
+        ],
+        "explanation": "$1, $2 are the documented positional-argument variables, distinct from $ARGUMENTS which is the whole string."
+      }
+    },
+    {
+      "prompt": "Which frontmatter fields does the reference list as available on a slash command, for restricting tool access, describing it, hinting at expected arguments, and pinning a model?",
+      "answer": "allowed-tools, description, argument-hint, model",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 36,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Slash commands & skills",
+        "choices": [
+          "allowed-tools, description, argument-hint, model",
+          "tools, summary, usage, engine",
+          "permissions, help, args, llm, and a required owner field for attribution",
+          "scope, name, params, provider"
+        ],
+        "explanation": "The reference names allowed-tools, description, argument-hint, and model as the slash command frontmatter fields."
+      }
+    },
+    {
+      "prompt": "A developer asks how skills structurally differ from slash commands, beyond both having a project/personal scope split. What's the key difference described in the reference?",
+      "answer": "Skills are a folder with supporting files, invoked by the model based on description rather than typed explicitly",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 37,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Slash commands & skills",
+        "choices": [
+          "Skills have no frontmatter at all, while commands require it",
+          "Skills are a folder with supporting files, invoked by the model based on description rather than typed explicitly",
+          "Skills can only ever be personal-scoped, never shared with a team",
+          "Skills replace CLAUDE.md entirely and can't coexist with it"
+        ],
+        "explanation": "Skills live at .claude/skills/<name>/SKILL.md with supporting files and are described as 'model-invocable by description' — the richer evolution of the single-file slash command."
+      }
+    },
+    {
+      "prompt": "A teammate insists skills can only live under ~/.claude/skills/ and can never be checked into a repo for the whole team to share. Is that accurate?",
+      "answer": "No — skills use the same project/personal split as commands: .claude/skills/ for shared, ~/.claude/skills/ for personal",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 38,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Slash commands & skills",
+        "choices": [
+          "Yes, skills are always personal by design",
+          "No — skills use the same project/personal split as commands: .claude/skills/ for shared, ~/.claude/skills/ for personal",
+          "No, skills can only be project-scoped, never personal",
+          "Yes, but only if the team has disabled MCP servers first"
+        ],
+        "explanation": "The reference states skills have 'the same project/personal scope split' as commands, so a shared, committed version is entirely possible."
+      }
+    },
+    {
+      "prompt": "A team wants a Postgres MCP server configuration checked into the repo so no one has to set it up by hand after cloning. Which scope and file achieve that?",
+      "answer": "project scope, stored in .mcp.json at the repo root",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 39,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · MCP servers",
+        "choices": [
+          "local scope, stored in each engineer's ~/.claude.json",
+          "project scope, stored in .mcp.json at the repo root",
+          "user scope, stored in ~/.claude.json globally",
+          "An mcpServers key inside .claude/settings.json"
+        ],
+        "explanation": "Project scope is the shared, committed MCP scope, and it lives in .mcp.json at the repo root — the file this whole team needs."
+      }
+    },
+    {
+      "prompt": "An engineer runs claude mcp add --scope local for a new MCP server. Where does that configuration get stored, and is it shared with teammates?",
+      "answer": "In ~/.claude.json, scoped to this project; no, it's just for this engineer, here",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 40,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · MCP servers",
+        "choices": [
+          "In .mcp.json at the repo root; yes, since it's committed",
+          "In ~/.claude.json, scoped to this project; no, it's just for this engineer, here",
+          "In ~/.claude/settings.json; yes, because user settings auto-sync",
+          "In .claude/mcp/local.json; no, but it applies across all their repos"
+        ],
+        "explanation": "Local MCP scope stores in ~/.claude.json but scoped to the current project, and is explicitly not shared — just this engineer, just this repo."
+      }
+    },
+    {
+      "prompt": "What distinguishes MCP 'user' scope from MCP 'local' scope, given both are stored in ~/.claude.json?",
+      "answer": "User scope applies across all of the engineer's projects; local scope is scoped to just the current project",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 41,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · MCP servers",
+        "choices": [
+          "User scope applies across all of the engineer's projects; local scope is scoped to just the current project",
+          "User scope is shared with the team; local scope is not",
+          "There's no real difference; they're aliases for the same behavior",
+          "User scope requires a managed policy to be active; local scope does not"
+        ],
+        "explanation": "Both write to ~/.claude.json, but user scope is global across all the engineer's projects while local scope is pinned to the current project only."
+      }
+    },
+    {
+      "prompt": "A new hire searches for the shared MCP server list under .claude/, the way they would for skills or subagents, and comes up empty. What should they be told about MCP's location?",
+      "answer": "The shared MCP file, .mcp.json, sits at the repo root, not inside .claude/",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 42,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · MCP servers",
+        "choices": [
+          "MCP configuration doesn't support a team-shared scope at all",
+          "The shared MCP file, .mcp.json, sits at the repo root, not inside .claude/",
+          "MCP servers are only ever configured via environment variables",
+          "They should look in ~/.claude/mcp.json, the correct shared location"
+        ],
+        "explanation": "MCP is the reference's one named oddball: unlike commands, skills, and agents, its team-shared file lives outside .claude/ entirely, at the repo root."
+      }
+    },
+    {
+      "prompt": "Which claude mcp add flag determines whether a new MCP server ends up in the committed .mcp.json versus the personal ~/.claude.json?",
+      "answer": "--scope project|user|local",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 43,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · MCP servers",
+        "choices": [
+          "--shared vs --private",
+          "--scope project|user|local",
+          "--team vs --solo",
+          "--commit"
+        ],
+        "explanation": "MCP servers are added with claude mcp add --scope project|user|local, and only project scope routes into the committed .mcp.json."
+      }
+    },
+    {
+      "prompt": "A contractor argues that since MCP servers are configured via claude mcp add, scope doesn't matter because Claude Code syncs everything to the team automatically. What's wrong with that reasoning?",
+      "answer": "Scope matters: only project scope writes to the committed .mcp.json; local and user scope stay in the personal ~/.claude.json and are never shared",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 44,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · MCP servers",
+        "choices": [
+          "Nothing — all MCP scopes sync automatically to every collaborator",
+          "Scope matters: only project scope writes to the committed .mcp.json; local and user scope stay in the personal ~/.claude.json and are never shared",
+          "MCP servers can never be shared with a team under any scope",
+          "They should add the server twice, once per scope, to cover all teammates"
+        ],
+        "explanation": "Sharing an MCP server with the team requires deliberately choosing --scope project; the other two scopes are personal by design and never propagate."
+      }
+    },
+    {
+      "prompt": "A developer notices their main conversation's context filling up with dozens of grep and file-read results from an exploratory search, degrading later responses. What's the config-level fix?",
+      "answer": "Delegate the exploration to a subagent, which runs in its own context window",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 45,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Subagents",
+        "choices": [
+          "Delegate the exploration to a subagent, which runs in its own context window",
+          "Write a much longer CLAUDE.md instructing Claude to summarize its own searches",
+          "Manually clear context every few messages during the search",
+          "Switch permission mode to plan mode to reduce tool calls"
+        ],
+        "explanation": "Subagents run in their own context window and return just a summary to the main thread — the reference's stated fix for 'main context filling with grep/read noise.'"
+      }
+    },
+    {
+      "prompt": "A teammate proposes fixing 'main context bloating with search noise' by expanding CLAUDE.md with instructions telling Claude to narrate searches more concisely. Why does the reference treat this as the band-aid rather than the fix?",
+      "answer": "CLAUDE.md instructions can't purge tokens already in the transcript — it's guidance, not a structural context isolation",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 46,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Subagents",
+        "choices": [
+          "CLAUDE.md instructions can't purge tokens already in the transcript — it's guidance, not a structural context isolation",
+          "CLAUDE.md is only loaded once per day, so the instruction wouldn't take effect in time",
+          "CLAUDE.md cannot contain instructions about tool usage at all",
+          "Bigger CLAUDE.md files are actually the reference's recommended fix"
+        ],
+        "explanation": "The reference explicitly names 'bigger CLAUDE.md' as not the fix, since it's just instructions and can't remove tokens already accumulated in the transcript."
+      }
+    },
+    {
+      "prompt": "Which subagent frontmatter fields are required, and which are optional, per the reference?",
+      "answer": "Required: name, description; optional: tools, model",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 47,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Subagents",
+        "choices": [
+          "Required: name, description; optional: tools, model",
+          "Required: tools, model; optional: name, description",
+          "All four fields are required with no optional fields",
+          "Only description is required; name is also optional"
+        ],
+        "explanation": "The reference states name and description are required frontmatter, while tools and model are optional."
+      }
+    },
+    {
+      "prompt": "A team wants a project-specific 'sql-query-reviewer' subagent available to everyone cloning the repo, plus a personal 'commit-message-polisher' subagent only one engineer uses across all their repos. Where should each live?",
+      "answer": "sql-query-reviewer in .claude/agents/; commit-message-polisher in ~/.claude/agents/",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 48,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Subagents",
+        "choices": [
+          "Both in ~/.claude/agents/, since subagents are always personal",
+          "sql-query-reviewer in .claude/agents/; commit-message-polisher in ~/.claude/agents/",
+          "sql-query-reviewer in ~/.claude/agents/; commit-message-polisher in .claude/agents/",
+          "Both inside .mcp.json, since subagents are treated as MCP tools"
+        ],
+        "explanation": "Project subagents (.claude/agents/) are for the shared, committed reviewer; personal subagents (~/.claude/agents/) follow one engineer across every repo."
+      }
+    },
+    {
+      "prompt": "What's described as 'the whole point' of a subagent running in its own context window with its own system prompt and tool access?",
+      "answer": "It isolates noisy intermediate work and returns only a distilled summary to the main thread",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 49,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Subagents",
+        "choices": [
+          "It runs faster than the main agent because it defaults to a smaller model",
+          "It isolates noisy intermediate work and returns only a distilled summary to the main thread",
+          "It bypasses every permission check configured for the main agent",
+          "It automatically inherits the main agent's entire conversation history"
+        ],
+        "explanation": "The reference states the whole point is that each subagent has its own context and tools and 'returns just a summary to the main thread.'"
+      }
+    },
+    {
+      "prompt": "A lead claims 'subagents are basically just a way to give a task a different model.' Is that an accurate description of why they exist, per the reference?",
+      "answer": "No — the stated purpose is context isolation, with model as just an optional field",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 50,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Reference · Subagents",
+        "choices": [
+          "Yes, model selection is the primary and only stated purpose",
+          "No — the stated purpose is context isolation, with model as just an optional field",
+          "Yes, and subagents also replace the need for any permission configuration",
+          "No, subagents exist solely to enable MCP server access the main agent lacks"
+        ],
+        "explanation": "Model is listed as an optional frontmatter field, but the reference frames the core purpose as separate context/tools that isolate noise and return a summary, not model swapping."
+      }
     }
   ]
 }
