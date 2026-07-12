@@ -188,7 +188,7 @@ def reference_cards(all_cards):
 
 
 def test_reference_count(reference_cards):
-    assert len(reference_cards) == 50
+    assert len(reference_cards) == 100
 
 
 def test_reference_structure(reference_cards):
@@ -208,7 +208,7 @@ def test_reference_structure(reference_cards):
         longest = max(lengths)
         if len(c["answer"]) == longest and lengths.count(longest) == 1:
             longest_hits += 1
-    assert sorted(numbers) == list(range(1, 51))
+    assert sorted(numbers) == list(range(1, 101))
     assert longest_hits / len(reference_cards) <= 0.40, (
         f"answer strictly longest in {longest_hits}/{len(reference_cards)}"
     )
