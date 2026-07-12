@@ -6705,6 +6705,856 @@
         ],
         "explanation": "Model is listed as an optional frontmatter field, but the reference frames the core purpose as separate context/tools that isolate noise and return a summary, not model swapping."
       }
+    },
+    {
+      "prompt": "A solo dev dumps an entire API docs folder into every prompt \"just to be safe\" and notices Claude's suggestions get worse, not better. What's the root cause and best fix?",
+      "answer": "Irrelevant context dilutes Claude's attention and decreases performance; curate only the files relevant to the current task instead of including everything.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 51,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · Context hygiene",
+        "choices": [
+          "Switch to a model with a larger context window so all the docs fit comfortably.",
+          "Irrelevant context dilutes Claude's attention and decreases performance; curate only the files relevant to the current task instead of including everything.",
+          "Split the docs into multiple messages so each request stays under the token limit.",
+          "Ask Claude to summarize the docs first, then paste that summary into every request."
+        ],
+        "explanation": "Too much irrelevant context actively decreases performance, it doesn't just cost tokens. The fix is guiding Claude to relevant files, not dumping everything and hoping it filters."
+      }
+    },
+    {
+      "prompt": "A team lead notices that after teammates started attaching the entire design-system folder to every Claude Code session \"to be thorough,\" suggestions started ignoring obvious project conventions. What's the root cause and fix?",
+      "answer": "Too much irrelevant context decreases performance, not just wastes tokens; guide Claude to the specific files needed for the task rather than the whole folder.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 52,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · Context hygiene",
+        "choices": [
+          "The design-system folder is stale and needs to be regenerated before use.",
+          "Claude Code has a hidden context ceiling that silently drops the oldest files once a session grows large, so reorder the attachments to put the newest ones first before sending.",
+          "Too much irrelevant context decreases performance, not just wastes tokens; guide Claude to the specific files needed for the task rather than the whole folder.",
+          "Enable extended thinking mode so Claude can process the larger context more carefully."
+        ],
+        "explanation": "The framing is explicit: too much irrelevant context decreases performance. Attaching an entire folder buries the relevant files rather than helping Claude reach them."
+      }
+    },
+    {
+      "prompt": "A new teammate pastes the entire git log and every open file's contents into their first Claude Code prompt of the day, then complains answers feel generic and slow. What should they do instead?",
+      "answer": "Include only the specific files and context relevant to the current task, since more context isn't automatically better and can decrease performance.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 53,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · Context hygiene",
+        "choices": [
+          "Run /init first so Claude re-learns the whole repo before every session.",
+          "Compress the git log with a summarizer tool before pasting it in.",
+          "Increase the max_tokens setting and enable a larger context window so Claude has more room to reason through the full git log and every open file without truncation.",
+          "Include only the specific files and context relevant to the current task, since more context isn't automatically better and can decrease performance."
+        ],
+        "explanation": "Context management means guiding Claude toward the right files, not dumping everything. Pasting logs and unrelated open files is the exact anti-pattern the framing warns against."
+      }
+    },
+    {
+      "prompt": "A CI script feeds Claude Code the full contents of every file changed in the last 30 days as background for a code review task, and review quality drops noticeably. What's the fix?",
+      "answer": "Guide Claude to only the files actually relevant to the review, since irrelevant context degrades output quality.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 54,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · Context hygiene",
+        "choices": [
+          "Run the review twice and merge the two outputs for better coverage.",
+          "Increase the CI job's timeout so Claude has more time to process everything.",
+          "Add a system prompt telling Claude to \"focus only on the important parts\" while still attaching all 30 days of unrelated file history unchanged.",
+          "Guide Claude to only the files actually relevant to the review, since irrelevant context degrades output quality."
+        ],
+        "explanation": "The unrelated 30-day history is irrelevant context, and irrelevant context decreases performance regardless of how it's framed to Claude. Scoping the input is the actual fix."
+      }
+    },
+    {
+      "prompt": "A solo developer starting a brand-new repo wants Claude Code to have a baseline understanding of the project's architecture and commands, without hand-writing that documentation. What should they run?",
+      "answer": "/init, which analyzes the codebase and writes a summary to CLAUDE.md.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 55,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · /init & /memory",
+        "choices": [
+          "/init, which analyzes the codebase and writes a summary to CLAUDE.md.",
+          "/memory, which opens a blank file for manual notes.",
+          "@path on the repo root to include every file in the next prompt.",
+          "CLAUDE.local.md, since Claude auto-populates personal files on first use."
+        ],
+        "explanation": "/init analyzes the whole codebase — purpose, architecture, key commands, coding patterns — and writes the resulting summary into CLAUDE.md."
+      }
+    },
+    {
+      "prompt": "A team lead onboarding a new project to Claude Code wants an automated first pass at documenting purpose, architecture, key commands, and coding patterns, before anyone hand-writes anything. Which command produces that?",
+      "answer": "/init, which analyzes the whole codebase and writes the summary to CLAUDE.md.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 56,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · /init & /memory",
+        "choices": [
+          "/memory, which opens CLAUDE.md for editing but performs no analysis.",
+          "@init as an inline file mention placed in the first prompt.",
+          "/init, which analyzes the whole codebase and writes the summary to CLAUDE.md.",
+          "A shell script that greps for README files and concatenates them."
+        ],
+        "explanation": "This is exactly what /init does: it analyzes the codebase and writes the resulting summary to CLAUDE.md. /memory only opens an existing file for editing."
+      }
+    },
+    {
+      "prompt": "A maintainer wants to regenerate a project's CLAUDE.md from scratch after a major refactor, capturing the new architecture and commands automatically rather than editing it by hand. What accomplishes that?",
+      "answer": "Re-running /init, which re-analyzes the codebase and rewrites the CLAUDE.md summary.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 57,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · /init & /memory",
+        "choices": [
+          "Deleting CLAUDE.md and waiting for Claude Code to recreate it automatically on the next request.",
+          "Re-running /init, which re-analyzes the codebase and rewrites the CLAUDE.md summary.",
+          "Running /memory, since it regenerates the file from the current codebase state.",
+          "Editing CLAUDE.local.md, which syncs its contents back into CLAUDE.md on save."
+        ],
+        "explanation": "/init is the analysis-and-write command; running it again re-scans the refactored codebase and produces a fresh CLAUDE.md summary. /memory just opens the file, it doesn't analyze anything."
+      }
+    },
+    {
+      "prompt": "A new teammate joins a project with no CLAUDE.md yet and asks how Claude Code would typically produce a first draft covering the project's key commands and file layout. What's the answer?",
+      "answer": "Run /init, which analyzes the codebase and writes that summary into CLAUDE.md.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 58,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · /init & /memory",
+        "choices": [
+          "Manually write CLAUDE.local.md first, since /init only edits files that already exist.",
+          "Use @AGENTS.md to import an existing agent config as a starting point.",
+          "Start a conversation and ask Claude to \"remember\" the codebase for future sessions.",
+          "Run /init, which analyzes the codebase and writes that summary into CLAUDE.md."
+        ],
+        "explanation": "/init is designed for exactly this: a first automated pass over an undocumented codebase that produces the initial CLAUDE.md."
+      }
+    },
+    {
+      "prompt": "While running /init on a large monorepo, a solo dev is interrupted by a write-permission prompt for every file and wants Claude to write freely through the rest of the codebase without stopping each time, just for this session. What should they do?",
+      "answer": "Press Shift+Tab to enter accept-edits mode, letting Claude write freely for the rest of the session.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 59,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · /init & /memory",
+        "choices": [
+          "Press Enter repeatedly until all prompts clear, since that's the only way to batch-approve.",
+          "Cancel /init and hand-write CLAUDE.md instead, to avoid the prompts entirely.",
+          "Press Shift+Tab to enter accept-edits mode, letting Claude write freely for the rest of the session.",
+          "Set USE_SQLITE=1 in .env, which also disables write-confirmation prompts."
+        ],
+        "explanation": "Shift+Tab switches into accept-edits mode so writes are approved automatically for the session, while Enter only approves the single write currently being confirmed."
+      }
+    },
+    {
+      "prompt": "A team lead reviewing a junior engineer's /init session sees they pressed Enter on each individual write-permission prompt instead of using the accept-edits shortcut. What did that choice actually do?",
+      "answer": "It approved each file write one at a time, giving fine-grained control rather than letting Claude write freely.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 60,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · /init & /memory",
+        "choices": [
+          "It silently discarded any write Claude proposed after the first one, requiring the engineer to restart /init from scratch to recover the lost files.",
+          "It saved the changes to CLAUDE.local.md instead of CLAUDE.md.",
+          "It disabled /init for the remainder of the session.",
+          "It approved each file write one at a time, giving fine-grained control rather than letting Claude write freely."
+        ],
+        "explanation": "Enter approves the current write only; it neither discards further writes nor changes which file gets updated. Shift+Tab is the shortcut for approving everything at once."
+      }
+    },
+    {
+      "prompt": "A CI script that shells out to Claude Code's /init in a fresh container hangs, apparently waiting on a per-file write-confirmation prompt with no human present to answer it. What's the fix for unattended runs like this?",
+      "answer": "Trigger accept-edits mode (the Shift+Tab behavior) so writes are approved automatically instead of waiting on a per-file prompt.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 61,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · /init & /memory",
+        "choices": [
+          "Add a longer timeout so the CI job waits until someone approves manually.",
+          "Switch the CI job to use CLAUDE.local.md instead of CLAUDE.md, since that personal file is documented as skipping write confirmation entirely in headless environments.",
+          "Pipe \"y\" into stdin repeatedly to satisfy the picker prompt.",
+          "Trigger accept-edits mode (the Shift+Tab behavior) so writes are approved automatically instead of waiting on a per-file prompt."
+        ],
+        "explanation": "The hang is caused by the per-write confirmation gate; accept-edits mode is the built-in way to let Claude write freely without a human approving each file, which is what an unattended job needs."
+      }
+    },
+    {
+      "prompt": "A new teammate is confused about pressing Enter versus Shift+Tab during /init's write prompts, and asks which one lets Claude write every remaining file without asking again. What's the correct explanation?",
+      "answer": "Shift+Tab switches into accept-edits mode, approving all subsequent writes for the session; Enter only approves the single file currently being confirmed.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 62,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · /init & /memory",
+        "choices": [
+          "Enter approves all remaining files at once for the rest of the entire session, while Shift+Tab only steps through and approves the single current one each time it appears.",
+          "Both keys do the same thing; the choice between them is purely cosmetic.",
+          "Shift+Tab switches into accept-edits mode, approving all subsequent writes for the session; Enter only approves the single file currently being confirmed.",
+          "Shift+Tab cancels /init entirely, and Enter is the only way to approve writes."
+        ],
+        "explanation": "Enter is a one-at-a-time approval; Shift+Tab is the accept-edits toggle that lets Claude proceed through the rest of the writes without further prompts."
+      }
+    },
+    {
+      "prompt": "A team lead wants to understand what content belongs in CLAUDE.md as opposed to a general project wiki. What are its two intended purposes?",
+      "answer": "Guiding Claude through the codebase (commands, architecture, style) and giving custom directions for how Claude should behave.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 63,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · CLAUDE.md purpose",
+        "choices": [
+          "Storing the full API reference and a changelog of every release.",
+          "Guiding Claude through the codebase (commands, architecture, style) and giving custom directions for how Claude should behave.",
+          "Housing test fixtures and mock data for the test suite.",
+          "Recording personal to-do lists and meeting notes for the team."
+        ],
+        "explanation": "CLAUDE.md functions as the project's persistent prompt: it orients Claude to the codebase and it carries custom behavioral instructions — nothing more, nothing less."
+      }
+    },
+    {
+      "prompt": "A solo developer keeps CLAUDE.md limited to a paragraph about folder structure and wonders whether it's also \"supposed to\" hold behavioral rules like always writing tests first, or whether that belongs somewhere else. What's the answer?",
+      "answer": "CLAUDE.md serves both purposes, codebase guidance and custom behavioral directions, so a rule like \"always write tests first\" belongs there too.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 64,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · CLAUDE.md purpose",
+        "choices": [
+          "Behavioral rules only belong in a separate .clauderc file, never in CLAUDE.md.",
+          "CLAUDE.md is strictly reserved for architecture notes and file layout; behavioral rules like commenting style must instead go through the API's separate system prompt configuration.",
+          "Custom directions only take effect if placed in CLAUDE.local.md, not the shared CLAUDE.md.",
+          "CLAUDE.md serves both purposes, codebase guidance and custom behavioral directions, so a rule like \"always write tests first\" belongs there too."
+        ],
+        "explanation": "CLAUDE.md is explicitly meant for both codebase orientation and custom directions, so behavioral rules are just as at-home there as architecture notes."
+      }
+    },
+    {
+      "prompt": "A new teammate reads a coworker's CLAUDE.md and sees a mix of \"run tests with pytest -v\" and \"use comments sparingly, only for complex code\" in the same file, and asks why both appear together. What explains this?",
+      "answer": "CLAUDE.md is meant to do both, guide Claude through the codebase and carry custom directions like commenting style, so combining them is expected.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 65,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · CLAUDE.md purpose",
+        "choices": [
+          "The commenting rule is a leftover from CLAUDE.local.md that accidentally got merged in.",
+          "Only one of the two entries actually takes effect, whichever was edited more recently.",
+          "Style rules like commenting preferences don't belong in CLAUDE.md at all and should instead live in a separate linter or formatter configuration file.",
+          "CLAUDE.md is meant to do both, guide Claude through the codebase and carry custom directions like commenting style, so combining them is expected."
+        ],
+        "explanation": "The commenting rule is a textbook example of a custom direction, one of CLAUDE.md's two designed purposes, sitting naturally alongside a codebase-orientation command."
+      }
+    },
+    {
+      "prompt": "A team's CLAUDE.md has ballooned to 800 lines of detailed prose on every subsystem, and engineers notice Claude now follows fewer of its actual instructions than it used to. What's the root cause and fix?",
+      "answer": "CLAUDE.md loads into every request, so a large file taxes every turn and reduces adherence; trim it back down to the essentials, well under 200 lines.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 66,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · Context tax",
+        "choices": [
+          "The file has exceeded a hard character limit and is being silently truncated from the top, so move the most important rules to the bottom.",
+          "CLAUDE.md loads into every request, so a large file taxes every turn and reduces adherence; trim it back down to the essentials, well under 200 lines.",
+          "Split the content across several CLAUDE.local.md files so each teammate only loads part of it.",
+          "Convert the file to bullet points, since Claude only parses lists, not prose."
+        ],
+        "explanation": "CLAUDE.md is included in every request; bloat becomes a per-turn tax that dilutes adherence. The prescribed fix is to keep it lean, generally under 200 lines."
+      }
+    },
+    {
+      "prompt": "A solo dev notices responses got noticeably slower and less on-point right after pasting their entire coding style guide into CLAUDE.md. What's happening?",
+      "answer": "CLAUDE.md is included in every request, so its size becomes a per-turn context tax; keep it lean instead of pasting whole guides in.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 67,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · Context tax",
+        "choices": [
+          "Claude Code caches CLAUDE.md incorrectly and needs the session restarted to pick up changes cleanly.",
+          "Style guides conflict with Claude's built-in formatting rules and cause extra retries.",
+          "The style guide should have gone into CLAUDE.local.md instead of CLAUDE.md, since only that personal file is documented as skipping the per-request load entirely.",
+          "CLAUDE.md is included in every request, so its size becomes a per-turn context tax; keep it lean instead of pasting whole guides in."
+        ],
+        "explanation": "CLAUDE.md loads on every request regardless of which file it is, so pasting a whole style guide directly inflates the tax on every single turn."
+      }
+    },
+    {
+      "prompt": "A team lead is deciding whether to add a 300-line troubleshooting runbook directly into the shared CLAUDE.md so every engineer's Claude session \"knows\" it automatically. What should they weigh first?",
+      "answer": "CLAUDE.md loads on every request, so 300 extra lines add a per-turn tax to every teammate's session; keep the shared file lean and reference longer material separately.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 68,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · Context tax",
+        "choices": [
+          "Runbooks are considered exempt from CLAUDE.md's size guidance since they're operational reference material rather than architectural documentation, so their length doesn't count at all.",
+          "Nothing, CLAUDE.md size has no effect on request cost or adherence.",
+          "CLAUDE.md loads on every request, so 300 extra lines add a per-turn tax to every teammate's session; keep the shared file lean and reference longer material separately.",
+          "Add it to ~/.claude/CLAUDE.md instead so it only loads for the team lead's own sessions."
+        ],
+        "explanation": "Since CLAUDE.md is read into every request for everyone who has it, adding 300 lines multiplies the tax across the whole team's sessions, not just once."
+      }
+    },
+    {
+      "prompt": "After months of ad hoc edits, a project's CLAUDE.md has become a dumping ground for old debugging notes nobody removed. A new teammate asks why Claude seems to sometimes ignore short, clear instructions in the file. What's going on?",
+      "answer": "Every request loads the entire file, so accumulated cruft dilutes the actual instructions and reduces how well Claude follows any one of them; the fix is pruning it back to lean, relevant content.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 69,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · Context tax",
+        "choices": [
+          "Claude only reads the first 50 lines of CLAUDE.md, so older notes pushed instructions out of range.",
+          "Every request loads the entire file, so accumulated cruft dilutes the actual instructions and reduces how well Claude follows any one of them; the fix is pruning it back to lean, relevant content.",
+          "Debugging notes need to be moved into inline comments scattered individually throughout the relevant code files themselves, rather than staying collected together in one place inside CLAUDE.md's prose form.",
+          "CLAUDE.md instructions expire after a certain number of turns and need periodic re-statement."
+        ],
+        "explanation": "A bloated, cruft-filled CLAUDE.md is still loaded whole on every turn; the excess content acts as irrelevant context that crowds out the instructions that matter."
+      }
+    },
+    {
+      "prompt": "Mid-conversation, a solo dev opens CLAUDE.md in another editor and adds a new rule, then immediately asks Claude a question in the same Claude Code session, expecting the new rule to apply right away — but it doesn't. Why?",
+      "answer": "CLAUDE.md is read at the start of the conversation, so edits only take effect starting with the next message, not the one already in flight.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 70,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · Context timing",
+        "choices": [
+          "Edits to CLAUDE.md never apply mid-session; a full application restart is required.",
+          "The edit was saved to CLAUDE.local.md by mistake, which is never loaded.",
+          "CLAUDE.md changes only take effect after running /init again.",
+          "CLAUDE.md is read at the start of the conversation, so edits only take effect starting with the next message, not the one already in flight."
+        ],
+        "explanation": "CLAUDE.md is loaded once at conversation start; an edit made mid-conversation is picked up starting with the next message rather than retroactively."
+      }
+    },
+    {
+      "prompt": "A team lead updates a shared CLAUDE.md rule to fix a convention issue, then watches a teammate's already-open Claude Code session keep the old behavior for one more exchange before it starts complying. Is something broken?",
+      "answer": "No, CLAUDE.md is loaded once at conversation start, so the update naturally takes effect on that session's next message rather than instantly.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 71,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · Context timing",
+        "choices": [
+          "Yes, CLAUDE.md should apply instantly, so this indicates a caching bug that needs a restart to clear.",
+          "Yes, shared CLAUDE.md edits only propagate to brand-new sessions started after the save, and never reach any session that was already in progress at save time.",
+          "No, CLAUDE.md is loaded once at conversation start, so the update naturally takes effect on that session's next message rather than instantly.",
+          "No, but the teammate needs to run /memory to force the reload before it applies."
+        ],
+        "explanation": "This is expected, not a bug: since CLAUDE.md is read at conversation start, an in-flight session naturally catches the change on its next message with no extra action needed."
+      }
+    },
+    {
+      "prompt": "A CI job starts a long-running Claude Code session, and partway through, a separate commit updates CLAUDE.md with a new build command. The in-flight session doesn't use the new command until its next turn. What should the CI maintainer conclude?",
+      "answer": "This is expected, CLAUDE.md loads at conversation start, so mid-session edits apply beginning with the next message, not retroactively.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 72,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · Context timing",
+        "choices": [
+          "This is a bug; CLAUDE.md should hot-reload on every tool call within a session.",
+          "The CI job needs to explicitly @-mention CLAUDE.md in every prompt to pick up changes.",
+          "The new build command should have gone into CLAUDE.local.md instead of CLAUDE.md, since that personal file is documented as reloading live mid-session.",
+          "This is expected, CLAUDE.md loads at conversation start, so mid-session edits apply beginning with the next message, not retroactively."
+        ],
+        "explanation": "There's nothing to fix here: CLAUDE.md is read once when a conversation starts, so a change committed mid-session naturally shows up on the next message."
+      }
+    },
+    {
+      "prompt": "A new teammate is confused why, right after saving a change to a testing convention in CLAUDE.md via /memory, Claude still recommends the old convention in its very next reply within the same ongoing message exchange. What explains the delay?",
+      "answer": "CLAUDE.md is loaded at the start of a conversation, so a save mid-conversation takes effect from the next message onward, not the one already in progress.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 73,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · Context timing",
+        "choices": [
+          "/memory only stages changes; they must also run /init to commit them to CLAUDE.md.",
+          "Testing conventions specifically require a full server restart before they take effect, unlike every other kind of rule stored in that same CLAUDE.md file.",
+          "The change needs to be duplicated into CLAUDE.local.md before it becomes active.",
+          "CLAUDE.md is loaded at the start of a conversation, so a save mid-conversation takes effect from the next message onward, not the one already in progress."
+        ],
+        "explanation": "The save itself is complete and correct; the delay is simply because the current conversation already loaded the old CLAUDE.md at its start, and the update applies starting next message."
+      }
+    },
+    {
+      "prompt": "A team lead discovers that only one engineer's Claude Code suggestions follow the team's shared linting convention, and traces it to that engineer having added the rule to their own machine instead of the repo. Where should the rule move?",
+      "answer": "Into the repo's committed CLAUDE.md, since only that file is shared with the whole team; the engineer had put it in ~/.claude/CLAUDE.md, which only applies on their own machine.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 74,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · CLAUDE.md locations",
+        "choices": [
+          "Into CLAUDE.local.md, since personal local files are documented as always taking priority over the committed, shared CLAUDE.md whenever the two happen to disagree on a linting rule.",
+          "Into the repo's committed CLAUDE.md, since only that file is shared with the whole team; the engineer had put it in ~/.claude/CLAUDE.md, which only applies on their own machine.",
+          "Into a .env variable so every engineer's Claude Code process picks it up automatically.",
+          "Nowhere, linting conventions should stay in the linter config, not any CLAUDE.md file."
+        ],
+        "explanation": "~/.claude/CLAUDE.md is personal and applies to all of that engineer's projects, but never to teammates. Team-wide conventions belong in the repo's committed, shared CLAUDE.md."
+      }
+    },
+    {
+      "prompt": "A solo developer wants a personal note like \"prefer functional components over classes\" to apply across every repo they work on, on their own laptop, without affecting any teammate's setup or being checked into any repo. Which file should hold it?",
+      "answer": "~/.claude/CLAUDE.md, the personal file that applies to all projects on the machine.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 75,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · CLAUDE.md locations",
+        "choices": [
+          "CLAUDE.local.md in each repo, since it applies globally once created anywhere.",
+          "The repo's committed CLAUDE.md, since personal preferences are meant to be shared for consistency.",
+          "~/.claude/CLAUDE.md, the personal file that applies to all projects on the machine.",
+          "A .clauderc file in the home directory, which Claude Code reads before CLAUDE.md."
+        ],
+        "explanation": "~/.claude/CLAUDE.md is the personal, all-projects file, exactly the scope needed for a machine-wide, non-shared preference."
+      }
+    },
+    {
+      "prompt": "A developer wants to keep personal scratch instructions, like \"explain regex patterns in detail for me specifically,\" scoped to just this one repository, without committing them for the rest of the team to see. Where do they belong?",
+      "answer": "CLAUDE.local.md, the personal-and-not-shared file scoped to this project.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 76,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · CLAUDE.md locations",
+        "choices": [
+          "The repo's committed CLAUDE.md, edited on a personal branch that's never merged.",
+          "~/.claude/CLAUDE.md, since personal instructions always belong at the global level.",
+          "A .gitignore'd copy of CLAUDE.md using the same filename as the shared one.",
+          "CLAUDE.local.md, the personal-and-not-shared file scoped to this project."
+        ],
+        "explanation": "CLAUDE.local.md is exactly this middle tier: personal instructions, not shared with the team, but scoped to the current project rather than every project."
+      }
+    },
+    {
+      "prompt": "A new teammate joins a project and asks which CLAUDE.md file was originally written by running /init and is expected to be checked into version control for the whole team to see and edit collaboratively. Which one is it?",
+      "answer": "CLAUDE.md itself, the committed, shared file that /init writes.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 77,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · CLAUDE.md locations",
+        "choices": [
+          "CLAUDE.local.md, since \"local\" refers to the local git repository shared by the team.",
+          "~/.claude/CLAUDE.md, since it's the canonical file Claude always reads first.",
+          "CLAUDE.md itself, the committed, shared file that /init writes.",
+          "Whichever file was most recently modified, since Claude Code merges all three into one canonical source."
+        ],
+        "explanation": "/init writes to the project's CLAUDE.md, which is the committed file meant to be shared with and edited by the whole team."
+      }
+    },
+    {
+      "prompt": "A team lead is auditing a repo and finds project-specific coding conventions living in an engineer's ~/.claude/CLAUDE.md rather than the repo's own CLAUDE.md, which is why the rest of the team never benefited from them. What's the actual scope mistake here?",
+      "answer": "~/.claude/CLAUDE.md applies to all of that engineer's projects on their machine, not to teammates, so project conventions need to live in the repo's committed CLAUDE.md instead.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 78,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · CLAUDE.md locations",
+        "choices": [
+          "The conventions should have gone in CLAUDE.local.md, since that file syncs to the whole team automatically once committed.",
+          "Nothing is wrong, ~/.claude/CLAUDE.md is read by every teammate's Claude Code session for any repo they open.",
+          "The engineer needed to run /init again to promote personal rules into the shared file.",
+          "~/.claude/CLAUDE.md applies to all of that engineer's projects on their machine, not to teammates, so project conventions need to live in the repo's committed CLAUDE.md instead."
+        ],
+        "explanation": "This is the classic scope trap: a user-level file was used for what should have been project-level, shared configuration, so no other teammate ever saw the convention."
+      }
+    },
+    {
+      "prompt": "A CI/CD pipeline runs Claude Code with a project convention rule that only exists in one developer's ~/.claude/CLAUDE.md; the pipeline, running under a different user account, never sees the rule and produces non-compliant code. What's the structural fix?",
+      "answer": "Move the convention into the repo's committed CLAUDE.md so it's shared and available to any user or process working in that repo, instead of one person's global personal file.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 79,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · CLAUDE.md locations",
+        "choices": [
+          "Set an environment variable in the CI config that mirrors the rule's text.",
+          "Have the CI job SSH in as that developer's own personal user account so its Claude Code process inherits their home directory and every one of their personal configuration files.",
+          "Add the rule to CLAUDE.local.md and commit that file so CI can read it too.",
+          "Move the convention into the repo's committed CLAUDE.md so it's shared and available to any user or process working in that repo, instead of one person's global personal file."
+        ],
+        "explanation": "Only the repo's CLAUDE.md is shared and accessible regardless of user account; the personal global file is inherently scoped to one machine and one person."
+      }
+    },
+    {
+      "prompt": "Two engineers on the same team both add the identical rule \"use snake_case for Python filenames\": one in the repo's CLAUDE.md, the other in their own ~/.claude/CLAUDE.md. A new hire asks which one actually governs everyone's sessions. What's the answer?",
+      "answer": "Only the repo's committed CLAUDE.md governs the team, since ~/.claude/CLAUDE.md is personal and machine-specific and doesn't affect anyone else's sessions even with an identical rule.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 80,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · CLAUDE.md locations",
+        "choices": [
+          "Whichever file was edited most recently wins, regardless of location.",
+          "Both files must agree, or Claude Code throws a configuration conflict error.",
+          "The global file takes precedence project-wide since \"global\" implies broader scope.",
+          "Only the repo's committed CLAUDE.md governs the team, since ~/.claude/CLAUDE.md is personal and machine-specific and doesn't affect anyone else's sessions even with an identical rule."
+        ],
+        "explanation": "Scope, not recency or naming, determines reach: the personal global file never extends to teammates, no matter how it's worded or when it was edited."
+      }
+    },
+    {
+      "prompt": "A solo dev switches between two laptops for the same repo and is annoyed that a personal rule they keep in the repo's CLAUDE.local.md doesn't show up on the second laptop. What's the actual limitation here, and what's the fix?",
+      "answer": "CLAUDE.local.md isn't shared or synced anywhere, including across a solo dev's own machines, so they should recreate it on the second laptop or move an all-repo preference into ~/.claude/CLAUDE.md instead.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 81,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · CLAUDE.md locations",
+        "choices": [
+          "CLAUDE.local.md syncs automatically through git; they just need to run git pull.",
+          "The fix is to rename it to CLAUDE.md so it syncs like a normal tracked file.",
+          "CLAUDE.local.md isn't shared or synced anywhere, including across a solo dev's own machines, so they should recreate it on the second laptop or move an all-repo preference into ~/.claude/CLAUDE.md instead.",
+          "Personal files like CLAUDE.local.md require a Claude Code account login on both machines before they will silently and automatically sync across devices through the user's account settings in the background."
+        ],
+        "explanation": "CLAUDE.local.md is deliberately unshared, it isn't committed, so it's local to a single filesystem and won't follow the dev to a second machine on its own."
+      }
+    },
+    {
+      "prompt": "A solo dev wants to add a new custom rule to CLAUDE.md without leaving Claude Code to open a separate text editor. What lets them do that from within a session?",
+      "answer": "The /memory command, which opens CLAUDE.md for editing directly.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 82,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · /init & /memory",
+        "choices": [
+          "The /init command, since it re-analyzes the codebase and appends new rules automatically.",
+          "@memory used as a file mention in any prompt.",
+          "The /memory command, which opens CLAUDE.md for editing directly.",
+          "Shift+Tab, which toggles into a dedicated memory-editing mode."
+        ],
+        "explanation": "/memory is the in-session shortcut for opening CLAUDE.md to edit it directly, as an alternative to editing the file in an external editor."
+      }
+    },
+    {
+      "prompt": "A team lead wants to quickly check what custom directions are currently active for a project before a session, without hunting for the file in a separate file browser. What Claude Code command opens it directly?",
+      "answer": "/memory, since it opens CLAUDE.md for viewing and editing.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 83,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · /init & /memory",
+        "choices": [
+          "/init, since it lists all custom directions currently in effect.",
+          "/status, since it prints a summary of active configuration files.",
+          "/memory, since it opens CLAUDE.md for viewing and editing.",
+          "@CLAUDE.md, which opens the file in a picker rather than for editing."
+        ],
+        "explanation": "/memory is specifically for opening CLAUDE.md; /init performs analysis and writing, not a quick open-for-review."
+      }
+    },
+    {
+      "prompt": "A new teammate has been directly opening CLAUDE.md in VS Code every time they want to tweak a rule and asks if there's a faster, in-session way to do it without breaking their flow. What should they be told?",
+      "answer": "Yes, running /memory inside Claude Code opens CLAUDE.md directly for editing, as an alternative to editing it in an external editor.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 84,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · /init & /memory",
+        "choices": [
+          "No, CLAUDE.md can only ever be edited outside of Claude Code in a separate text editor, by design, specifically to prevent accidental self-modification during a session.",
+          "Yes, but only /init supports in-session edits; /memory is read-only.",
+          "Yes, but edits made via /memory require a session restart to be saved to disk.",
+          "Yes, running /memory inside Claude Code opens CLAUDE.md directly for editing, as an alternative to editing it in an external editor."
+        ],
+        "explanation": "/memory opens CLAUDE.md for editing right inside Claude Code, which is exactly the faster in-session workflow the teammate is asking about."
+      }
+    },
+    {
+      "prompt": "A solo dev is debugging a login bug and doesn't want to dump the whole codebase into context, just the handful of files touching authentication. What's the right move?",
+      "answer": "Type @auth in the prompt to surface a picker of auth-related files and include only the ones needed.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 85,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · @ mentions",
+        "choices": [
+          "Type @auth in the prompt to surface a picker of auth-related files and include only the ones needed.",
+          "Add @auth to CLAUDE.md so authentication files are always loaded going forward.",
+          "Run /init to have Claude re-scan the codebase and auto-detect the auth files.",
+          "Paste the full file tree so Claude can infer which files relate to auth."
+        ],
+        "explanation": "Typing @auth in a prompt surfaces a picker of matching files for surgical, on-demand inclusion, exactly the scoped context this one-off debugging task needs."
+      }
+    },
+    {
+      "prompt": "A team lead wants a one-off way to hand Claude the exact contents of a single config file for the current question only, without permanently changing what's loaded in future sessions. What's the mechanism?",
+      "answer": "@path in the prompt, which includes that file's contents in just that one request, on demand.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 86,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · @ mentions",
+        "choices": [
+          "@path added permanently to CLAUDE.md, which loads the file for every single future request in the project going forward, not just this one.",
+          "@path in the prompt, which includes that file's contents in just that one request, on demand.",
+          "/memory, which permanently attaches the file to the project's context.",
+          "Renaming the file to AGENTS.md so it's picked up automatically."
+        ],
+        "explanation": "@path used inside a prompt is a scalpel: it includes the file just for that request, unlike an @-mention placed inside CLAUDE.md, which would persist across every future request."
+      }
+    },
+    {
+      "prompt": "A new teammate wants to reference a specific test file in their question but only remembers part of its name. Typing @ followed by that partial name in the prompt does what?",
+      "answer": "It surfaces a picker of matching files so they can select the exact one to include, on demand, for that request.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 87,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · @ mentions",
+        "choices": [
+          "It automatically adds every matching file to CLAUDE.md for all future requests.",
+          "It runs a project-wide search and prints every matching filename as plain text in the chat, without actually including any of the files' contents.",
+          "It fails silently unless the full exact filename is typed.",
+          "It surfaces a picker of matching files so they can select the exact one to include, on demand, for that request."
+        ],
+        "explanation": "@ mentions in a prompt surface a picker, as with @auth, letting the user select the right file even from a partial name, then include it just for that request."
+      }
+    },
+    {
+      "prompt": "A CI script needs to include the contents of one specific migration file in a single automated prompt, without altering any persistent project configuration. What should it use?",
+      "answer": "An @path mention pointing at that migration file, scoped to just that one prompt.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 88,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · @ mentions",
+        "choices": [
+          "An @path mention inside CLAUDE.md, scoped to persist across all future prompts.",
+          "The /init command, to regenerate context including that file.",
+          "An @path mention pointing at that migration file, scoped to just that one prompt.",
+          "A CLAUDE.local.md entry referencing the file's path."
+        ],
+        "explanation": "@path in a prompt is on-demand and scoped to that single request, exactly what's needed when persistent configuration should stay untouched."
+      }
+    },
+    {
+      "prompt": "A team's database schema rarely changes, but nearly every question anyone asks Claude Code touches the database layer, and engineers are tired of re-attaching @prisma/schema.prisma to every single prompt. What's the fix?",
+      "answer": "Put the @prisma/schema.prisma mention directly in CLAUDE.md so it's automatically included in every request, since it's a file that's always relevant.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 89,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · @ mentions",
+        "choices": [
+          "Add the schema file's path to .env so Claude Code loads it as a startup file.",
+          "Rename the schema file itself to CLAUDE.local.md so its full contents get read in alongside the project's other personal, not-shared rules automatically every time.",
+          "Use /memory before every prompt to re-attach the file manually.",
+          "Put the @prisma/schema.prisma mention directly in CLAUDE.md so it's automatically included in every request, since it's a file that's always relevant."
+        ],
+        "explanation": "An @-mention placed inside CLAUDE.md auto-includes that file on every request, which is the intended pattern for an always-relevant file like a frequently-needed schema."
+      }
+    },
+    {
+      "prompt": "A solo dev wants Claude to be able to answer schema questions immediately, without searching or re-reading the schema file fresh each time, across every conversation in the project. What should they do?",
+      "answer": "Add an @-mention of the schema file inside CLAUDE.md, so its contents are auto-included in every request.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 90,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · @ mentions",
+        "choices": [
+          "Add the schema file to .gitignore so it stays local and always accessible.",
+          "Add an @-mention of the schema file inside CLAUDE.md, so its contents are auto-included in every request.",
+          "Mention the schema with @path once, since Claude permanently remembers any file it has seen.",
+          "Rename the schema file to AGENTS.md so it loads before CLAUDE.md."
+        ],
+        "explanation": "This matches the documented pattern of noting \"the schema is defined in @prisma/schema.prisma\" inside CLAUDE.md, so Claude has it available without searching or reading it fresh each time."
+      }
+    },
+    {
+      "prompt": "A team lead is deciding whether a rarely-touched 500-line legacy migration script should get an @-mention inside the shared CLAUDE.md so it's always available to Claude. What consideration should drive that decision?",
+      "answer": "An @-mention in CLAUDE.md is auto-included on every single request, so it should be reserved for files that are always relevant, and a rarely-touched file doesn't qualify.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 91,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · @ mentions",
+        "choices": [
+          "It doesn't matter at all, @-mentions placed inside CLAUDE.md are documented as loading only once per calendar day regardless of how large the mentioned file happens to be.",
+          "Legacy scripts are automatically excluded from @-mentions by Claude Code.",
+          "@-mentions in CLAUDE.md only take effect if the file is under 50 lines.",
+          "An @-mention in CLAUDE.md is auto-included on every single request, so it should be reserved for files that are always relevant, and a rarely-touched file doesn't qualify."
+        ],
+        "explanation": "Because CLAUDE.md's @-mentions load every turn, they should be reserved for genuinely always-needed files; a rarely-used 500-line script would just add unnecessary per-turn cost."
+      }
+    },
+    {
+      "prompt": "A new teammate notices CLAUDE.md contains the line \"The database schema is defined in the @prisma/schema.prisma file. Reference it anytime…\" and asks what actually happens with that file on every request. What's the correct explanation?",
+      "answer": "Because the @-mention lives inside CLAUDE.md, the schema file's contents are automatically pulled into every request, not just requests that mention schemas.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 92,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · @ mentions",
+        "choices": [
+          "The mention is just documentation text for humans reading the file; Claude still has to be separately asked with @path each time to actually load the file's contents.",
+          "The file loads only the first time it's referenced in a conversation, then is cached from memory afterward.",
+          "The mention only activates when the prompt contains the word \"schema.\"",
+          "Because the @-mention lives inside CLAUDE.md, the schema file's contents are automatically pulled into every request, not just requests that mention schemas."
+        ],
+        "explanation": "An @-mention inside CLAUDE.md isn't conditional or one-time; it's auto-included on every single request, unconditionally, which is exactly why it should be reserved for always-needed files."
+      }
+    },
+    {
+      "prompt": "A repo already has a well-maintained AGENTS.md used by another AI coding tool, and the team wants Claude Code to follow the same instructions without maintaining two separate copies of the same content. What's the recommended approach?",
+      "answer": "Put @AGENTS.md on the first line of CLAUDE.md so it's loaded first, then add any Claude-specific instructions below it, avoiding duplication.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 93,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · @ mentions",
+        "choices": [
+          "Rename AGENTS.md to CLAUDE.md, deleting the original so the other tool falls back to defaults.",
+          "Copy the full contents of AGENTS.md into CLAUDE.md by hand and keep both files in sync manually going forward.",
+          "Put @AGENTS.md on the first line of CLAUDE.md so it's loaded first, then add any Claude-specific instructions below it, avoiding duplication.",
+          "Symlink CLAUDE.md to AGENTS.md at the OS level so both tools read identical bytes."
+        ],
+        "explanation": "Placing @AGENTS.md on CLAUDE.md's first line loads the existing file first, then Claude-specific instructions can be layered below it, with no duplicated content to keep in sync."
+      }
+    },
+    {
+      "prompt": "A solo dev maintains AGENTS.md for a different coding assistant and doesn't want project instructions to drift out of sync between that file and Claude Code's CLAUDE.md over time. How should they wire CLAUDE.md?",
+      "answer": "Start CLAUDE.md with @AGENTS.md on the first line to load the existing file, then layer Claude-specific instructions underneath it.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 94,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · @ mentions",
+        "choices": [
+          "Leave CLAUDE.md empty and configure Claude Code to read AGENTS.md exclusively instead.",
+          "Use a build script triggered by a git hook that regenerates CLAUDE.md from AGENTS.md automatically on every single commit to the repository.",
+          "Add AGENTS.md as a CLAUDE.local.md entry so only local sessions inherit it.",
+          "Start CLAUDE.md with @AGENTS.md on the first line to load the existing file, then layer Claude-specific instructions underneath it."
+        ],
+        "explanation": "The documented pattern is a single @AGENTS.md mention on CLAUDE.md's first line, which reuses the existing file directly and eliminates drift without any build tooling."
+      }
+    },
+    {
+      "prompt": "A team lead is reviewing a new CLAUDE.md and sees @AGENTS.md sitting on the very first line, followed by a few Claude-specific bullet points. What does that first line actually accomplish?",
+      "answer": "It loads the existing AGENTS.md content first so both tools share the same base instructions, without the team having to duplicate that content inside CLAUDE.md.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 95,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · @ mentions",
+        "choices": [
+          "It disables AGENTS.md for the other tool once Claude Code has read it once.",
+          "It tells Claude Code to ignore everything below it and defer entirely to AGENTS.md.",
+          "It's purely cosmetic, @-mentions only function inside a prompt, never inside CLAUDE.md itself.",
+          "It loads the existing AGENTS.md content first so both tools share the same base instructions, without the team having to duplicate that content inside CLAUDE.md."
+        ],
+        "explanation": "This is the intended reuse pattern: @AGENTS.md on the first line pulls in the shared file, and the bullet points below add Claude-specific instructions on top of it."
+      }
+    },
+    {
+      "prompt": "A CI maintainer wants Claude Code sessions to inherit the same conventions already encoded in AGENTS.md for a different tool, but is worried about keeping two files in sync as the project evolves. What single-line fix addresses this?",
+      "answer": "Adding @AGENTS.md as the first line of CLAUDE.md, so Claude always loads the shared file directly instead of a copy that can drift out of date.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 96,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · @ mentions",
+        "choices": [
+          "Adding a comment at the top of AGENTS.md noting that CLAUDE.md is a duplicate that must be updated in tandem.",
+          "Scheduling a nightly job that diffs the two files and alerts on mismatch.",
+          "Adding @AGENTS.md as the first line of CLAUDE.md, so Claude always loads the shared file directly instead of a copy that can drift out of date.",
+          "Renaming both files to a shared CONVENTIONS.md and hoping both tools pick it up."
+        ],
+        "explanation": "The @AGENTS.md first-line pattern is a one-time wiring change that removes the possibility of drift entirely, rather than adding process (diffing, comments) to manage two copies."
+      }
+    },
+    {
+      "prompt": "To shrink a bloated CLAUDE.md, a solo dev moves most of its content into a separate 600-line doc and adds a single @-mention line pointing to it, expecting the per-turn cost to drop. Does this work?",
+      "answer": "No, the @-mentioned doc is still auto-included in every request, so the per-turn context tax is unchanged; loaded is loaded regardless of which file the content lives in.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 97,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · Context tax",
+        "choices": [
+          "Yes, @-mentioning a file defers loading until Claude actually needs it, so idle turns get cheaper.",
+          "No, the @-mentioned doc is still auto-included in every request, so the per-turn context tax is unchanged; loaded is loaded regardless of which file the content lives in.",
+          "Yes, moving content out of CLAUDE.md itself always reduces the tax, since only CLAUDE.md's own line count counts against the budget.",
+          "Partially, it halves the tax because @-mentioned files load at half the token cost of inline text."
+        ],
+        "explanation": "@-mentioning a file inside CLAUDE.md still auto-includes its full contents on every request; relocating text behind an @-mention doesn't reduce what actually gets loaded each turn."
+      }
+    },
+    {
+      "prompt": "A team lead proposes \"just @import the whole style guide into CLAUDE.md instead of pasting it inline\" as a fix for a CLAUDE.md that's making every request slower. Will that actually solve the problem?",
+      "answer": "No, an @-mention in CLAUDE.md still gets auto-included on every request just as fully as inline text; the real fix is to trim the content, not relocate it.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 98,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · Context tax",
+        "choices": [
+          "Yes, @import only loads the referenced file lazily, on the turns where it's actually relevant.",
+          "Yes, @-mentioned content is documented as not counting toward CLAUDE.md's line-count guidance at all, since only literal inline text counts against the budget.",
+          "No, an @-mention in CLAUDE.md still gets auto-included on every request just as fully as inline text; the real fix is to trim the content, not relocate it.",
+          "Partially, it removes the tax for the first message of each conversation only."
+        ],
+        "explanation": "This is the documented trap: @-importing a huge doc into CLAUDE.md doesn't reduce the per-turn tax, because the imported content is still loaded on every request."
+      }
+    },
+    {
+      "prompt": "A new teammate suggests replacing a large inline coding-conventions section in CLAUDE.md with an @-mention to a separate CONVENTIONS.md file, believing this will make sessions faster. What should a more experienced teammate point out?",
+      "answer": "The @-mention still auto-loads CONVENTIONS.md's full contents on every request, so nothing is actually saved; the tax comes from what's loaded, not from which file it originated in.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 99,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · Context tax",
+        "choices": [
+          "The suggestion is correct, since @-mentioned files are compressed automatically before being sent.",
+          "The suggestion is correct, but only if CONVENTIONS.md is placed in CLAUDE.local.md instead.",
+          "The suggestion only works if CONVENTIONS.md itself stays under roughly 200 lines total, in which case @-mentioning it instead of pasting it inline does measurably reduce the per-turn tax.",
+          "The @-mention still auto-loads CONVENTIONS.md's full contents on every request, so nothing is actually saved; the tax comes from what's loaded, not from which file it originated in."
+        ],
+        "explanation": "Splitting content into a second file doesn't help if that file is still @-mentioned inside CLAUDE.md, since it's loaded in full on every request either way."
+      }
+    },
+    {
+      "prompt": "A solo dev, chasing sluggish responses, discovers their CLAUDE.md is short but @-mentions three separate multi-hundred-line reference docs at the bottom. They assume the file \"counts\" as small since it's technically only 15 lines. Where's the flaw in that reasoning?",
+      "answer": "CLAUDE.md's own line count isn't what matters; every request loads the full contents of anything it @-mentions too, so those three large docs are just as much a per-turn tax as pasted inline text.",
+      "metadata": {
+        "source": "cca_reference",
+        "number": 100,
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "Course Note · Context tax",
+        "choices": [
+          "There's no flaw; only the literal CLAUDE.md file counts toward the per-turn budget, so those docs are effectively free.",
+          "The flaw is that @-mentions technically require every single referenced file to individually stay under 200 lines each, so at least one of the three large reference docs is silently being truncated without warning.",
+          "The flaw is that @-mentioned docs load twice per request, doubling their effective cost compared to inline text.",
+          "CLAUDE.md's own line count isn't what matters; every request loads the full contents of anything it @-mentions too, so those three large docs are just as much a per-turn tax as pasted inline text."
+        ],
+        "explanation": "The 15-line CLAUDE.md file is misleading: what actually loads every turn includes everything it @-mentions, so the real per-turn payload is the sum of all three reference docs, not the file's own line count."
+      }
     }
   ]
 }
