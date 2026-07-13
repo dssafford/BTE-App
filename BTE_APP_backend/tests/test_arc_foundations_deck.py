@@ -165,6 +165,7 @@ def test_no_unknown_sources(all_cards):
         "arc_foundations",
         "cca_course_quiz",
         "cca_reference",
+        "cca_domains",
     }
 
 
@@ -212,6 +213,67 @@ def test_reference_structure(reference_cards):
     assert longest_hits / len(reference_cards) <= 0.40, (
         f"answer strictly longest in {longest_hits}/{len(reference_cards)}"
     )
+
+
+# --- Domain-weighted expansion cards (source 'cca_domains'; authored from
+# the workspace's per-domain reference pages and course notes, counts
+# proportional to the exam's domain weights: 27/20/20/18/15%) ---
+
+DOMAINS_EXPECTED_COUNTS = {
+    "Agentic Architecture & Orchestration": 68,
+    "Claude Code Configuration & Workflows": 50,
+    "Prompt Engineering & Structured Output": 50,
+    "Tool Design & MCP Integration": 45,
+    "Context Management & Reliability": 37,
+}
+
+
+@pytest.fixture(scope="module")
+def domain_cards(all_cards):
+    return [c for c in all_cards if c["metadata"]["source"] == "cca_domains"]
+
+
+def test_domains_count(domain_cards):
+    assert len(domain_cards) == 250
+
+
+def test_domains_domain_counts(domain_cards):
+    counts = {}
+    for c in domain_cards:
+        counts[c["metadata"]["domain"]] = counts.get(c["metadata"]["domain"], 0) + 1
+    assert counts == DOMAINS_EXPECTED_COUNTS
+
+
+def test_domains_structure(domain_cards):
+    numbers = []
+    global_hits = 0
+    per_domain = {}
+    per_domain_totals = {}
+    for c in domain_cards:
+        m = c["metadata"]
+        choices = m["choices"]
+        assert isinstance(choices, list) and len(choices) == 4, m["number"]
+        assert len(set(choices)) == 4, m["number"]
+        assert c["answer"] in choices, m["number"]
+        assert isinstance(m["explanation"], str) and m["explanation"].strip()
+        assert isinstance(m["subdomain"], str) and m["subdomain"].strip()
+        numbers.append(m["number"])
+        domain = m["domain"]
+        per_domain_totals[domain] = per_domain_totals.get(domain, 0) + 1
+        lengths = [len(ch) for ch in choices]
+        longest = max(lengths)
+        if len(c["answer"]) == longest and lengths.count(longest) == 1:
+            global_hits += 1
+            per_domain[domain] = per_domain.get(domain, 0) + 1
+    assert sorted(numbers) == list(range(1, 251))
+    assert global_hits / len(domain_cards) <= 0.40, (
+        f"answer strictly longest in {global_hits}/{len(domain_cards)}"
+    )
+    for domain, total in per_domain_totals.items():
+        hits = per_domain.get(domain, 0)
+        assert hits / total <= 0.50, (
+            f"{domain}: answer strictly longest in {hits}/{total}"
+        )
 
 
 def test_course_quiz_structure(course_cards):
