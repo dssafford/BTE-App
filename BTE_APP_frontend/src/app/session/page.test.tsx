@@ -129,3 +129,57 @@ describe("study mode", () => {
     expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
   });
 });
+
+describe("domain filter", () => {
+  const agentCard = mcCard({
+    id: 10,
+    prompt_text: "Agent domain question?",
+    metadata: { domain: "Agentic Architecture & Orchestration", choices: ["a", "b"] },
+  });
+  const promptCard = mcCard({
+    id: 11,
+    prompt_text: "Prompt domain question?",
+    metadata: { domain: "Prompt Engineering & Structured Output", choices: ["a", "b"] },
+  });
+
+  it("renders a domain dropdown with an option per distinct domain", async () => {
+    fetchDecks.mockResolvedValue([mcDeck]);
+    fetchCardsForDeck.mockResolvedValue([agentCard, promptCard]);
+    render(<SessionPage />);
+    const select = await screen.findByLabelText("Domain:");
+    expect(select).toBeInTheDocument();
+    expect(
+      screen.getByRole("option", { name: /All domains \(2\)/ })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("option", { name: /Agentic Architecture & Orchestration \(1\)/ })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("option", { name: /Prompt Engineering & Structured Output \(1\)/ })
+    ).toBeInTheDocument();
+  });
+
+  it("limits the session to the selected domain's cards", async () => {
+    fetchDecks.mockResolvedValue([mcDeck]);
+    fetchCardsForDeck.mockResolvedValue([agentCard, promptCard]);
+    render(<SessionPage />);
+    const select = await screen.findByLabelText("Domain:");
+    await userEvent.selectOptions(
+      select,
+      "Prompt Engineering & Structured Output"
+    );
+    await userEvent.click(screen.getByText(/Start Quiz/i));
+    expect(screen.getByText("Prompt domain question?")).toBeInTheDocument();
+    expect(screen.queryByText("Agent domain question?")).not.toBeInTheDocument();
+  });
+
+  it("does not render the dropdown for decks whose cards have no domain", async () => {
+    fetchDecks.mockResolvedValue([mcDeck]);
+    fetchCardsForDeck.mockResolvedValue([
+      mcCard({ metadata: { choices: ["a", "b"] } }),
+    ]);
+    render(<SessionPage />);
+    await waitFor(() => expect(screen.getByText(/Start Quiz/i)).toBeEnabled());
+    expect(screen.queryByLabelText("Domain:")).not.toBeInTheDocument();
+  });
+});

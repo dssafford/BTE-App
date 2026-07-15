@@ -33,6 +33,9 @@ const COUNT_OPTIONS = ["5", "10", "20", "all"] as const;
 type CountOption = (typeof COUNT_OPTIONS)[number];
 type Mode = "study" | "quiz";
 
+// Sentinel for the domain <select> meaning "don't filter by domain".
+const ALL_DOMAINS = "__all__";
+
 function ModeToggle({ mode, onChange }: { mode: Mode; onChange: (m: Mode) => void }) {
   return (
     <div
@@ -81,6 +84,10 @@ function SessionInner() {
   const [choiceOrders, setChoiceOrders] = useState<(string[] | null)[]>([]);
   const [checked, setChecked] = useState(false);
   const [countOption, setCountOption] = useState<CountOption>("10");
+  // Filter the session to a single domain (card.metadata.domain). Defaults
+  // to ALL_DOMAINS; the dropdown only renders for decks whose cards carry a
+  // domain, so number/behavior decks are unaffected.
+  const [domainFilter, setDomainFilter] = useState<string>(ALL_DOMAINS);
   const [randomize, setRandomize] = useState(true);
   const [threshold, setThreshold] = useState(80);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -127,8 +134,34 @@ function SessionInner() {
     return [];
   }, [deck]);
 
+  // Distinct, sorted domains present in this deck's cards. Empty for decks
+  // whose cards have no metadata.domain (numbers, behaviors) — the dropdown
+  // is hidden in that case.
+  const domains = useMemo<string[]>(() => {
+    const set = new Set<string>();
+    for (const c of allCards) {
+      const d = c.metadata?.domain;
+      if (typeof d === "string" && d.length > 0) set.add(d);
+    }
+    return [...set].sort((a, b) => a.localeCompare(b));
+  }, [allCards]);
+
+  // Cards eligible for this session after applying the domain filter.
+  const availableCards = useMemo<Card[]>(() => {
+    if (domainFilter === ALL_DOMAINS) return allCards;
+    return allCards.filter((c) => c.metadata?.domain === domainFilter);
+  }, [allCards, domainFilter]);
+
+  // A previously-selected domain can disappear when the deck changes; fall
+  // back to ALL_DOMAINS so the filter never points at an absent value.
+  useEffect(() => {
+    if (domainFilter !== ALL_DOMAINS && !domains.includes(domainFilter)) {
+      setDomainFilter(ALL_DOMAINS);
+    }
+  }, [domains, domainFilter]);
+
   const startSession = () => {
-    let source = allCards;
+    let source = availableCards;
     if (randomize) source = shuffle(source);
     const n =
       countOption === "all" ? source.length : Math.min(Number(countOption), source.length);
@@ -236,16 +269,46 @@ function SessionInner() {
           </div>
         </header>
 
-        <div className="mb-6 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-          <label className="font-semibold">Session size:</label>
+        <div className="mb-6 flex flex-col items-start gap-4 sm:flex-row sm:flex-wrap sm:items-center">
+          {domains.length > 0 && (
+            <>
+              <label htmlFor="domain" className="font-semibold">
+                Domain:
+              </label>
+              <select
+                id="domain"
+                value={domainFilter}
+                onChange={(e) => setDomainFilter(e.target.value)}
+                className="rounded-md border border-amber-400 bg-zinc-700 px-4 py-2"
+              >
+                <option value={ALL_DOMAINS} className="bg-amber-400 text-zinc-900">
+                  All domains ({allCards.length})
+                </option>
+                {domains.map((d) => {
+                  const n = allCards.filter(
+                    (c) => c.metadata?.domain === d
+                  ).length;
+                  return (
+                    <option key={d} value={d} className="bg-amber-400 text-zinc-900">
+                      {d} ({n})
+                    </option>
+                  );
+                })}
+              </select>
+            </>
+          )}
+          <label htmlFor="count" className="font-semibold">
+            Session size:
+          </label>
           <select
+            id="count"
             value={countOption}
             onChange={(e) => setCountOption(e.target.value as CountOption)}
             className="rounded-md border border-amber-400 bg-zinc-700 px-4 py-2"
           >
             {COUNT_OPTIONS.map((opt) => (
               <option key={opt} value={opt} className="bg-amber-400 text-zinc-900">
-                {opt === "all" ? `All (${allCards.length})` : opt}
+                {opt === "all" ? `All (${availableCards.length})` : opt}
               </option>
             ))}
           </select>
@@ -262,7 +325,7 @@ function SessionInner() {
             type="button"
             onClick={startSession}
             className="rounded-md bg-amber-400 px-4 py-2 font-semibold text-zinc-900 hover:bg-amber-300"
-            disabled={allCards.length === 0}
+            disabled={availableCards.length === 0}
           >
             {cards.length > 0
               ? mode === "study"
