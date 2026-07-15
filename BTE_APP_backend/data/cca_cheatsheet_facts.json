@@ -1,0 +1,3836 @@
+{
+  "deck_name": "CCA-F Cheatsheet Facts",
+  "match_strategy": "multi_choice",
+  "render_config": {
+    "fields": [
+      "domain"
+    ]
+  },
+  "cards": [
+    {
+      "prompt": "In Anthropic's agentic systems framework, what fundamentally distinguishes a 'workflow' from an 'agent'?",
+      "answer": "A workflow is a graph of steps predefined in code, while an agent is a loop the model drives dynamically",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.1 workflow vs agent",
+        "choices": [
+          "A workflow always runs faster than an agent",
+          "A workflow cannot use tools while an agent can call tools",
+          "A workflow uses a single LLM call while an agent always uses multiple LLM calls",
+          "A workflow is a graph of steps predefined in code, while an agent is a loop the model drives dynamically"
+        ],
+        "explanation": "Workflow = a graph you draw in code; agent = a loop the model drives, deciding steps, tools, and when to stop.",
+        "source": "cca_cheatsheet",
+        "number": 1
+      }
+    },
+    {
+      "prompt": "You can enumerate every step of a task in a fixed order up front. Per the least-agency principle, what should you build?",
+      "answer": "A workflow, since the path is predictable and testable",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.1 workflow vs agent",
+        "choices": [
+          "An evaluator-optimizer loop, to guarantee quality",
+          "A workflow, since the path is predictable and testable",
+          "An orchestrator-workers pattern, to allow adaptive subtask generation",
+          "An agent, for runtime flexibility and to future-proof the system"
+        ],
+        "explanation": "Enumerable, fixed-order steps are a strong workflow signal; 'agent for future-proofing' is the softened distractor the exam dangles.",
+        "source": "cca_cheatsheet",
+        "number": 2
+      }
+    },
+    {
+      "prompt": "A product's UX constrains users to a small set of known, predefined tasks. What does this strongly signal about the right architecture?",
+      "answer": "A workflow — the tasks are enumerable by construction",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.1 workflow vs agent",
+        "choices": [
+          "A workflow — the tasks are enumerable by construction",
+          "A multi-agent hub-and-spoke system",
+          "An evaluator-optimizer loop",
+          "An agent, since it is more capable and flexible"
+        ],
+        "explanation": "A constrained UX means the tasks are enumerable by construction, a strong workflow signal — not 'agent is more capable, so prefer it.'",
+        "source": "cca_cheatsheet",
+        "number": 3
+      }
+    },
+    {
+      "prompt": "You're uncertain what task or parameters will come in, and the goal is open-ended. What does the least-agency principle recommend here?",
+      "answer": "An agent — the model decides the next step, picks tools, and decides when to stop",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.1 workflow vs agent",
+        "choices": [
+          "A prompt chain with a fixed number of steps",
+          "A parallelization pattern with a fixed aggregation step",
+          "An agent — the model decides the next step, picks tools, and decides when to stop",
+          "A router with a fixed menu of pipelines"
+        ],
+        "explanation": "Open-ended goals with unknown task/params are the genuine signal for an agent, unlike enumerable-step cases where a workflow suffices.",
+        "source": "cca_cheatsheet",
+        "number": 4
+      }
+    },
+    {
+      "prompt": "When two architecture designs both technically 'work' for a task, what rule should decide which to pick?",
+      "answer": "Use the least agency that reliably solves the task",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.1 workflow vs agent",
+        "choices": [
+          "Use whichever pattern has the fewest LLM calls, regardless of reliability",
+          "Use the most agentic option available, since it is more robust",
+          "Use the least agency that reliably solves the task",
+          "Use an orchestrator-workers pattern by default for scalability"
+        ],
+        "explanation": "The master key for this domain is: use the least agency that reliably solves the task; the sophisticated-sounding higher rung is usually the wrong answer.",
+        "source": "cca_cheatsheet",
+        "number": 5
+      }
+    },
+    {
+      "prompt": "Of Anthropic's five documented agentic patterns (chaining, parallelization, routing, orchestrator-workers, evaluator-optimizer), how many are technically 'agents' in the sense that the model drives the loop?",
+      "answer": "Zero — all five are still workflows",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.2 the five patterns",
+        "choices": [
+          "Zero — all five are still workflows",
+          "All five, since they all use LLM calls",
+          "Two — orchestrator-workers and evaluator-optimizer",
+          "One — evaluator-optimizer only"
+        ],
+        "explanation": "All five patterns are still workflows; orchestrator-workers and evaluator-optimizer merely bridge toward agents without crossing the line.",
+        "source": "cca_cheatsheet",
+        "number": 6
+      }
+    },
+    {
+      "prompt": "What does the mnemonic 'CPR' stand for among the three basic (Cookbook) agentic workflow patterns?",
+      "answer": "Chaining, Parallelization, Routing",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.2 the five patterns",
+        "choices": [
+          "Chaining, Parallelization, Routing",
+          "Chaining, Prioritization, Routing",
+          "Coordination, Parallelization, Retrieval",
+          "Chaining, Parallelization, Recovery"
+        ],
+        "explanation": "CPR is the mnemonic for the three basic workflow patterns: Chaining, Parallelization, Routing.",
+        "source": "cca_cheatsheet",
+        "number": 7
+      }
+    },
+    {
+      "prompt": "In prompt-chaining, what property must the subtasks have?",
+      "answer": "Non-parallelizable — each step needs the result of the last",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.2 the five patterns",
+        "choices": [
+          "Heterogeneous, requiring classification before dispatch",
+          "Non-parallelizable — each step needs the result of the last",
+          "Unknown in advance, generated by the model at runtime",
+          "Independent and concurrent, so they can run at the same time"
+        ],
+        "explanation": "Chaining requires known, ordered stages where each step needs the last; independence/concurrency instead describes parallelization.",
+        "source": "cca_cheatsheet",
+        "number": 8
+      }
+    },
+    {
+      "prompt": "Besides sequential LLM calls, what else can a prompt-chaining pipeline legally interleave between calls?",
+      "answer": "Non-LLM steps such as code, validation, or API calls",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.2 the five patterns",
+        "choices": [
+          "Only additional LLM calls run in parallel",
+          "Nothing — chains must be pure LLM-to-LLM steps",
+          "A second evaluator-optimizer loop",
+          "Non-LLM steps such as code, validation, or API calls"
+        ],
+        "explanation": "Prompt-chaining can interleave non-LLM steps (code, validation, API) between LLM calls.",
+        "source": "cca_cheatsheet",
+        "number": 9
+      }
+    },
+    {
+      "prompt": "What is the correct three-step structure of the parallelization pattern?",
+      "answer": "Split → run concurrently → aggregate",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.2 the five patterns",
+        "choices": [
+          "Split → run concurrently → aggregate",
+          "Split → run concurrently → route to one pipeline",
+          "Classify → dispatch → synthesize",
+          "Generate → judge → refine"
+        ],
+        "explanation": "Parallelization's defining structure is split → run concurrent → AGGREGATE; dropping the aggregation step is a common trap.",
+        "source": "cca_cheatsheet",
+        "number": 10
+      }
+    },
+    {
+      "prompt": "For a parallelization pattern with N independent subtasks, what determines the wall-clock time of the whole operation?",
+      "answer": "The slowest sub-task",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.2 the five patterns",
+        "choices": [
+          "The average latency across all sub-tasks",
+          "The sum of all sub-task latencies",
+          "The slowest sub-task",
+          "The number of aggregation steps"
+        ],
+        "explanation": "In parallelization, cost = N calls but wall-clock time = the slowest sub-task, since the rest run concurrently.",
+        "source": "cca_cheatsheet",
+        "number": 11
+      }
+    },
+    {
+      "prompt": "Anthropic's guide describes two variants of the parallelization pattern. What distinguishes 'sectioning' from 'voting'?",
+      "answer": "Sectioning splits a task into independent subtasks; voting runs the same task multiple times for diverse outputs",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.2 the five patterns",
+        "choices": [
+          "Sectioning splits a task into independent subtasks; voting runs the same task multiple times for diverse outputs",
+          "Sectioning runs subtasks sequentially; voting runs them concurrently",
+          "Sectioning is reserved for a cheap model tier; voting is reserved for the strongest model tier",
+          "Sectioning aggregates results with an evaluator-optimizer loop; voting aggregates with a router"
+        ],
+        "explanation": "Parallelization has two variants: sectioning breaks a task into independent subtasks run concurrently, while voting runs the identical task multiple times to get diverse outputs (e.g., for majority vote or confidence).",
+        "source": "cca_cheatsheet",
+        "number": 12
+      }
+    },
+    {
+      "prompt": "In the routing pattern, after the initial classification call, how many specialized pipelines does a given input get dispatched to?",
+      "answer": "Exactly one",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.2 the five patterns",
+        "choices": [
+          "Exactly one",
+          "Two, for redundancy and comparison",
+          "All matching pipelines, then the best output is picked",
+          "As many as the model decides are relevant"
+        ],
+        "explanation": "Routing classifies once, then dispatches to exactly ONE specialized pipeline — that single-path dispatch is the efficiency win.",
+        "source": "cca_cheatsheet",
+        "number": 13
+      }
+    },
+    {
+      "prompt": "In the orchestrator-workers pattern, who determines the subtasks to delegate?",
+      "answer": "The model generates the subtasks at runtime",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.2 the five patterns",
+        "choices": [
+          "A separate evaluator model defines them before execution begins",
+          "The subtasks are fixed at the aggregation step",
+          "The model generates the subtasks at runtime",
+          "They are enumerated in advance by the developer, as in routing"
+        ],
+        "explanation": "Orchestrator-workers is used when subtasks can't be known in advance; the model generates them at runtime, delegates, then synthesizes.",
+        "source": "cca_cheatsheet",
+        "number": 14
+      }
+    },
+    {
+      "prompt": "What two things does a valid evaluator-optimizer loop require to avoid becoming 'theater'?",
+      "answer": "An articulable 'good' (quality bar) and a max-iteration cap",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.2 the five patterns",
+        "choices": [
+          "A fixed number of forward steps and a routing classifier",
+          "Independent subtasks and an aggregation step",
+          "An articulable 'good' (quality bar) and a max-iteration cap",
+          "A coordinator and isolated subagent contexts"
+        ],
+        "explanation": "Evaluator-optimizer generates, judges, and refines in a loop, and needs both an articulable quality bar and a max-iteration cap to be sound.",
+        "source": "cca_cheatsheet",
+        "number": 15
+      }
+    },
+    {
+      "prompt": "What is the key question that distinguishes routing from orchestrator-workers?",
+      "answer": "Are the subtasks/menu knowable in advance, or written at runtime?",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.3 pattern seams",
+        "choices": [
+          "Are the subtasks/menu knowable in advance, or written at runtime?",
+          "Does the pattern use tool calls or not?",
+          "Is the output structured JSON or free text?",
+          "Is the task multi-step or single-step?"
+        ],
+        "explanation": "Routing picks one path from a menu YOU defined; the orchestrator writes the menu at runtime — that's the distinguishing seam.",
+        "source": "cca_cheatsheet",
+        "number": 16
+      }
+    },
+    {
+      "prompt": "What distinguishes a prompt chain from an evaluator-optimizer loop?",
+      "answer": "A chain runs a fixed number of forward steps; evaluator-optimizer loops back an unknown number of times until a judge says stop",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.3 pattern seams",
+        "choices": [
+          "Evaluator-optimizer always runs subtasks in parallel, unlike a chain",
+          "A chain uses tools while evaluator-optimizer never does",
+          "A chain runs a fixed number of forward steps; evaluator-optimizer loops back an unknown number of times until a judge says stop",
+          "A chain requires a coordinator; evaluator-optimizer does not"
+        ],
+        "explanation": "Fixed forward steps = chain; unbounded loop-back until a judge stops = evaluator-optimizer — the second tested seam.",
+        "source": "cca_cheatsheet",
+        "number": 17
+      }
+    },
+    {
+      "prompt": "A single prompt keeps violating constraints, so you add one fixed generate-then-revise pass with no judge scoring the output. What pattern is this?",
+      "answer": "Still prompt-chaining",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.3 pattern seams",
+        "choices": [
+          "Still prompt-chaining",
+          "Routing, since the revision pass is a different pipeline",
+          "Orchestrator-workers, since a second pass is generated",
+          "Evaluator-optimizer, since there's a revision step"
+        ],
+        "explanation": "A fixed generate-then-revise pass with no judge is still chaining; 'any revision step makes it evaluator-optimizer' is the softened distractor.",
+        "source": "cca_cheatsheet",
+        "number": 18
+      }
+    },
+    {
+      "prompt": "When deciding whether an agent turn is finished, what should you branch on?",
+      "answer": "The API response's stop_reason field, never the reply text",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.4 agent loop & stop_reason",
+        "choices": [
+          "The API response's stop_reason field, never the reply text",
+          "Whether the reply text contains a tool-call-shaped string",
+          "The length of the response in tokens",
+          "Whether the text ends with a period"
+        ],
+        "explanation": "Truncation, refusal, and a clean finish can look identical in text; stop_reason is the reliable signal to branch on.",
+        "source": "cca_cheatsheet",
+        "number": 19
+      }
+    },
+    {
+      "prompt": "What does stop_reason: 'max_tokens' mean for an agent response?",
+      "answer": "The response was truncated mid-answer, not done",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.4 agent loop & stop_reason",
+        "choices": [
+          "The model refused the request for safety reasons",
+          "The task finished successfully and cleanly",
+          "The response was truncated mid-answer, not done",
+          "A long-running server tool was paused"
+        ],
+        "explanation": "max_tokens means the answer was cut off mid-generation; you must continue the turn or raise the cap, not treat it as complete.",
+        "source": "cca_cheatsheet",
+        "number": 20
+      }
+    },
+    {
+      "prompt": "What does stop_reason: 'end_turn' indicate?",
+      "answer": "The model finished naturally — the response is done",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.4 agent loop & stop_reason",
+        "choices": [
+          "The model declined to respond for safety reasons",
+          "The response was truncated and needs continuation",
+          "A server-side tool call is still in progress",
+          "The model finished naturally — the response is done"
+        ],
+        "explanation": "end_turn is the clean-finish signal, contrasted with the truncation of max_tokens and the special handling of refusal/pause_turn.",
+        "source": "cca_cheatsheet",
+        "number": 21
+      }
+    },
+    {
+      "prompt": "What should an agent loop do when it receives stop_reason: 'tool_use'?",
+      "answer": "Run the requested tool, append the tool_result, and re-call the model",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.4 agent loop & stop_reason",
+        "choices": [
+          "Escalate to a coordinator agent immediately",
+          "Parse the reply text to confirm a tool was actually requested",
+          "Treat the turn as finished and return the text to the user",
+          "Run the requested tool, append the tool_result, and re-call the model"
+        ],
+        "explanation": "tool_use means the model wants a tool; you branch on the field itself, not by parsing the text for a tool request.",
+        "source": "cca_cheatsheet",
+        "number": 22
+      }
+    },
+    {
+      "prompt": "What is distinctive about stop_reason: 'refusal' that engineers must handle explicitly?",
+      "answer": "It may have no text block at all, unlike a normal decline",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.4 agent loop & stop_reason",
+        "choices": [
+          "It always includes a fully-formed apology in the text field",
+          "It only occurs after max_tokens has been exceeded",
+          "It may have no text block at all, unlike a normal decline",
+          "It automatically triggers a subagent retry"
+        ],
+        "explanation": "Refusal means the model declined for safety and may arrive with no text block, so an empty text block can't be assumed to mean 'task complete.'",
+        "source": "cca_cheatsheet",
+        "number": 23
+      }
+    },
+    {
+      "prompt": "What is the correct handling for stop_reason: 'pause_turn'?",
+      "answer": "Pass the response straight back to the API to continue",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.4 agent loop & stop_reason",
+        "choices": [
+          "Discard the response and restart the agent loop from scratch",
+          "Pass the response straight back to the API to continue",
+          "Treat it identically to end_turn and return the text",
+          "Escalate to a human reviewer before proceeding"
+        ],
+        "explanation": "pause_turn signals a long-running server tool paused mid-operation; the fix is passing the response straight back to continue.",
+        "source": "cca_cheatsheet",
+        "number": 24
+      }
+    },
+    {
+      "prompt": "What is the recommended backstop for an agent or evaluator loop with no natural bound?",
+      "answer": "A max-iteration cap, while still stopping on the real signal (end_turn / grader PASS)",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.4 agent loop & stop_reason",
+        "choices": [
+          "A max-iteration cap, while still stopping on the real signal (end_turn / grader PASS)",
+          "Stopping after a fixed arbitrary count of iterations regardless of signal",
+          "Removing the loop and converting it to a prompt chain",
+          "Letting the loop run until the context window is exhausted"
+        ],
+        "explanation": "The cap is a backstop, not the primary stop condition; stopping purely on an arbitrary count is called out as also wrong.",
+        "source": "cca_cheatsheet",
+        "number": 25
+      }
+    },
+    {
+      "prompt": "Why must an agent verify results after each step rather than assuming a tool call succeeded?",
+      "answer": "Unchecked loops compound small errors into large ones",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.4 agent loop & stop_reason",
+        "choices": [
+          "Verification is required to populate the stop_reason field",
+          "Unchecked loops compound small errors into large ones",
+          "Only tool_use responses require verification, not end_turn",
+          "It reduces the total number of LLM calls needed"
+        ],
+        "explanation": "The 'agent acts, then moves on' anti-pattern lets small errors compound; the fix is verifying the result at every step.",
+        "source": "cca_cheatsheet",
+        "number": 26
+      }
+    },
+    {
+      "prompt": "In multi-agent orchestration, what topology does a coordinator with specialist subagents use?",
+      "answer": "Hub-and-spoke — the coordinator is the only node that routes",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.5 multi-agent orchestration",
+        "choices": [
+          "A ring topology, with each subagent talking to its neighbor",
+          "Hub-and-spoke — the coordinator is the only node that routes",
+          "A mesh, where any subagent can message any other",
+          "A chain, where subagents pass output directly to the next subagent"
+        ],
+        "explanation": "Multi-agent orchestration is hub-and-spoke, not a mesh; subagents never talk to each other directly.",
+        "source": "cca_cheatsheet",
+        "number": 27
+      }
+    },
+    {
+      "prompt": "A subagent discovers it needs a dependency that only another subagent can provide. What should it do?",
+      "answer": "Return structured control upward; the coordinator decides what to dispatch next",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.5 multi-agent orchestration",
+        "choices": [
+          "Terminate immediately and let the coordinator restart everything",
+          "Merge itself with the other subagent to resolve the dependency",
+          "Message the other subagent directly, then log it afterward",
+          "Return structured control upward; the coordinator decides what to dispatch next"
+        ],
+        "explanation": "Subagents never talk peer-to-peer; on a dependency they surrender structured control up to the coordinator.",
+        "source": "cca_cheatsheet",
+        "number": 28
+      }
+    },
+    {
+      "prompt": "A task is merely multi-step, with no need for isolation or concurrency. What's the recommended architecture?",
+      "answer": "Keep it a single agent — fewer handoff failure points, less latency/cost",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.5 multi-agent orchestration",
+        "choices": [
+          "Use a mesh of subagents for redundancy",
+          "Split it into subagents, since more steps warrant more agents",
+          "Convert it to an orchestrator-workers pattern automatically",
+          "Keep it a single agent — fewer handoff failure points, less latency/cost"
+        ],
+        "explanation": "Being multi-step alone doesn't justify subagents; split only for context isolation, permission boundaries, or genuine concurrency.",
+        "source": "cca_cheatsheet",
+        "number": 29
+      }
+    },
+    {
+      "prompt": "Which of the following is NOT one of the legitimate reasons to split a task into subagents?",
+      "answer": "The task has more than three sequential steps",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.5 multi-agent orchestration",
+        "choices": [
+          "Context isolation",
+          "The task has more than three sequential steps",
+          "Genuine concurrency",
+          "Permission boundaries"
+        ],
+        "explanation": "The legitimate reasons are context isolation, permission boundaries, and genuine concurrency — step count alone is not one of them.",
+        "source": "cca_cheatsheet",
+        "number": 30
+      }
+    },
+    {
+      "prompt": "Several subagents in a batch succeed and one fails. What is the correct recovery action?",
+      "answer": "Retry only the failed subagent",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.5 multi-agent orchestration",
+        "choices": [
+          "Retry only the failed subagent",
+          "Mark the whole batch as failed and discard all results",
+          "Terminate the entire coordinator run and escalate to a human",
+          "Blanket re-run the whole set to be safe"
+        ],
+        "explanation": "Successful subagents may already have caused side effects (writes, emails); a blanket re-run fires those twice, so only the failed one is retried.",
+        "source": "cca_cheatsheet",
+        "number": 31
+      }
+    },
+    {
+      "prompt": "A subagent hits a transient error like a timeout or rate limit. What should it do first?",
+      "answer": "Attempt local recovery itself, escalating only what it genuinely can't resolve",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.5 multi-agent orchestration",
+        "choices": [
+          "Terminate on every exception and let the coordinator handle all errors",
+          "Immediately spawn a duplicate subagent to redo the same work",
+          "Attempt local recovery itself, escalating only what it genuinely can't resolve",
+          "Return a partial result marked 'success' so the coordinator can proceed"
+        ],
+        "explanation": "The correct pattern is local recovery first, escalating only genuine failures; a partial result must never be marked as success.",
+        "source": "cca_cheatsheet",
+        "number": 32
+      }
+    },
+    {
+      "prompt": "In the Agent SDK, what must a coordinator's allowedTools list include for it to spawn subagents?",
+      "answer": "\"Task\"",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.5 multi-agent orchestration",
+        "choices": [
+          "\"Delegate\"",
+          "\"Spawn\"",
+          "\"Subagent\"",
+          "\"Task\""
+        ],
+        "explanation": "The built-in tool for spawning subagents is Task, so allowedTools must include \"Task\".",
+        "source": "cca_cheatsheet",
+        "number": 33
+      }
+    },
+    {
+      "prompt": "How does the Agent SDK achieve parallel subagent execution?",
+      "answer": "Multiple Task tool calls issued within one response",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.5 multi-agent orchestration",
+        "choices": [
+          "Multiple Task tool calls issued within one response",
+          "Multiple Task tool calls spread across separate turns",
+          "Setting a parallel=true flag on the coordinator",
+          "A single Task call with a batch-size parameter"
+        ],
+        "explanation": "Parallel execution means multiple Task calls in ONE response; spreading them across separate turns is the softened distractor.",
+        "source": "cca_cheatsheet",
+        "number": 34
+      }
+    },
+    {
+      "prompt": "Do subagents spawned via the Task tool automatically inherit the coordinator's conversation history?",
+      "answer": "No — context is not inherited; findings must be passed explicitly in the subagent's prompt",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.5 multi-agent orchestration",
+        "choices": [
+          "No — context is not inherited; findings must be passed explicitly in the subagent's prompt",
+          "Only the most recent turn is inherited automatically",
+          "Yes — subagents see the coordinator's full history by default",
+          "Only tool_use blocks are inherited, not text"
+        ],
+        "explanation": "Context is not inherited by spawned subagents; the coordinator must pass findings explicitly in the subagent's prompt.",
+        "source": "cca_cheatsheet",
+        "number": 35
+      }
+    },
+    {
+      "prompt": "Where should a safety limit, approval gate, or escalation threshold be implemented?",
+      "answer": "In a deterministic code gate the model can't talk its way around",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.6 anti-patterns",
+        "choices": [
+          "As a strongly-worded rule in the system prompt",
+          "As a one-shot example demonstrating the desired restraint",
+          "In a deterministic code gate the model can't talk its way around",
+          "In the evaluator-optimizer's quality rubric"
+        ],
+        "explanation": "Protection is code, not a prompt — a system prompt instruction is only advisory and can be talked around.",
+        "source": "cca_cheatsheet",
+        "number": 36
+      }
+    },
+    {
+      "prompt": "What should you do with a tool's or model's structured output before relying on it downstream?",
+      "answer": "Validate and normalize it at the parse boundary",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.6 anti-patterns",
+        "choices": [
+          "Assume it matches the schema whenever stop_reason is end_turn",
+          "Cache it without inspection to save latency",
+          "Trust the SDK's typing and use it directly",
+          "Validate and normalize it at the parse boundary"
+        ],
+        "explanation": "Structured output is not guaranteed-typed (e.g., an array can come back as a JSON string); validate and normalize at the parse boundary.",
+        "source": "cca_cheatsheet",
+        "number": 37
+      }
+    },
+    {
+      "prompt": "A team picks an agent architecture mainly because it 'sounds more impressive' to stakeholders, even though a workflow would reliably solve the task. What anti-pattern is this?",
+      "answer": "Agency for its own sake — added complexity and cost without added reliability",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.6 anti-patterns",
+        "choices": [
+          "Agency for its own sake — added complexity and cost without added reliability",
+          "Model tiering — matching model strength to task difficulty",
+          "The least-agency principle — building with the minimum agency the task needs",
+          "Context isolation — a legitimate reason to add agentic structure"
+        ],
+        "explanation": "Reaching for agentic architecture because it sounds impressive, not because the task requires it, violates the least-agency principle: complexity and cost rise without any reliability gain.",
+        "source": "cca_cheatsheet",
+        "number": 38
+      }
+    },
+    {
+      "prompt": "An orchestrator-workers pattern is used where a fixed router would serve just as well. What's the fix?",
+      "answer": "Route instead — don't pay for runtime decomposition you don't need",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.6 anti-patterns",
+        "choices": [
+          "Convert the orchestrator into an evaluator-optimizer loop",
+          "Route instead — don't pay for runtime decomposition you don't need",
+          "Add a max-iteration cap to the orchestrator's loop",
+          "Add more worker agents to increase coverage"
+        ],
+        "explanation": "Using an orchestrator when a fixed router would serve is over-engineering; the fix is to route, not add more machinery.",
+        "source": "cca_cheatsheet",
+        "number": 39
+      }
+    },
+    {
+      "prompt": "An evaluator-optimizer loop is proposed but there's no articulable definition of 'good' output. What's the correct conclusion?",
+      "answer": "Don't use it — with no quality signal, the loop is theater",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.6 anti-patterns",
+        "choices": [
+          "Don't use it — with no quality signal, the loop is theater",
+          "Use it, but replace the judge with a fixed iteration count",
+          "Use it, but only exit on a PASS signal",
+          "Use it anyway; the loop will discover quality criteria on its own"
+        ],
+        "explanation": "Without an articulable quality bar, the evaluator-optimizer loop is theater; 'it'll figure out quality on its own' and 'PASS-only exit is fine' are both rejected as softened distractors.",
+        "source": "cca_cheatsheet",
+        "number": 40
+      }
+    },
+    {
+      "prompt": "What does the CCA-F credential stand for?",
+      "answer": "Claude Certified Architect, Foundations",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.7 exam & cross-domain vocabulary",
+        "choices": [
+          "Certified Claude Architecture Framework",
+          "Claude Certified Agent, Foundations",
+          "Certified Claude Application Foundations",
+          "Claude Certified Architect, Foundations"
+        ],
+        "explanation": "CCA-F is Anthropic's foundational technical certification: Claude Certified Architect, Foundations.",
+        "source": "cca_cheatsheet",
+        "number": 41
+      }
+    },
+    {
+      "prompt": "What scaled score is required to pass the CCA-F exam?",
+      "answer": "720 (on a 0–1000 scale)",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.7 exam & cross-domain vocabulary",
+        "choices": [
+          "720 (on a 0–1000 scale)",
+          "70% raw percentage correct",
+          "650 (on a 0–1000 scale)",
+          "800 (on a 0–1000 scale)"
+        ],
+        "explanation": "The exam reports a 0–1000 scaled score, not a raw percentage; 720 is the passing threshold.",
+        "source": "cca_cheatsheet",
+        "number": 42
+      }
+    },
+    {
+      "prompt": "Agentic Architecture & Orchestration is which domain by exam weight among the CCA-F's five domains?",
+      "answer": "The largest domain, at 27%",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.7 exam & cross-domain vocabulary",
+        "choices": [
+          "The smallest domain, at 15%",
+          "Tied for largest at 25%",
+          "The second-largest domain, at 20%",
+          "The largest domain, at 27%"
+        ],
+        "explanation": "Agentic Architecture & Orchestration is the largest of the five weighted domains at 27%.",
+        "source": "cca_cheatsheet",
+        "number": 43
+      }
+    },
+    {
+      "prompt": "In CCA-F course vocabulary, what determines how a 'domain' should shape a candidate's study allocation?",
+      "answer": "Its weight, which sets how many exam questions it contributes",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.7 exam & cross-domain vocabulary",
+        "choices": [
+          "Its alphabetical order among the five domains",
+          "The number of lessons written for it",
+          "Its weight, which sets how many exam questions it contributes",
+          "Whether it covers Claude Code specifically"
+        ],
+        "explanation": "A domain is one of five weighted subject areas; the weight sets how many questions it contributes and therefore how study time should be allocated.",
+        "source": "cca_cheatsheet",
+        "number": 44
+      }
+    },
+    {
+      "prompt": "What is 'model tiering' as a cost-management move relevant to agent and orchestration design?",
+      "answer": "Using a cheap model (e.g., Haiku) for grunt work like dataset generation or grading, and a strong model for the task under test",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.7 exam & cross-domain vocabulary",
+        "choices": [
+          "Escalating automatically to the most expensive model whenever stop_reason is max_tokens",
+          "Routing every request to the cheapest available model regardless of task",
+          "Running the same prompt on multiple model tiers and averaging the outputs",
+          "Using a cheap model (e.g., Haiku) for grunt work like dataset generation or grading, and a strong model for the task under test"
+        ],
+        "explanation": "Model tiering pairs a cheap model for grunt work with a strong model reserved for the task under test — a core cost-management move.",
+        "source": "cca_cheatsheet",
+        "number": 45
+      }
+    },
+    {
+      "prompt": "When a scalar setting like `model` or `cleanupPeriodDays` is defined in multiple Claude Code settings files, which precedence order determines the winning value?",
+      "answer": "Managed > Local > Project > User (highest layer wins)",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.1 settings vs permissions precedence",
+        "choices": [
+          "All layers are merged and the most restrictive value wins",
+          "Managed > Local > Project > User (highest layer wins)",
+          "Project > Managed > Local > User",
+          "User > Project > Local > Managed (most specific wins)"
+        ],
+        "explanation": "Scalar settings resolve by strict file-rank override, highest layer wins: Managed > Local > Project > User; the other orders and 'merge to most restrictive' describe permission evaluation, not scalar settings.",
+        "source": "cca_cheatsheet",
+        "number": 46
+      }
+    },
+    {
+      "prompt": "What mnemonic represents the Claude Code settings precedence order (Managed > Local > Project > User)?",
+      "answer": "ML-PU",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.7 mnemonics",
+        "choices": [
+          "PLUM",
+          "ML-PU",
+          "SO-PV",
+          "D-A-A"
+        ],
+        "explanation": "ML-PU spells out Managed-Local-Project-User; D-A-A is the permission order mnemonic and SO-PV is the settings-vs-permissions mnemonic, so both are plausible but wrong here.",
+        "source": "cca_cheatsheet",
+        "number": 47
+      }
+    },
+    {
+      "prompt": "How are permission rules (allow/deny/ask) from multiple settings layers combined when Claude Code evaluates a tool call?",
+      "answer": "Merged into one pool across all layers, then evaluated as deny → ask → allow",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.1 settings vs permissions precedence",
+        "choices": [
+          "Only the highest-precedence file's rules apply, same as scalar settings",
+          "Evaluated in the order allow → ask → deny",
+          "Merged into one pool across all layers, then evaluated as deny → ask → allow",
+          "Merged, then evaluated in the order the rules appear within each file"
+        ],
+        "explanation": "Permissions use the 'veto' model: every layer's rules are merged into one pool and deny always wins first, unlike scalar settings which use file-rank override.",
+        "source": "cca_cheatsheet",
+        "number": 48
+      }
+    },
+    {
+      "prompt": "What mnemonic captures the permission evaluation order in Claude Code, where deny is checked first and wins?",
+      "answer": "D-A-A",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.7 mnemonics",
+        "choices": [
+          "D-A-A",
+          "SO-PV",
+          "ML-PU",
+          "ADA"
+        ],
+        "explanation": "D-A-A stands for Deny → Ask → Allow; ML-PU is the settings precedence mnemonic and SO-PV names the settings-vs-permissions contrast, not the evaluation order itself.",
+        "source": "cca_cheatsheet",
+        "number": 49
+      }
+    },
+    {
+      "prompt": "A `local` settings file has an `allow` rule for a Bash command, while the `project` settings file has a `deny` rule for the same command. What happens?",
+      "answer": "The command is denied — deny wins from any layer regardless of file rank",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.1 settings vs permissions precedence",
+        "choices": [
+          "The command is allowed, because local settings outrank project settings",
+          "The two rules cancel out and the tool call errors",
+          "Claude falls back to asking the user for a decision",
+          "The command is denied — deny wins from any layer regardless of file rank"
+        ],
+        "explanation": "File rank (Local beats Project) governs scalar settings only; for permissions, deny is a rank-independent hard block, so it wins even though local normally outranks project.",
+        "source": "cca_cheatsheet",
+        "number": 50
+      }
+    },
+    {
+      "prompt": "In Claude Code's settings-vs-permissions model, what does file-rank precedence (Managed>Local>Project>User) actually govern?",
+      "answer": "Scalar settings only (e.g., model, env) — not permission allow/deny/ask rules",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.1 settings vs permissions precedence",
+        "choices": [
+          "Scalar settings only (e.g., model, env) — not permission allow/deny/ask rules",
+          "MCP server registration only",
+          "Permission rules only, not scalar settings",
+          "Both scalar settings and permission rules equally"
+        ],
+        "explanation": "The mnemonic SO-PV distinguishes them: Settings = Override (rank governs), Permissions = Veto (rank is irrelevant, deny always wins).",
+        "source": "cca_cheatsheet",
+        "number": 51
+      }
+    },
+    {
+      "prompt": "Where does Claude Code look for the enterprise-managed settings file that always wins settings precedence?",
+      "answer": "A fixed OS-level system path (e.g. /Library/Application Support/ClaudeCode/managed-settings.json on macOS), not a repo or home-directory file",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.1 settings vs permissions precedence",
+        "choices": [
+          "An environment variable CLAUDE_MANAGED_SETTINGS pointing to any file",
+          "A fixed OS-level system path (e.g. /Library/Application Support/ClaudeCode/managed-settings.json on macOS), not a repo or home-directory file",
+          ".claude/settings.json in the repo root",
+          "~/.claude/settings.json"
+        ],
+        "explanation": "Managed settings are deployed by IT/MDM to a fixed system path outside user or project control, which is why they always win the Managed>Local>Project>User precedence; the other options are user- or project-controlled locations that don't have managed rank.",
+        "source": "cca_cheatsheet",
+        "number": 52
+      }
+    },
+    {
+      "prompt": "A tool call matches neither an allow nor a deny rule during an interactive terminal session. What does Claude Code do?",
+      "answer": "Prompts the human to make a decision (asks)",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.2 permissions",
+        "choices": [
+          "Denies the call immediately",
+          "Prompts the human to make a decision (asks)",
+          "Allows the call by default",
+          "Queues the call until the session ends"
+        ],
+        "explanation": "In an interactive session there is a human to ask, so an unmatched tool call falls through to a prompt rather than being auto-denied or auto-allowed.",
+        "source": "cca_cheatsheet",
+        "number": 53
+      }
+    },
+    {
+      "prompt": "A tool call matches neither an allow nor a deny rule while running headless (e.g., `-p` flag, GitHub Actions, or the SDK). What happens?",
+      "answer": "It is denied immediately",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.4 headless / CI",
+        "choices": [
+          "It queues until an operator answers asynchronously",
+          "It is allowed by default since there's no reviewer",
+          "The prompt moves to the terminal for later approval",
+          "It is denied immediately"
+        ],
+        "explanation": "Headless runs have no TTY to prompt, so an unmatched tool call is denied immediately rather than queued or defaulted to allow.",
+        "source": "cca_cheatsheet",
+        "number": 54
+      }
+    },
+    {
+      "prompt": "Why does Claude Code deny an unmatched tool call in headless mode rather than prompting for a decision?",
+      "answer": "There is no TTY / human available to prompt, and waiting would hang CI",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.4 headless / CI",
+        "choices": [
+          "There is no TTY / human available to prompt, and waiting would hang CI",
+          "Headless mode always runs under bypassPermissions",
+          "Headless mode disables the entire permission system",
+          "Unmatched calls are queued in a webhook for async approval"
+        ],
+        "explanation": "The 'headless = heartless' mnemonic captures this: no human to ask means an unmatched call is auto-denied instead of blocking the run indefinitely.",
+        "source": "cca_cheatsheet",
+        "number": 55
+      }
+    },
+    {
+      "prompt": "Because headless runs deny any unmatched tool call, what must an `allowed_tools` list for a CI/Actions run be?",
+      "answer": "Exhaustive — it must list every tool the run needs individually",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.4 headless / CI",
+        "choices": [
+          "It can rely on a wildcard glob like mcp__server__*",
+          "Exhaustive — it must list every tool the run needs individually",
+          "It only needs to list write-capable tools",
+          "It's optional if bypassPermissions is also set"
+        ],
+        "explanation": "Since headless unmatched calls auto-deny, every tool the run needs must be explicitly listed; globbing an MCP server's tools is not supported.",
+        "source": "cca_cheatsheet",
+        "number": 56
+      }
+    },
+    {
+      "prompt": "What does setting `permission-mode: bypassPermissions` do in Claude Code?",
+      "answer": "Skips ALL permission checks, including deny rules",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.2 permissions",
+        "choices": [
+          "Skips ALL permission checks, including deny rules",
+          "Pre-approves only the tools listed in allowed_tools",
+          "Still honors deny rules but skips ask prompts",
+          "Only bypasses permissions for read-only tools"
+        ],
+        "explanation": "bypassPermissions turns the safety layer fully off — even deny rules are skipped, unlike the softened distractors which imply deny still applies.",
+        "source": "cca_cheatsheet",
+        "number": 57
+      }
+    },
+    {
+      "prompt": "Why is `bypassPermissions` never the recommended way to scope a CI run's powers?",
+      "answer": "It skips deny rules too, so it isn't safe to limit a CI run — an explicit allowed_tools allowlist is the safer pattern",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.4 headless / CI",
+        "choices": [
+          "It skips deny rules too, so it isn't safe to limit a CI run — an explicit allowed_tools allowlist is the safer pattern",
+          "It requires a TTY, which CI environments don't have",
+          "It only works when permission-mode is also set to plan",
+          "It is deprecated and scheduled for removal"
+        ],
+        "explanation": "Because bypassPermissions disables even deny rules, it removes all guardrails; the safe CI pattern is an explicit allowed_tools allowlist where deny still vetoes.",
+        "source": "cca_cheatsheet",
+        "number": 58
+      }
+    },
+    {
+      "prompt": "In Claude Code's `plan` permission mode, what is Claude allowed to do?",
+      "answer": "Read and analyze only — no writes or execution",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.2 permissions",
+        "choices": [
+          "Read/analyze plus run pre-approved Bash commands",
+          "Full write access but no tool execution",
+          "Read and analyze only — no writes or execution",
+          "Everything except deleting files"
+        ],
+        "explanation": "Plan mode is strictly read/analyze — even 'approved' Bash commands cannot run, which is the softened distractor the exam dangles.",
+        "source": "cca_cheatsheet",
+        "number": 59
+      }
+    },
+    {
+      "prompt": "What does the `acceptEdits` permission mode do?",
+      "answer": "Auto-approves file edits but still gates Bash and other tool calls",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.2 permissions",
+        "choices": [
+          "Only applies to Markdown file edits",
+          "Requires a human to accept each edit individually, then remembers the choice",
+          "Auto-approves everything including Bash commands",
+          "Auto-approves file edits but still gates Bash and other tool calls"
+        ],
+        "explanation": "acceptEdits only auto-approves edits; Bash and other non-edit tools are still subject to normal permission gating.",
+        "source": "cca_cheatsheet",
+        "number": 60
+      }
+    },
+    {
+      "prompt": "Which Claude Code setting grants filesystem access to folders outside the current project root without changing directories?",
+      "answer": "additionalDirectories",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.2 permissions",
+        "choices": [
+          "workspaceRoots",
+          "allowedPaths",
+          "additionalDirectories",
+          "extraContext"
+        ],
+        "explanation": "additionalDirectories (settable in settings.json or via --add-dir) is the documented field for granting access beyond the project root; the other names are plausible-sounding but not real Claude Code settings keys.",
+        "source": "cca_cheatsheet",
+        "number": 61
+      }
+    },
+    {
+      "prompt": "Which hook exit code is the only one that actually blocks a tool call in Claude Code?",
+      "answer": "exit 2",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.3 hooks",
+        "choices": [
+          "exit 0",
+          "exit 2",
+          "exit 1",
+          "any non-zero exit code"
+        ],
+        "explanation": "Per the 'only 2 slams the door' mnemonic, exit 2 is the sole code that blocks; any other non-zero code fails open.",
+        "source": "cca_cheatsheet",
+        "number": 62
+      }
+    },
+    {
+      "prompt": "When a PreToolUse hook blocks a tool call with exit 2, where must the block reason be written for Claude to read it?",
+      "answer": "stderr",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.3 hooks",
+        "choices": [
+          "stderr",
+          "the terminal's exit message",
+          "stdout",
+          "a JSON file in .claude/logs/"
+        ],
+        "explanation": "Claude Code reads the block reason from stderr; writing it to stdout is the exam's common softened distractor.",
+        "source": "cca_cheatsheet",
+        "number": 63
+      }
+    },
+    {
+      "prompt": "Which hook event must a blocking hook (using exit 2) be registered on?",
+      "answer": "PreToolUse",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.3 hooks",
+        "choices": [
+          "PostToolUse",
+          "SessionStart",
+          "UserPromptSubmit",
+          "PreToolUse"
+        ],
+        "explanation": "Only PreToolUse runs before the tool executes, so only it can actually block the call; PostToolUse fires too late.",
+        "source": "cca_cheatsheet",
+        "number": 64
+      }
+    },
+    {
+      "prompt": "A PreToolUse hook exits with code 1, 3, or 127 (any non-zero code other than 2). What happens to the tool call?",
+      "answer": "It fails open — the tool runs anyway, with stderr logged",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.3 hooks",
+        "choices": [
+          "It is queued for manual review",
+          "It fails open — the tool runs anyway, with stderr logged",
+          "It is blocked, same as exit 2",
+          "Claude Code retries the hook once before failing open"
+        ],
+        "explanation": "Only exit 2 blocks; any other non-zero code fails open so a crashing hook can't accidentally brick the session.",
+        "source": "cca_cheatsheet",
+        "number": 65
+      }
+    },
+    {
+      "prompt": "What does a hook exit code of 1 semantically indicate, per Claude Code's hook contract?",
+      "answer": "A generic hook crash/error — not a deliberate veto of the tool call",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.3 hooks",
+        "choices": [
+          "A generic hook crash/error — not a deliberate veto of the tool call",
+          "A deliberate deny decision, functionally identical to exit 2",
+          "A request for the user to confirm before the tool runs",
+          "A success signal with a warning attached"
+        ],
+        "explanation": "Exit 1 means 'the hook broke,' not 'the hook vetoed' — the tool call still runs (fails open) rather than being blocked.",
+        "source": "cca_cheatsheet",
+        "number": 66
+      }
+    },
+    {
+      "prompt": "A PostToolUse hook returns a nonzero exit code after a tool has already run. Can it prevent the tool call?",
+      "answer": "No — PostToolUse runs after the tool executes, so it is too late to block",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.3 hooks",
+        "choices": [
+          "No — PostToolUse runs after the tool executes, so it is too late to block",
+          "Yes, it rolls back the already-executed tool call",
+          "Yes, if the exit code is 2",
+          "Only for Bash tool calls"
+        ],
+        "explanation": "PostToolUse fires after execution, so no exit code from it can block the call — only PreToolUse with exit 2 can.",
+        "source": "cca_cheatsheet",
+        "number": 67
+      }
+    },
+    {
+      "prompt": "What CAN a PostToolUse hook do, even though it cannot block the tool call?",
+      "answer": "Normalize/intercept the tool's output (e.g., reformat it) and feed feedback to Claude",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.3 hooks",
+        "choices": [
+          "Deny the permission for future identical calls",
+          "Rewrite the tool's input before execution",
+          "Pause the session until a human reviews the output",
+          "Normalize/intercept the tool's output (e.g., reformat it) and feed feedback to Claude"
+        ],
+        "explanation": "PostToolUse can normalize or intercept output and feed Claude feedback, but rewriting input before execution is a PreToolUse/JSON capability, not PostToolUse's.",
+        "source": "cca_cheatsheet",
+        "number": 68
+      }
+    },
+    {
+      "prompt": "Besides plain exit codes, what richer mechanism can a Claude Code hook use to control a tool call's outcome?",
+      "answer": "Exit 0 and return JSON on stdout",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.3 hooks",
+        "choices": [
+          "Write a decision file to .claude/hooks/decision.json",
+          "Set an environment variable read by Claude Code",
+          "Exit 2 with a JSON payload on stderr",
+          "Exit 0 and return JSON on stdout"
+        ],
+        "explanation": "The JSON-on-stdout interface requires exit 0; it gives finer control than the exit-code-only mechanism (e.g., setting permissionDecision or rewriting input).",
+        "source": "cca_cheatsheet",
+        "number": 69
+      }
+    },
+    {
+      "prompt": "In a hook's JSON stdout response, which field lets it explicitly set the outcome to allow, deny, or ask?",
+      "answer": "permissionDecision",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.3 hooks",
+        "choices": [
+          "toolDecision",
+          "verdict",
+          "permissionDecision",
+          "hookResult"
+        ],
+        "explanation": "The documented JSON field is permissionDecision, taking allow/deny/ask; the other field names are plausible-sounding but not the actual key.",
+        "source": "cca_cheatsheet",
+        "number": 70
+      }
+    },
+    {
+      "prompt": "Beyond setting allow/deny/ask, what else can a hook's JSON stdout response do to a tool call?",
+      "answer": "Rewrite the tool's input before it executes",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.3 hooks",
+        "choices": [
+          "Reassign the call to a different tool entirely",
+          "Rewrite the tool's input before it executes",
+          "Change which permission mode is active for the whole session",
+          "Rewrite the tool's output after it executes"
+        ],
+        "explanation": "The JSON hook interface can rewrite the tool's input before execution; rewriting output after the fact is instead PostToolUse's normalize/intercept role.",
+        "source": "cca_cheatsheet",
+        "number": 71
+      }
+    },
+    {
+      "prompt": "A hook is registered with `matcher: \"Bash\"`. A `Read(.env)` call happens. Does the hook fire?",
+      "answer": "No — a per-tool matcher never fires for a different tool",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.3 hooks",
+        "choices": [
+          "Yes, matchers apply to all tool calls in the session",
+          "Only if PostToolUse is also configured for Bash",
+          "Yes, because .env access always triggers every hook",
+          "No — a per-tool matcher never fires for a different tool"
+        ],
+        "explanation": "Hook matchers are per-tool and blind to other tools; a Bash matcher will never see a Read call, no matter how sensitive the file.",
+        "source": "cca_cheatsheet",
+        "number": 72
+      }
+    },
+    {
+      "prompt": "To reliably block reads of `.env` files regardless of which tool is used, what should you configure instead of a tool-specific hook matcher?",
+      "answer": "A deny permission rule, e.g. `deny \"Read(**/.env)\"`",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.3 hooks",
+        "choices": [
+          "An acceptEdits mode restriction on .env files",
+          "A PostToolUse hook attached to the Read tool",
+          "A hook matcher set to '*' to cover every tool",
+          "A deny permission rule, e.g. `deny \"Read(**/.env)\"`"
+        ],
+        "explanation": "A deny rule applies uniformly across all tools that could touch the path, unlike a hook matcher which is scoped to one specific tool.",
+        "source": "cca_cheatsheet",
+        "number": 73
+      }
+    },
+    {
+      "prompt": "What kind of path should a hook's `command` field use in Claude Code?",
+      "answer": "An absolute path",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.3 hooks",
+        "choices": [
+          "Either is fine as long as it's consistent",
+          "An absolute path",
+          "A relative path from the repo root",
+          "A relative path from the .claude directory"
+        ],
+        "explanation": "Hook commands should use absolute paths; a relative path is a security/portability hole since resolution isn't guaranteed to be reliable.",
+        "source": "cca_cheatsheet",
+        "number": 74
+      }
+    },
+    {
+      "prompt": "When granting tools to a headless Claude Code run (Actions or `-p`), how must `allowed_tools` list MCP tools?",
+      "answer": "Every tool individually, including each mcp__server__tool entry",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.4 headless / CI",
+        "choices": [
+          "By naming just the MCP server, e.g. mcp__linear",
+          "MCP tools are allowed by default and don't need listing",
+          "Every tool individually, including each mcp__server__tool entry",
+          "Using a glob like mcp__linear__*"
+        ],
+        "explanation": "allowed_tools requires each individual mcp__server__tool entry; naming just the server or globbing it does not grant its tools.",
+        "source": "cca_cheatsheet",
+        "number": 75
+      }
+    },
+    {
+      "prompt": "Which transport types does Claude Code support for connecting to an MCP server?",
+      "answer": "stdio, SSE, and HTTP",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.5 MCP scope",
+        "choices": [
+          "Only stdio is supported",
+          "stdio and WebSocket only",
+          "stdio, SSE, and HTTP",
+          "gRPC and HTTP only"
+        ],
+        "explanation": "Claude Code can register MCP servers over stdio, SSE, or HTTP transports; WebSocket and gRPC are plausible-sounding but not supported MCP transport types in Claude Code.",
+        "source": "cca_cheatsheet",
+        "number": 76
+      }
+    },
+    {
+      "prompt": "Which slash command scans a repo and generates a starter CLAUDE.md file?",
+      "answer": "/init",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.6 sessions & rules",
+        "choices": [
+          "/memory",
+          "/init",
+          "/bootstrap",
+          "/setup"
+        ],
+        "explanation": "/init inspects the codebase and writes a starter CLAUDE.md; /memory instead opens memory files for editing, and /setup and /bootstrap are not real Claude Code slash commands.",
+        "source": "cca_cheatsheet",
+        "number": 77
+      }
+    },
+    {
+      "prompt": "Which of the following is NOT considered a headless Claude Code context where unmatched tools auto-deny?",
+      "answer": "An interactive terminal session",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.4 headless / CI",
+        "choices": [
+          "An interactive terminal session",
+          "A GitHub Actions workflow",
+          "A script invoked with the -p flag",
+          "An SDK-driven run"
+        ],
+        "explanation": "Interactive terminal sessions have a human to prompt (ask); GitHub Actions, -p runs, and SDK usage are the headless contexts where unmatched tools auto-deny.",
+        "source": "cca_cheatsheet",
+        "number": 78
+      }
+    },
+    {
+      "prompt": "Which file should you commit to a repo to make an MCP server available to the whole team on checkout?",
+      "answer": ".mcp.json",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.5 MCP scope",
+        "choices": [
+          ".mcp.json",
+          "~/.claude.json",
+          ".claude/settings.local.json",
+          ".claude/settings.json"
+        ],
+        "explanation": ".mcp.json is the project-scoped, committed file for team-wide MCP servers; ~/.claude.json is personal/user scope.",
+        "source": "cca_cheatsheet",
+        "number": 79
+      }
+    },
+    {
+      "prompt": "Which file registers an MCP server for just you, across all of your own projects?",
+      "answer": "~/.claude.json",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.5 MCP scope",
+        "choices": [
+          ".claude/rules/",
+          ".claude/settings.local.json",
+          "~/.claude.json",
+          ".mcp.json"
+        ],
+        "explanation": "~/.claude.json is the user-scope MCP registration file; .mcp.json is project scope and is the common softened-distractor swap.",
+        "source": "cca_cheatsheet",
+        "number": 80
+      }
+    },
+    {
+      "prompt": "What is the correct permission-rule naming format for an MCP tool in Claude Code?",
+      "answer": "mcp__<server>__<tool> (double underscores)",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.5 MCP scope",
+        "choices": [
+          "<server>::<tool>",
+          "mcp__<server>__<tool> (double underscores)",
+          "mcp.<server>.<tool>",
+          "mcp_<server>_<tool> (single underscore)"
+        ],
+        "explanation": "MCP tool permission names use the double-underscore mcp__server__tool format; dot notation and single underscores are the common typo-style distractors.",
+        "source": "cca_cheatsheet",
+        "number": 81
+      }
+    },
+    {
+      "prompt": "What does the `--resume` flag do to a Claude Code session?",
+      "answer": "Continues the existing session in place",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.6 sessions & rules",
+        "choices": [
+          "Resumes only the most recently executed tool call",
+          "Restarts the session from scratch with the same settings",
+          "Branches a new copy of the session, leaving the original untouched",
+          "Continues the existing session in place"
+        ],
+        "explanation": "--resume continues the same session, in contrast to fork_session which branches a separate copy.",
+        "source": "cca_cheatsheet",
+        "number": 82
+      }
+    },
+    {
+      "prompt": "What does `fork_session` do in Claude Code?",
+      "answer": "Branches a copy of the session so the original is left untouched",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.6 sessions & rules",
+        "choices": [
+          "Continues the existing session in place",
+          "Branches a copy of the session so the original is left untouched",
+          "Merges two sessions into a single one",
+          "Archives the session and deletes local history"
+        ],
+        "explanation": "fork_session creates a branched copy, distinguishing it from --resume which continues the original session directly.",
+        "source": "cca_cheatsheet",
+        "number": 83
+      }
+    },
+    {
+      "prompt": "Where do project-specific custom slash commands live in a Claude Code repo?",
+      "answer": ".claude/commands/ (each Markdown file becomes a /command)",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.6 sessions & rules",
+        "choices": [
+          ".claude/commands/ (each Markdown file becomes a /command)",
+          ".claude/skills/",
+          ".claude/rules/",
+          "CLAUDE.md front-matter blocks"
+        ],
+        "explanation": "Custom slash commands are Markdown files under .claude/commands/, one command per file; .claude/rules/ holds path-scoped instructions instead, and skills/front-matter are not where Claude Code slash commands are defined.",
+        "source": "cca_cheatsheet",
+        "number": 84
+      }
+    },
+    {
+      "prompt": "As opposed to plan mode, what does Claude Code's 'direct' mode do?",
+      "answer": "Acts immediately without a proposal/approval step",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.6 sessions & rules",
+        "choices": [
+          "Only allows read-only tools",
+          "Requires bypassPermissions to be enabled first",
+          "Still requires approval but skips the read step",
+          "Acts immediately without a proposal/approval step"
+        ],
+        "explanation": "Direct mode acts immediately, contrasted with plan mode's propose-then-approve contract.",
+        "source": "cca_cheatsheet",
+        "number": 85
+      }
+    },
+    {
+      "prompt": "Per Claude Code guidance, when should you pick plan mode over direct mode?",
+      "answer": "When the change is risky or large",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.6 sessions & rules",
+        "choices": [
+          "When the change is risky or large",
+          "When bypassPermissions is unavailable",
+          "When only read-only tools are needed",
+          "When running headless in CI"
+        ],
+        "explanation": "Plan mode is recommended specifically for risky or large changes, so the human can review before any mutation happens.",
+        "source": "cca_cheatsheet",
+        "number": 86
+      }
+    },
+    {
+      "prompt": "Where do project-scoped instruction files (distinct from the global CLAUDE.md) live in Claude Code?",
+      "answer": ".claude/rules/",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.6 sessions & rules",
+        "choices": [
+          "CLAUDE.local.md",
+          ".claude/rules/",
+          ".claude/instructions/",
+          ".claude/settings.json"
+        ],
+        "explanation": ".claude/rules/ is the documented location for scoped instruction files, matched by glob against paths.",
+        "source": "cca_cheatsheet",
+        "number": 87
+      }
+    },
+    {
+      "prompt": "How are files matched to the instruction files under `.claude/rules/`?",
+      "answer": "By glob patterns matched against file paths",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.6 sessions & rules",
+        "choices": [
+          "By MIME type detection",
+          "By exact filename match only",
+          "By glob patterns matched against file paths",
+          "By directory name only, not the full file path"
+        ],
+        "explanation": ".claude/rules/ files apply their instructions to paths matched by glob, not by exact filename or directory alone.",
+        "source": "cca_cheatsheet",
+        "number": 88
+      }
+    },
+    {
+      "prompt": "Where are custom subagent definitions stored for a Claude Code project?",
+      "answer": ".claude/agents/ (one Markdown file per subagent, with YAML frontmatter)",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.6 sessions & rules",
+        "choices": [
+          "settings.json under a subagents key",
+          ".claude/rules/",
+          ".mcp.json",
+          ".claude/agents/ (one Markdown file per subagent, with YAML frontmatter)"
+        ],
+        "explanation": "Subagents are defined as Markdown files with YAML frontmatter under .claude/agents/; .claude/rules/ is for path-scoped instructions, .mcp.json registers MCP servers, and settings.json has no subagents key.",
+        "source": "cca_cheatsheet",
+        "number": 89
+      }
+    },
+    {
+      "prompt": "What is the difference between `.claude/settings.json` and `.claude/settings.local.json`?",
+      "answer": "settings.json is committed/shared with the team; settings.local.json is gitignored and personal to you",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.6 sessions & rules",
+        "choices": [
+          "They are identical except settings.local.json is deprecated",
+          "settings.local.json is committed for the team; settings.json is personal to you",
+          "settings.json is committed/shared with the team; settings.local.json is gitignored and personal to you",
+          "settings.local.json takes lower precedence than the User layer"
+        ],
+        "explanation": "settings.json is the committed/team file while settings.local.json is gitignored and just-you, per the Local layer in the ML-PU precedence stack.",
+        "source": "cca_cheatsheet",
+        "number": 90
+      }
+    },
+    {
+      "prompt": "A support agent's accuracy on recalling earlier details steadily declines as a conversation grows, well before the context window limit is reached. What is this phenomenon called, and what type of problem is it?",
+      "answer": "Context rot — a reliability phenomenon, not a token-limit overflow",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.1 context rot",
+        "choices": [
+          "The model refusing for safety reasons",
+          "A rate-limit throttling error",
+          "Context rot — a reliability phenomenon, not a token-limit overflow",
+          "A hard token-limit overflow error"
+        ],
+        "explanation": "Context rot describes accuracy degradation before the limit is hit; it's a reliability issue, not an overflow or safety refusal.",
+        "source": "cca_cheatsheet",
+        "number": 91
+      }
+    },
+    {
+      "prompt": "What is the correct fix for context rot?",
+      "answer": "Curate the tokens in context (keep only high-signal content)",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.1 context rot",
+        "choices": [
+          "Increase the max_tokens output parameter",
+          "Curate the tokens in context (keep only high-signal content)",
+          "Switch to the 1M-token context window model",
+          "Lower the temperature setting"
+        ],
+        "explanation": "Context rot is fixed by curating tokens; a bigger window increases dilution rather than fixing it.",
+        "source": "cca_cheatsheet",
+        "number": 92
+      }
+    },
+    {
+      "prompt": "Mechanistically, why does adding more tokens to context hurt recall of a specific fact?",
+      "answer": "Attention is a softmax-weighted average whose weights sum to a fixed 1.0",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.1 context rot",
+        "choices": [
+          "Attention is a softmax-weighted average whose weights sum to a fixed 1.0",
+          "Tokenization becomes less accurate with longer input",
+          "The model's vocabulary size shrinks as input grows",
+          "The API applies a hard truncation to older tokens"
+        ],
+        "explanation": "Softmax attention weights always sum to 1.0, so adding tokens spreads that fixed budget thinner across more competitors.",
+        "source": "cca_cheatsheet",
+        "number": 93
+      }
+    },
+    {
+      "prompt": "When writing few-shot examples into a system prompt, what does the context engineering guidance recommend over an exhaustive list of edge-case rules?",
+      "answer": "A small set of diverse, canonical examples that efficiently convey the desired behavior",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.2 master principle",
+        "choices": [
+          "A single example repeated several times for emphasis",
+          "An exhaustive list covering every edge case the model might encounter",
+          "A small set of diverse, canonical examples that efficiently convey the desired behavior",
+          "No examples at all, relying purely on natural-language instructions"
+        ],
+        "explanation": "Diverse, canonical examples act like 'pictures worth a thousand words,' conveying intended behavior more efficiently than trying to enumerate every edge case in high-signal token budget.",
+        "source": "cca_cheatsheet",
+        "number": 94
+      }
+    },
+    {
+      "prompt": "Why do models struggle with information at long token positions in a very long context?",
+      "answer": "Long positions are out-of-distribution because models were trained on shorter sequences",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.1 context rot",
+        "choices": [
+          "Long positions are always masked out by the attention layer",
+          "Long positions are out-of-distribution because models were trained on shorter sequences",
+          "Long positions receive double the normal attention weight",
+          "The tokenizer drops tokens past a fixed position index"
+        ],
+        "explanation": "Models are trained mostly on shorter sequences, so very long positions fall outside the training distribution.",
+        "source": "cca_cheatsheet",
+        "number": 95
+      }
+    },
+    {
+      "prompt": "In the 'lost in the middle' effect, which part of a long context tends to lose out in attention weighting?",
+      "answer": "The middle, which loses to primacy (start) and recency (end)",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.1 context rot",
+        "choices": [
+          "The very end, which is discarded once compaction runs",
+          "The middle, which loses to primacy (start) and recency (end)",
+          "All positions equally, since attention is position-independent",
+          "The very beginning, which is always truncated first"
+        ],
+        "explanation": "Primacy and recency effects mean the start and end of context are attended to more strongly than the middle.",
+        "source": "cca_cheatsheet",
+        "number": 96
+      }
+    },
+    {
+      "prompt": "A support agent 40 turns deep forgets the account number mentioned in turn 3. What is the recommended fix?",
+      "answer": "Extract durable facts into a small structured case block, re-anchored at the end of every turn",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.1 context rot",
+        "choices": [
+          "Ask the customer to repeat the account number each turn",
+          "Summarize the entire conversation so far into one paragraph",
+          "Extract durable facts into a small structured case block, re-anchored at the end of every turn",
+          "Switch the agent to a model with a 1M-token context window"
+        ],
+        "explanation": "A small, structured, re-anchored case block keeps load-bearing facts where attention reliably lands; summarizing risks losing exact IDs.",
+        "source": "cca_cheatsheet",
+        "number": 97
+      }
+    },
+    {
+      "prompt": "Why is 'just summarize the whole conversation' the wrong fix for an agent that lost a load-bearing detail like an exact account number?",
+      "answer": "Summarization is lossy compression that can silently drop exact IDs and numbers",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.1 context rot",
+        "choices": [
+          "Summarization is a server-only feature unavailable to client code",
+          "Summarization always exceeds the token limit faster than raw history",
+          "Summarization is lossy compression that can silently drop exact IDs and numbers",
+          "Summarization requires an idempotency key that isn't available"
+        ],
+        "explanation": "Summarizing keeps the gist but can lose exact, load-bearing values like account numbers — the opposite of what's needed.",
+        "source": "cca_cheatsheet",
+        "number": 98
+      }
+    },
+    {
+      "prompt": "An exam question dangles 'just use the 1M-token context model' as a fix for context rot. What is the correct response?",
+      "answer": "Reject it — a bigger window makes dilution worse, not better",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.1 context rot",
+        "choices": [
+          "Reject it — a bigger window makes dilution worse, not better",
+          "Accept it, but only if caching is also enabled",
+          "Accept it — more room always improves recall",
+          "Reject it — 1M-token models don't support tool use"
+        ],
+        "explanation": "A larger window increases the number of competing tokens, worsening attention dilution rather than fixing it.",
+        "source": "cca_cheatsheet",
+        "number": 99
+      }
+    },
+    {
+      "prompt": "What computational relationship does the cheatsheet reference when describing attention cost as more tokens are piled onto a long context?",
+      "answer": "n² (quadratic) attention",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.1 context rot",
+        "choices": [
+          "Logarithmic (log n) attention",
+          "Linear (n) attention",
+          "n² (quadratic) attention",
+          "Constant-time (O(1)) attention"
+        ],
+        "explanation": "The cheatsheet references 'n² attention,' i.e., attention computation scaling quadratically with sequence length.",
+        "source": "cca_cheatsheet",
+        "number": 100
+      }
+    },
+    {
+      "prompt": "What is the single guiding principle of context engineering according to the cheatsheet?",
+      "answer": "Find the smallest set of high-signal tokens that produce the outcome",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.2 master principle",
+        "choices": [
+          "Load as much relevant data as possible before inference",
+          "Keep the full conversation history for maximum recall",
+          "Always prefer the largest available context window",
+          "Find the smallest set of high-signal tokens that produce the outcome"
+        ],
+        "explanation": "This one line drives the whole domain: minimize tokens to only the highest-signal ones needed.",
+        "source": "cca_cheatsheet",
+        "number": 101
+      }
+    },
+    {
+      "prompt": "An agent may need any of 10,000 files. What does just-in-time retrieval hold in context instead of the file contents?",
+      "answer": "Lightweight identifiers (paths, URLs, queries), loading data on demand at inference",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.2 master principle",
+        "choices": [
+          "A pre-generated summary of every file",
+          "The full contents of the 100 most relevant files",
+          "A compacted version of all 10,000 files",
+          "Lightweight identifiers (paths, URLs, queries), loading data on demand at inference"
+        ],
+        "explanation": "JIT retrieval keeps only lightweight identifiers in context and loads actual data on demand at inference time.",
+        "source": "cca_cheatsheet",
+        "number": 102
+      }
+    },
+    {
+      "prompt": "What defines good tool curation for an agent's tool set?",
+      "answer": "Minimal overlap between tools and unambiguous purpose for each",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.2 master principle",
+        "choices": [
+          "As many tools as possible so the agent always has an option",
+          "One universal tool that can perform any action",
+          "Minimal overlap between tools and unambiguous purpose for each",
+          "Tools grouped by API provider rather than by purpose"
+        ],
+        "explanation": "Tool curation means keeping tools minimally overlapping with a clear, unambiguous purpose to avoid confusing the agent.",
+        "source": "cca_cheatsheet",
+        "number": 103
+      }
+    },
+    {
+      "prompt": "What problem does a bloated tool set create for an agent?",
+      "answer": "Ambiguous decision points, causing the agent to pick the wrong tool or hesitate",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.2 master principle",
+        "choices": [
+          "A hard limit on the number of turns allowed",
+          "Automatic triggering of compaction",
+          "Ambiguous decision points, causing the agent to pick the wrong tool or hesitate",
+          "Higher latency only, with no effect on accuracy"
+        ],
+        "explanation": "Too many overlapping tools create ambiguous decision points where the agent struggles to pick correctly.",
+        "source": "cca_cheatsheet",
+        "number": 104
+      }
+    },
+    {
+      "prompt": "You need to summarize a long chat with NO client-side bookkeeping code. Which mechanism handles this?",
+      "answer": "Compaction — server-side, Anthropic auto-summarizes near the limit",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.3 mechanisms",
+        "choices": [
+          "Subagent delegation — a separate agent handles the summary",
+          "Context editing — client-side clearing of tool results",
+          "Compaction — server-side, Anthropic auto-summarizes near the limit",
+          "Memory tool — client-side reads/writes to /memories"
+        ],
+        "explanation": "Compaction is the one server-side mechanism: the API auto-summarizes near the limit with no client bookkeeping required.",
+        "source": "cca_cheatsheet",
+        "number": 105
+      }
+    },
+    {
+      "prompt": "After compaction runs, what does the API return that you must pass back into subsequent requests?",
+      "answer": "A compaction block",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.3 mechanisms",
+        "choices": [
+          "A memory file path",
+          "A new idempotency key",
+          "A compaction block",
+          "An updated system prompt"
+        ],
+        "explanation": "Compaction returns a compaction block representing the summarized history, which you pass back in later requests.",
+        "source": "cca_cheatsheet",
+        "number": 106
+      }
+    },
+    {
+      "prompt": "You want to trim old tool results from a heavy agent loop, keeping only the N most recent. Which mechanism is this, and where does it run?",
+      "answer": "Context editing — client-side, configured to clear oldest tool_results/thinking blocks at a token threshold",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.3 mechanisms",
+        "choices": [
+          "Compaction — server-side, summarizes automatically near the limit",
+          "Caching — server-side, reuses a static prompt prefix",
+          "Memory tool — client-side, persists to /memories files",
+          "Context editing — client-side, configured to clear oldest tool_results/thinking blocks at a token threshold"
+        ],
+        "explanation": "Context editing is client-side: you configure clearing of oldest tool_results/thinking blocks once a token threshold is hit.",
+        "source": "cca_cheatsheet",
+        "number": 107
+      }
+    },
+    {
+      "prompt": "You need Claude to persist state across separate sessions. Which mechanism applies, and who implements the storage?",
+      "answer": "Memory tool — client-side; Claude reads/writes /memories/* but you implement the storage",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.3 mechanisms",
+        "choices": [
+          "Memory tool — client-side; Claude reads/writes /memories/* but you implement the storage",
+          "Compaction — server-side; Anthropic stores the summary for you",
+          "Context editing — client-side; it clears data rather than persisting it",
+          "A bigger system prompt that repeats history every session"
+        ],
+        "explanation": "The memory tool is client-side: Claude reads/writes /memories/* paths, but the developer implements the actual storage backend.",
+        "source": "cca_cheatsheet",
+        "number": 108
+      }
+    },
+    {
+      "prompt": "Who is responsible for guarding against path traversal attacks on memory file paths under /memories?",
+      "answer": "You (the developer) — Anthropic does not sandbox memory writes",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.3 mechanisms",
+        "choices": [
+          "Anthropic, via automatic API-level sandboxing",
+          "The compaction mechanism, which validates all file paths",
+          "You (the developer) — Anthropic does not sandbox memory writes",
+          "Neither party; path traversal is not possible with the memory tool"
+        ],
+        "explanation": "Since the memory tool is client-side, the developer must secure paths and guard against traversal — Anthropic doesn't do this.",
+        "source": "cca_cheatsheet",
+        "number": 109
+      }
+    },
+    {
+      "prompt": "How do context editing and the memory tool work together to avoid losing load-bearing information?",
+      "answer": "Context editing sends an automatic warning to save to memory BEFORE clearing",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.3 mechanisms",
+        "choices": [
+          "The memory tool automatically backs up everything context editing clears",
+          "Context editing sends an automatic warning to save to memory BEFORE clearing",
+          "Compaction restores anything context editing removes",
+          "They don't interact; each operates independently"
+        ],
+        "explanation": "Context editing warns Claude to save important state to memory before it clears old tool_results, preventing silent loss.",
+        "source": "cca_cheatsheet",
+        "number": 110
+      }
+    },
+    {
+      "prompt": "At what point does compaction automatically trigger, according to the cheatsheet?",
+      "answer": "Near the token limit",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.3 mechanisms",
+        "choices": [
+          "Near the token limit",
+          "Only after the limit is exceeded and the call fails",
+          "At a fixed 50% of the context window",
+          "Only when the developer manually invokes it"
+        ],
+        "explanation": "Compaction is described as auto-summarizing 'near the limit,' not after failure or at a manual trigger.",
+        "source": "cca_cheatsheet",
+        "number": 111
+      }
+    },
+    {
+      "prompt": "A tool call fails mid-task (e.g., a lookup API times out). What does the reliability guidance say the agent should do rather than silently continuing?",
+      "answer": "Surface the failure explicitly rather than proceeding with guessed or incomplete data",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.6 reliability",
+        "choices": [
+          "Silently retry indefinitely until the call eventually succeeds",
+          "Surface the failure explicitly rather than proceeding with guessed or incomplete data",
+          "Drop the failed step and continue with the remaining task silently",
+          "Fabricate a plausible-looking result so the user isn't interrupted"
+        ],
+        "explanation": "Reliable agents fail loudly on tool errors instead of masking them with guesses or silent retries — a confidently-wrong continuation is worse than a visible failure.",
+        "source": "cca_cheatsheet",
+        "number": 112
+      }
+    },
+    {
+      "prompt": "How do compaction and context editing differ in HOW they change old content?",
+      "answer": "Compaction rewrites old turns into a lossy summary; context editing deletes stale tool_results verbatim",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.4 summarize vs clear",
+        "choices": [
+          "Both delete stale content verbatim with no summarization",
+          "Context editing rewrites into a summary; compaction deletes verbatim",
+          "Compaction rewrites old turns into a lossy summary; context editing deletes stale tool_results verbatim",
+          "Both rewrite content into lossy summaries"
+        ],
+        "explanation": "Compaction = summarize (keep the gist); context editing = clear (delete whole stale tool_results entirely). Reversing them is a common trap.",
+        "source": "cca_cheatsheet",
+        "number": 113
+      }
+    },
+    {
+      "prompt": "A tool dumps huge output on every call, flooding the main thread with noise. What is the PREVENTION-focused fix?",
+      "answer": "Delegate to a subagent, which works in its own clean window and returns a condensed ~1–2k-token summary",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.4 summarize vs clear",
+        "choices": [
+          "Enable compaction so the noise gets summarized automatically",
+          "Delegate to a subagent, which works in its own clean window and returns a condensed ~1–2k-token summary",
+          "Apply context editing to clear the noisy results after they arrive",
+          "Increase the context window so there's more room for the noise"
+        ],
+        "explanation": "A subagent prevents noise from ever touching the main thread, returning only a condensed summary — that's prevention, not cleanup.",
+        "source": "cca_cheatsheet",
+        "number": 114
+      }
+    },
+    {
+      "prompt": "Noise from a tool has already landed in the main context and diluted the window. What is the CLEANUP-focused fix?",
+      "answer": "Context editing — removes what already arrived",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.4 summarize vs clear",
+        "choices": [
+          "Compaction — rewrites the noise into a summary",
+          "Spin up a subagent — but this is too late, prevention was the earlier move",
+          "Context editing — removes what already arrived",
+          "Nothing can be done once noise has landed"
+        ],
+        "explanation": "Once noise has already diluted the window, context editing cleans it up; a subagent would have been the earlier prevention step.",
+        "source": "cca_cheatsheet",
+        "number": 115
+      }
+    },
+    {
+      "prompt": "When a subagent handles a noisy search task, what does it return to the main thread?",
+      "answer": "A condensed summary only, not the full transcript",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.4 summarize vs clear",
+        "choices": [
+          "Nothing; results are stored only in its own memory files",
+          "The full transcript, streamed line by line",
+          "A compaction block covering its entire session",
+          "A condensed summary only, not the full transcript"
+        ],
+        "explanation": "Subagents return only a condensed summary to the parent thread, keeping the noisy search transcript out of the main context.",
+        "source": "cca_cheatsheet",
+        "number": 116
+      }
+    },
+    {
+      "prompt": "What tradeoff does just-in-time retrieval make?",
+      "answer": "It trades latency for context economy",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.5 JIT tradeoff",
+        "choices": [
+          "It trades context economy for latency",
+          "It trades cost for reliability, with no effect on latency",
+          "It trades accuracy for speed",
+          "It trades latency for context economy"
+        ],
+        "explanation": "JIT retrieval adds a per-call retrieval hop (latency cost) in exchange for using far less context.",
+        "source": "cca_cheatsheet",
+        "number": 117
+      }
+    },
+    {
+      "prompt": "What tradeoff does pre-loading data into context make, as opposed to JIT retrieval?",
+      "answer": "It trades context for latency",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.5 JIT tradeoff",
+        "choices": [
+          "It trades reliability for cost",
+          "It trades latency for context",
+          "It has no tradeoff; it is strictly better than JIT",
+          "It trades context for latency"
+        ],
+        "explanation": "Pre-loading spends context budget up front to avoid the latency of per-call retrieval — the inverse of JIT's tradeoff.",
+        "source": "cca_cheatsheet",
+        "number": 118
+      }
+    },
+    {
+      "prompt": "At scale, which approach to giving an agent access to lots of data generally wins?",
+      "answer": "Just-in-time retrieval",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.5 JIT tradeoff",
+        "choices": [
+          "Loading the full dataset into a subagent's memory",
+          "Pre-loading everything into the prompt",
+          "Summarizing all data up front",
+          "Just-in-time retrieval"
+        ],
+        "explanation": "At scale, JIT retrieval's context economy outweighs pre-loading's latency advantage.",
+        "source": "cca_cheatsheet",
+        "number": 119
+      }
+    },
+    {
+      "prompt": "In which rare, inverted scenario can pre-loading data be the right call instead of JIT retrieval?",
+      "answer": "A tiny fixed dataset with a tight latency budget",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.5 JIT tradeoff",
+        "choices": [
+          "An agent with unlimited context window",
+          "A massive dataset accessed rarely",
+          "A tiny fixed dataset with a tight latency budget",
+          "Any scenario involving a subagent"
+        ],
+        "explanation": "With a tiny, fixed dataset and tight latency needs, avoiding the per-call retrieval hop by pre-loading can be fine.",
+        "source": "cca_cheatsheet",
+        "number": 120
+      }
+    },
+    {
+      "prompt": "A long-running agent retries after a timeout and risks charging a customer's card twice. What is the correct fix?",
+      "answer": "Check state before acting and pass an idempotency key so a repeated call is a no-op",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.6 reliability",
+        "choices": [
+          "Disable retries entirely for payment-related actions",
+          "Add a longer timeout so the call won't need to retry",
+          "Retry the whole transaction from scratch to be safe",
+          "Check state before acting and pass an idempotency key so a repeated call is a no-op"
+        ],
+        "explanation": "Idempotency keys plus a pre-action state check turn a duplicate retry into a safe no-op instead of a double charge.",
+        "source": "cca_cheatsheet",
+        "number": 121
+      }
+    },
+    {
+      "prompt": "An agent's action fails silently in production. What does proper observability require logging?",
+      "answer": "Tool calls, intermediate decisions, and context state per step",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.6 reliability",
+        "choices": [
+          "Tool calls, intermediate decisions, and context state per step",
+          "Only the total token count per session",
+          "Only error messages and stack traces",
+          "Only the final output returned to the user"
+        ],
+        "explanation": "A failure you can't see is one you can't fix — observability means logging the full decision trail, not just the final output.",
+        "source": "cca_cheatsheet",
+        "number": 122
+      }
+    },
+    {
+      "prompt": "What are the two triggers for an agent's confidence check that should lead it to escalate to a human?",
+      "answer": "Low stated confidence OR unresolvable ambiguity",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.6 reliability",
+        "choices": [
+          "High token usage OR a slow response time",
+          "Low stated confidence OR unresolvable ambiguity",
+          "A failed idempotency check OR a cache miss",
+          "Exceeding the context window OR a compaction event"
+        ],
+        "explanation": "The confidence check escalates on either of two triggers: the agent's own low confidence, or ambiguity it cannot resolve.",
+        "source": "cca_cheatsheet",
+        "number": 123
+      }
+    },
+    {
+      "prompt": "According to the reliability half of Domain 5, which is the WORSE failure mode?",
+      "answer": "A confidently-wrong answer, worse than over-escalating to a human",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.6 reliability",
+        "choices": [
+          "A confidently-wrong answer, worse than over-escalating to a human",
+          "Over-escalating to a human, worse than a confidently-wrong answer",
+          "A timeout, worse than either a wrong answer or escalation",
+          "A cache miss, worse than a confidently-wrong answer"
+        ],
+        "explanation": "A bad answer delivered to a customer is worse than a cheap review ticket — so escalation is preferred when unsure.",
+        "source": "cca_cheatsheet",
+        "number": 124
+      }
+    },
+    {
+      "prompt": "When an agent escalates to a human due to ambiguity, what should the handoff include?",
+      "answer": "A structured summary",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.6 reliability",
+        "choices": [
+          "The full raw conversation transcript with no formatting",
+          "A compaction block",
+          "Only the final user message",
+          "A structured summary"
+        ],
+        "explanation": "Escalation should hand off a structured summary so the human reviewer has clear, organized context.",
+        "source": "cca_cheatsheet",
+        "number": 125
+      }
+    },
+    {
+      "prompt": "Which state artifact is described as a human-readable log for a long-running agent that must resume across sessions?",
+      "answer": "claude-progress.txt",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.6 reliability",
+        "choices": [
+          "claude-progress.txt",
+          "A JSON feature list",
+          "A git commit history",
+          "A memory tool file under /memories"
+        ],
+        "explanation": "claude-progress.txt is the human-readable log among the three recommended state artifacts.",
+        "source": "cca_cheatsheet",
+        "number": 126
+      }
+    },
+    {
+      "prompt": "Which state artifact serves as the machine-verifiable baseline for a long-running agent's progress?",
+      "answer": "Git commits",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.6 reliability",
+        "choices": [
+          "The compaction block",
+          "claude-progress.txt",
+          "Git commits",
+          "A JSON feature list"
+        ],
+        "explanation": "Git commits act as the machine baseline, complementing the human-readable progress log and JSON feature list.",
+        "source": "cca_cheatsheet",
+        "number": 127
+      }
+    },
+    {
+      "prompt": "Which state artifact is specifically designed to resist spec-rewrite and premature claims of 'done'?",
+      "answer": "A JSON feature list",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.6 reliability",
+        "choices": [
+          "A JSON feature list",
+          "Git commits",
+          "claude-progress.txt",
+          "A memory tool file"
+        ],
+        "explanation": "The JSON feature list tracks required features explicitly, resisting scope drift or premature completion claims.",
+        "source": "cca_cheatsheet",
+        "number": 128
+      }
+    },
+    {
+      "prompt": "Both the memory tool and state artifacts (progress log, git commits, JSON feature list) persist across sessions. How does the cheatsheet distinguish them?",
+      "answer": "Memory tool names the API feature (Claude manages files); state artifacts name the engineering discipline for structuring a multi-day agent",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.6 reliability",
+        "choices": [
+          "Memory tool is for reliability; state artifacts are for context economy",
+          "State artifacts are server-side; the memory tool is client-side",
+          "Memory tool names the API feature (Claude manages files); state artifacts name the engineering discipline for structuring a multi-day agent",
+          "They are interchangeable terms for the same mechanism"
+        ],
+        "explanation": "One is an API feature (memory tool), the other an engineering discipline (state artifacts) — treating them as interchangeable is the trap.",
+        "source": "cca_cheatsheet",
+        "number": 129
+      }
+    },
+    {
+      "prompt": "Why does enabling compaction cause the prompt cache to bust?",
+      "answer": "Compaction rewrites history, which changes the cached prefix",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.7 caching",
+        "choices": [
+          "Compaction deletes the system prompt entirely",
+          "Compaction rewrites history, which changes the cached prefix",
+          "Compaction requires a new idempotency key each time",
+          "Compaction always disables caching as a side effect"
+        ],
+        "explanation": "Because compaction rewrites older turns, the previously cached prefix no longer matches, busting the cache on that turn.",
+        "source": "cca_cheatsheet",
+        "number": 130
+      }
+    },
+    {
+      "prompt": "What is the recommended way to minimize cache disruption from compaction?",
+      "answer": "Cache the stable head (system/docs) and let compaction hit only the tail, or use the 1-hour TTL",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.7 caching",
+        "choices": [
+          "Cache the entire conversation including the changing user turn",
+          "Run compaction twice as often to keep the cache fresh",
+          "Disable caching whenever compaction is enabled",
+          "Cache the stable head (system/docs) and let compaction hit only the tail, or use the 1-hour TTL"
+        ],
+        "explanation": "Caching the stable head, letting compaction affect only the tail, or using the 1-hour TTL, minimizes the cache disruption.",
+        "source": "cca_cheatsheet",
+        "number": 131
+      }
+    },
+    {
+      "prompt": "According to the official guide, which of the following is OUT OF SCOPE for the Foundations exam?",
+      "answer": "Exact cache economics multipliers (e.g., 0.1×/1.25×/2.0×), TTLs, and minimum-token thresholds",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.7 caching",
+        "choices": [
+          "The concept of context rot",
+          "Exact cache economics multipliers (e.g., 0.1×/1.25×/2.0×), TTLs, and minimum-token thresholds",
+          "The concept that caching should target a static prompt prefix",
+          "The distinction between compaction and context editing"
+        ],
+        "explanation": "Foundations tests the concept of caching the static prefix, not the exact multipliers, TTL values, or minimum-token numbers.",
+        "source": "cca_cheatsheet",
+        "number": 132
+      }
+    },
+    {
+      "prompt": "What is the actual practical impact when compaction fires on a cached conversation?",
+      "answer": "A one-turn cost spike, not a permanent loss of caching benefit",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.7 caching",
+        "choices": [
+          "A doubling of the context window size",
+          "A permanent disabling of caching for the rest of the session",
+          "No impact at all on cost or caching",
+          "A one-turn cost spike, not a permanent loss of caching benefit"
+        ],
+        "explanation": "Compaction busts the cache only for the turn it fires on — a one-turn cost spike, not a lasting loss of caching benefit.",
+        "source": "cca_cheatsheet",
+        "number": 133
+      }
+    },
+    {
+      "prompt": "Which implementation detail is explicitly out of scope at the Foundations exam level?",
+      "answer": "SSE / streaming implementation details",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.8 scope",
+        "choices": [
+          "The idempotency key pattern",
+          "SSE / streaming implementation details",
+          "The concept of just-in-time retrieval",
+          "The difference between compaction and context editing"
+        ],
+        "explanation": "Streaming/SSE implementation detail questions are out of scope for Foundations, even if dressed up as concept questions.",
+        "source": "cca_cheatsheet",
+        "number": 134
+      }
+    },
+    {
+      "prompt": "What percentage of the CCA-F exam does Domain 5 (Context Management & Reliability) represent?",
+      "answer": "15%",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.8 scope",
+        "choices": [
+          "10%",
+          "15%",
+          "20%",
+          "25%"
+        ],
+        "explanation": "The cheatsheet header states Domain 5 is weighted 15% of the exam.",
+        "source": "cca_cheatsheet",
+        "number": 135
+      }
+    },
+    {
+      "prompt": "When you force schema-valid JSON output (via forced tool use or native strict structured output), what exactly does that guarantee?",
+      "answer": "The output is schema-valid (parses correctly), not that its content is correct",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.1 shape vs semantics",
+        "choices": [
+          "The output's business logic and calculations are validated",
+          "The output is both schema-valid and semantically correct",
+          "The output is schema-valid (parses correctly), not that its content is correct",
+          "The output is guaranteed to match the source document exactly"
+        ],
+        "explanation": "Shape techniques only guarantee the output parses against the schema; semantic/business-rule correctness is a separate, unenforced guarantee.",
+        "source": "cca_cheatsheet",
+        "number": 136
+      }
+    },
+    {
+      "prompt": "A response schema requires a `total` field and the API call succeeds with a schema-valid number in that field. What does this actually tell you?",
+      "answer": "Only that the field is present and correctly typed — nothing checks whether the total actually adds up",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.1 shape vs semantics",
+        "choices": [
+          "Only that the field is present and correctly typed — nothing checks whether the total actually adds up",
+          "Structured output mode recalculates totals automatically",
+          "The total has been arithmetically validated by the API",
+          "The model re-checked its math before returning the field"
+        ],
+        "explanation": "This is the classic shape-not-semantics trap: a schema-valid total field can still hold the wrong number.",
+        "source": "cca_cheatsheet",
+        "number": 137
+      }
+    },
+    {
+      "prompt": "What combination is required for a production system where structured output must be both parseable AND correct?",
+      "answer": "A shape technique plus a validation-retry loop for business rules",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.1 shape vs semantics",
+        "choices": [
+          "A larger model with a longer system prompt",
+          "Forced tool use alone, since it enforces business rules",
+          "A shape technique plus a validation-retry loop for business rules",
+          "Strict mode alone, since it validates both shape and semantics"
+        ],
+        "explanation": "Shape and correctness are two separate guarantees; strict mode/forced tool use alone never validates business rules.",
+        "source": "cca_cheatsheet",
+        "number": 138
+      }
+    },
+    {
+      "prompt": "Which API parameter forces the model to call a specific tool — the canonical, stable way to guarantee schema-valid JSON across any model?",
+      "answer": "tool_choice:{type:\"tool\", name:...}",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.2 shape technique choice",
+        "choices": [
+          "tool_choice:{type:\"tool\", name:...}",
+          "output_config:{strict:true}",
+          "response_format:{type:\"json_object\"}",
+          "system:{schema:...}"
+        ],
+        "explanation": "Forced tool use via tool_choice with an explicit tool name is the cross-model canonical path; output_config/strict:true is the native path, not this one.",
+        "source": "cca_cheatsheet",
+        "number": 139
+      }
+    },
+    {
+      "prompt": "When using forced tool use to get structured JSON, where do you read the resulting JSON from?",
+      "answer": "The tool_use.input block",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.2 shape technique choice",
+        "choices": [
+          "A separate structured_output field on the response",
+          "The assistant's text content block",
+          "The tool_use.input block",
+          "The stop_reason field"
+        ],
+        "explanation": "Forced tool use returns the JSON as the input to the invoked tool, found on tool_use.input, not as free text.",
+        "source": "cca_cheatsheet",
+        "number": 140
+      }
+    },
+    {
+      "prompt": "What is the underlying mechanism behind Anthropic's native structured output (output_config / strict:true) called?",
+      "answer": "Constrained decoding",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.2 shape technique choice",
+        "choices": [
+          "Constrained decoding",
+          "Grammar prefill",
+          "Forced tool use",
+          "Schema injection"
+        ],
+        "explanation": "The native GA path works via constrained decoding against a compiled grammar, distinct from the forced-tool-use mechanism.",
+        "source": "cca_cheatsheet",
+        "number": 141
+      }
+    },
+    {
+      "prompt": "With native structured output (strict:true), what does the first call against a new schema pay that later calls don't?",
+      "answer": "Grammar-compile latency",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.2 shape technique choice",
+        "choices": [
+          "Grammar-compile latency",
+          "A mandatory batches queuing delay",
+          "A doubled token cost",
+          "An extra validation-retry round trip"
+        ],
+        "explanation": "Constrained decoding must compile a grammar for the schema on first use, adding one-time latency before caching kicks in.",
+        "source": "cca_cheatsheet",
+        "number": 142
+      }
+    },
+    {
+      "prompt": "After the first call compiles the grammar for native structured output, how long is that compiled grammar cached?",
+      "answer": "~24 hours",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.2 shape technique choice",
+        "choices": [
+          "Indefinitely, until the API key is rotated",
+          "~1 hour",
+          "~24 hours",
+          "~7 days"
+        ],
+        "explanation": "The compiled grammar cache lasts roughly 24 hours before it must be recompiled on the next call.",
+        "source": "cca_cheatsheet",
+        "number": 143
+      }
+    },
+    {
+      "prompt": "According to the official guide, what is the status of using assistant prefill (starting the reply with `{`) to force JSON output?",
+      "answer": "Out of scope — not the officially documented reliable path",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.2 shape technique choice",
+        "choices": [
+          "Deprecated in favor of forced tool use only on Opus",
+          "Out of scope — not the officially documented reliable path",
+          "The primary recommended cross-model technique",
+          "Required as a fallback whenever strict:true is unavailable"
+        ],
+        "explanation": "The official guide treats structured output as always tool-based; prefill is background knowledge only, not a drilled or endorsed technique.",
+        "source": "cca_cheatsheet",
+        "number": 144
+      }
+    },
+    {
+      "prompt": "Empirically, on which model does JSON-forcing assistant prefill work, while it returns 400 errors on Sonnet 5 and Opus?",
+      "answer": "Haiku 4.5",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.2 shape technique choice",
+        "choices": [
+          "Haiku 3.5",
+          "Opus 4.1",
+          "Haiku 4.5",
+          "Sonnet 4"
+        ],
+        "explanation": "The cheatsheet notes prefill empirically 400s on Sonnet 5/Opus but works on Haiku 4.5, kept as background-only trivia.",
+        "source": "cca_cheatsheet",
+        "number": 145
+      }
+    },
+    {
+      "prompt": "In a validation-retry loop, what exactly should you append as the next turn when a business-rule check fails?",
+      "answer": "The bad output plus the exact validator error message",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.3 validation-retry & schema design",
+        "choices": [
+          "A completely new prompt with the schema removed",
+          "The original prompt repeated verbatim",
+          "The bad output plus the exact validator error message",
+          "Just a generic 'please fix your JSON' instruction"
+        ],
+        "explanation": "Effective retries feed back the specific bad output and the exact validator error so the model knows precisely what to fix.",
+        "source": "cca_cheatsheet",
+        "number": 146
+      }
+    },
+    {
+      "prompt": "When using forced tool use, how should a validation error be returned to the model in the retry loop?",
+      "answer": "As a tool_result with is_error:true",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.3 validation-retry & schema design",
+        "choices": [
+          "As a new system prompt",
+          "As an assistant prefill correction",
+          "As a tool_result with is_error:true",
+          "As a plain user text message with no special field"
+        ],
+        "explanation": "In the forced-tool-use flow the validator error is fed back as a tool_result block flagged is_error:true, matching the tool-call turn structure.",
+        "source": "cca_cheatsheet",
+        "number": 147
+      }
+    },
+    {
+      "prompt": "A validation-retry loop is effective at fixing which category of output errors?",
+      "answer": "Malformed / format-structural errors",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.3 validation-retry & schema design",
+        "choices": [
+          "Malformed / format-structural errors",
+          "Errors caused by an outdated model version",
+          "Latency issues from grammar compilation",
+          "Data that is entirely absent from the source document"
+        ],
+        "explanation": "Retries can correct malformed/structural issues because the model can reshape its answer, but they can't invent missing source data.",
+        "source": "cca_cheatsheet",
+        "number": 148
+      }
+    },
+    {
+      "prompt": "If the required information is simply absent from the source document, what happens when you retry the extraction?",
+      "answer": "Retrying is useless — re-asking can't conjure data that isn't there",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.3 validation-retry & schema design",
+        "choices": [
+          "Retrying triggers a fallback to the batches API",
+          "Retrying is useless — re-asking can't conjure data that isn't there",
+          "Retrying eventually surfaces the field after enough attempts",
+          "Retrying causes strict mode to synthesize a plausible value"
+        ],
+        "explanation": "This is the tested 'absent vs malformed' distinction — retries can't fix absence of source data, only formatting problems.",
+        "source": "cca_cheatsheet",
+        "number": 149
+      }
+    },
+    {
+      "prompt": "To prevent the model from fabricating a value for a field the source document might not contain, what should you do?",
+      "answer": "Mark the field optional/nullable so the model can return null",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.3 validation-retry & schema design",
+        "choices": [
+          "Remove the field from the schema entirely",
+          "Mark the field optional/nullable so the model can return null",
+          "Mark the field required so the model is forced to find an answer",
+          "Set the field's type to string only, never structured"
+        ],
+        "explanation": "Nullable/optional fields let the model honestly report absence with null instead of fabricating a value to satisfy a required field.",
+        "source": "cca_cheatsheet",
+        "number": 150
+      }
+    },
+    {
+      "prompt": "For an enum field representing an extensible category, what pattern keeps it from breaking on unseen categories?",
+      "answer": "Include an \"other\" value plus a free-text detail field",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.3 validation-retry & schema design",
+        "choices": [
+          "Include an \"other\" value plus a free-text detail field",
+          "List every possible category exhaustively up front",
+          "Make the field a required string with no enum constraint",
+          "Default unseen categories to the most common enum value"
+        ],
+        "explanation": "An \"other\" enum value paired with a free-text detail field lets the schema handle categories not anticipated at design time.",
+        "source": "cca_cheatsheet",
+        "number": 151
+      }
+    },
+    {
+      "prompt": "Which enum value should represent cases where the correct category is genuinely ambiguous from the source?",
+      "answer": "\"unclear\"",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.3 validation-retry & schema design",
+        "choices": [
+          "\"other\"",
+          "\"null\"",
+          "\"pending_review\"",
+          "\"unclear\""
+        ],
+        "explanation": "\"unclear\" is reserved for ambiguous cases, distinct from \"other\" which covers extensible-but-known categories.",
+        "source": "cca_cheatsheet",
+        "number": 152
+      }
+    },
+    {
+      "prompt": "To let a system self-flag total mismatches, what two fields should the schema emit?",
+      "answer": "calculated_total and stated_total",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.3 validation-retry & schema design",
+        "choices": [
+          "A single authoritative total field",
+          "raw_total and rounded_total",
+          "calculated_total and stated_total",
+          "total and total_confidence_score"
+        ],
+        "explanation": "Emitting both the calculated and the stated total surfaces mismatches instead of collapsing to one authoritative-but-possibly-wrong number.",
+        "source": "cca_cheatsheet",
+        "number": 153
+      }
+    },
+    {
+      "prompt": "What field/type should you add to flag when source data is internally inconsistent?",
+      "answer": "A conflict_detected boolean",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.3 validation-retry & schema design",
+        "choices": [
+          "A data_quality enum",
+          "A confidence_score float",
+          "A conflict_reason string, required",
+          "A conflict_detected boolean"
+        ],
+        "explanation": "A conflict_detected boolean is the recommended field for surfacing inconsistent source data.",
+        "source": "cca_cheatsheet",
+        "number": 154
+      }
+    },
+    {
+      "prompt": "What field is useful for later false-positive analysis of extracted results?",
+      "answer": "detected_pattern",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.3 validation-retry & schema design",
+        "choices": [
+          "extraction_confidence",
+          "detected_pattern",
+          "validation_status",
+          "raw_match_text"
+        ],
+        "explanation": "A detected_pattern field captures what triggered an extraction, enabling later review of false positives.",
+        "source": "cca_cheatsheet",
+        "number": 155
+      }
+    },
+    {
+      "prompt": "How much cheaper is the Message Batches API compared to synchronous calls?",
+      "answer": "50% cheaper",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.4 message batches",
+        "choices": [
+          "50% cheaper",
+          "25% cheaper",
+          "10% cheaper",
+          "75% cheaper"
+        ],
+        "explanation": "The Message Batches API is documented as 50% cheaper than equivalent synchronous calls.",
+        "source": "cca_cheatsheet",
+        "number": 156
+      }
+    },
+    {
+      "prompt": "Which field on a Message Batch do you poll to track its progress?",
+      "answer": "processing_status",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.4 message batches",
+        "choices": [
+          "batch_state",
+          "job_status",
+          "completion_status",
+          "processing_status"
+        ],
+        "explanation": "The batch lifecycle (create → poll → stream) polls the processing_status field specifically.",
+        "source": "cca_cheatsheet",
+        "number": 157
+      }
+    },
+    {
+      "prompt": "What value of processing_status indicates a Message Batch has finished processing?",
+      "answer": "\"ended\"",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.4 message batches",
+        "choices": [
+          "\"ended\"",
+          "\"finished\"",
+          "\"completed\"",
+          "\"done\""
+        ],
+        "explanation": "You poll processing_status until it equals the literal value \"ended\", not \"completed\" or similar.",
+        "source": "cca_cheatsheet",
+        "number": 158
+      }
+    },
+    {
+      "prompt": "After a Message Batch reaches processing_status \"ended,\" what is the final step to retrieve its output?",
+      "answer": "Stream the results",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.4 message batches",
+        "choices": [
+          "Download a single consolidated JSON file synchronously",
+          "Stream the results",
+          "Poll the custom_id endpoint",
+          "Re-submit the batch for confirmation"
+        ],
+        "explanation": "The Create-Poll-Stream lifecycle ends with streaming the results once processing_status is \"ended\".",
+        "source": "cca_cheatsheet",
+        "number": 159
+      }
+    },
+    {
+      "prompt": "When reassembling Message Batch results onto your original inputs, what must you match on?",
+      "answer": "custom_id",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.4 message batches",
+        "choices": [
+          "The model's response hash",
+          "request_id timestamp",
+          "Submission order / array index",
+          "custom_id"
+        ],
+        "explanation": "custom_id is the join key because batch results return unordered, so index-based matching is unreliable.",
+        "source": "cca_cheatsheet",
+        "number": 160
+      }
+    },
+    {
+      "prompt": "In what order does the Message Batches API return results?",
+      "answer": "Unordered — not necessarily the submission order",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.4 message batches",
+        "choices": [
+          "Sorted by response length",
+          "Alphabetical by custom_id",
+          "Same order as submitted",
+          "Unordered — not necessarily the submission order"
+        ],
+        "explanation": "Results come back unordered, which is exactly why custom_id (not array index) must be used to reassemble them.",
+        "source": "cca_cheatsheet",
+        "number": 161
+      }
+    },
+    {
+      "prompt": "What is the maximum async processing window for the Message Batches API (though it's usually much faster)?",
+      "answer": "≤24 hours",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.4 message batches",
+        "choices": [
+          "≤1 hour",
+          "≤24 hours",
+          "≤72 hours",
+          "≤7 days"
+        ],
+        "explanation": "The documented async processing window is up to 24 hours, though most batches finish in minutes.",
+        "source": "cca_cheatsheet",
+        "number": 162
+      }
+    },
+    {
+      "prompt": "How long are Message Batch results retained before they're no longer available?",
+      "answer": "29 days",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.4 message batches",
+        "choices": [
+          "24 hours",
+          "90 days",
+          "29 days",
+          "7 days"
+        ],
+        "explanation": "Batch results are kept for 29 days, distinct from the shorter 24-hour processing window.",
+        "source": "cca_cheatsheet",
+        "number": 163
+      }
+    },
+    {
+      "prompt": "What are the size limits for a single Message Batch?",
+      "answer": "Up to 100,000 requests or 256 MB, whichever comes first",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.4 message batches",
+        "choices": [
+          "Up to 500,000 requests or 1 GB, whichever comes first",
+          "Up to 100,000 requests or 256 MB, whichever comes first",
+          "Up to 10,000 requests or 50 MB, whichever comes first",
+          "Up to 1 million requests with no size cap"
+        ],
+        "explanation": "A batch is capped at 100k requests or 256 MB, whichever limit is hit first.",
+        "source": "cca_cheatsheet",
+        "number": 164
+      }
+    },
+    {
+      "prompt": "What are the four possible per-result statuses in a Message Batch response?",
+      "answer": "succeeded, errored, canceled, expired",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.4 message batches",
+        "choices": [
+          "success, error, retry, dropped",
+          "pending, running, complete, failed",
+          "queued, processing, done, timeout",
+          "succeeded, errored, canceled, expired"
+        ],
+        "explanation": "Each individual result in a batch resolves to one of exactly: succeeded, errored, canceled, or expired.",
+        "source": "cca_cheatsheet",
+        "number": 165
+      }
+    },
+    {
+      "prompt": "When should you avoid the Message Batches API even though it's cheaper?",
+      "answer": "When a user is actively waiting on the answer (interactive use case)",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.4 message batches",
+        "choices": [
+          "When processing more than 1,000 requests",
+          "When using forced tool use instead of native structured output",
+          "When a user is actively waiting on the answer (interactive use case)",
+          "When the schema includes nested objects"
+        ],
+        "explanation": "Batches trade latency for cost, so any interactive scenario with a waiting user should use synchronous/streaming calls instead.",
+        "source": "cca_cheatsheet",
+        "number": 166
+      }
+    },
+    {
+      "prompt": "When iterating on prompt versions and running evals, what's the correct methodology for attributing a score change?",
+      "answer": "Change one technique at a time and re-eval between changes",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.5 eval loop",
+        "choices": [
+          "Stack several improvements at once to save eval runs",
+          "Only re-eval after every five changes",
+          "Change the grader, not the prompt, between runs",
+          "Change one technique at a time and re-eval between changes"
+        ],
+        "explanation": "Changing one technique at a time is the only way to attribute a score move to a specific cause; stacking changes destroys attribution.",
+        "source": "cca_cheatsheet",
+        "number": 167
+      }
+    },
+    {
+      "prompt": "An eval returns a score of 7.86. What does this number, by itself, actually tell you?",
+      "answer": "Very little on its own — what matters is whether you can move it (the delta) between prompt versions",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.5 eval loop",
+        "choices": [
+          "That the prompt is objectively production-ready",
+          "Very little on its own — what matters is whether you can move it (the delta) between prompt versions",
+          "That further prompt iteration is unnecessary",
+          "That the prompt outperforms industry benchmarks"
+        ],
+        "explanation": "The eval is an instrument for measuring change, not a verdict; the absolute value means little compared to whether it moves.",
+        "source": "cca_cheatsheet",
+        "number": 168
+      }
+    },
+    {
+      "prompt": "For a deterministic criterion like \"is this valid JSON,\" which type of grader should you use?",
+      "answer": "Code grader",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.5 eval loop",
+        "choices": [
+          "Model grader",
+          "Ensemble grader",
+          "Human grader",
+          "Code grader"
+        ],
+        "explanation": "Deterministic, checkable criteria should be matched to a code grader rather than a subjective model grader.",
+        "source": "cca_cheatsheet",
+        "number": 169
+      }
+    },
+    {
+      "prompt": "For a subjective criterion like overall response quality, which type of grader should you use?",
+      "answer": "Model grader",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.5 eval loop",
+        "choices": [
+          "Code grader",
+          "Schema validator",
+          "Model grader",
+          "Regex grader"
+        ],
+        "explanation": "Judgment-based criteria need a model grader; a code grader can only check deterministic facts, not quality/taste.",
+        "source": "cca_cheatsheet",
+        "number": 170
+      }
+    },
+    {
+      "prompt": "What is an example of combining a model grader and a syntax/code grader into one score?",
+      "answer": "(model + syntax) / 2",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.5 eval loop",
+        "choices": [
+          "max(model, syntax)",
+          "(model + syntax) / 2",
+          "syntax only, discard the model score",
+          "model × syntax"
+        ],
+        "explanation": "The cheatsheet gives (model + syntax)/2 as the example way to combine a deterministic check with a quality judgment into one score.",
+        "source": "cca_cheatsheet",
+        "number": 171
+      }
+    },
+    {
+      "prompt": "An unanchored model grader tends to converge on what score for almost everything, regardless of actual quality?",
+      "answer": "~6",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.5 eval loop",
+        "choices": [
+          "~10",
+          "~3",
+          "~8",
+          "~6"
+        ],
+        "explanation": "Un-anchored model graders default to a middling ~6 regardless of the actual output quality.",
+        "source": "cca_cheatsheet",
+        "number": 172
+      }
+    },
+    {
+      "prompt": "What two changes fix a model grader that keeps returning a middling score for everything?",
+      "answer": "Ask for reasoning/strengths-weaknesses before the score, and anchor to explicit criteria",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.5 eval loop",
+        "choices": [
+          "Switch to a bigger judge model",
+          "Remove the scoring rubric to reduce bias",
+          "Ask for reasoning/strengths-weaknesses before the score, and anchor to explicit criteria",
+          "Lower the grader's temperature to 0"
+        ],
+        "explanation": "The \"reason before score\" mnemonic: requesting reasoning first and anchoring to explicit criteria breaks graders out of the ~6 default.",
+        "source": "cca_cheatsheet",
+        "number": 173
+      }
+    },
+    {
+      "prompt": "What model-tiering strategy is recommended for building eval datasets cost-effectively?",
+      "answer": "Use a cheap model (e.g. Haiku) to generate and grade; reserve the strong model for the task under test",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.5 eval loop",
+        "choices": [
+          "Use the strongest model for every step, including grading",
+          "Use a cheap model only for the task under test, and the strong model for grading",
+          "Use the same model for generation, grading, and the task under test",
+          "Use a cheap model (e.g. Haiku) to generate and grade; reserve the strong model for the task under test"
+        ],
+        "explanation": "Model tiering saves cost by using a cheap model for dataset generation and grading, keeping the strong model reserved for the actual task under evaluation.",
+        "source": "cca_cheatsheet",
+        "number": 174
+      }
+    },
+    {
+      "prompt": "A team says \"we tested it a few times and patched a corner case.\" What's the risk with that approach compared to an evaluation-first path?",
+      "answer": "It still gets blindsided in production by edge cases nobody imagined",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.5 eval loop",
+        "choices": [
+          "It wastes more compute than a full eval run",
+          "It only fails on schema-valid, semantically incorrect outputs",
+          "It's equivalent in rigor to a scored eval dataset",
+          "It still gets blindsided in production by edge cases nobody imagined"
+        ],
+        "explanation": "Ad hoc manual testing misses unanticipated edge cases that only a scored eval dataset run in dev would surface.",
+        "source": "cca_cheatsheet",
+        "number": 175
+      }
+    },
+    {
+      "prompt": "What should the first line of a well-written prompt be, per the \"clear and direct\" technique?",
+      "answer": "A direct instruction using an action verb",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.6 technique ladder",
+        "choices": [
+          "Background context about the business",
+          "A polite question framing the task",
+          "A restatement of the schema",
+          "A direct instruction using an action verb"
+        ],
+        "explanation": "Clear-and-direct prompting leads with an action-verb instruction, not a polite question, since the first line matters most.",
+        "source": "cca_cheatsheet",
+        "number": 176
+      }
+    },
+    {
+      "prompt": "When should you include step-by-step process instructions (how to think it through) in a prompt, versus output guidelines?",
+      "answer": "Process steps only for complex problems; output guidelines almost always",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.6 technique ladder",
+        "choices": [
+          "Process steps always; output guidelines only for complex problems",
+          "Process steps only for complex problems; output guidelines almost always",
+          "Neither is needed if using structured output",
+          "Both should be included in every prompt regardless of complexity"
+        ],
+        "explanation": "Output guidelines (length/format/must-haves) apply almost always, while process steps are reserved for genuinely complex reasoning tasks.",
+        "source": "cca_cheatsheet",
+        "number": 177
+      }
+    },
+    {
+      "prompt": "What is the purpose of wrapping interpolated data in descriptive XML tags like <athlete_information>?",
+      "answer": "To bind/separate the data clearly from the surrounding instructions",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.6 technique ladder",
+        "choices": [
+          "To reduce token usage on long prompts",
+          "To force the model into strict JSON mode",
+          "To enable forced tool use automatically",
+          "To bind/separate the data clearly from the surrounding instructions"
+        ],
+        "explanation": "Descriptive XML tags exist to prevent interpolated data from being confused with the surrounding instructions.",
+        "source": "cca_cheatsheet",
+        "number": 178
+      }
+    },
+    {
+      "prompt": "What's the difference in purpose between one-shot and multi-shot examples in a prompt?",
+      "answer": "One-shot establishes the pattern; multi-shot covers corner cases",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.6 technique ladder",
+        "choices": [
+          "One-shot covers corner cases; multi-shot establishes the pattern",
+          "One-shot establishes the pattern; multi-shot covers corner cases",
+          "Multi-shot is only useful for classification tasks, not extraction",
+          "They serve the identical purpose, just more examples"
+        ],
+        "explanation": "One example is enough to show the pattern, but multiple examples are needed to demonstrate handling of edge/corner cases.",
+        "source": "cca_cheatsheet",
+        "number": 179
+      }
+    },
+    {
+      "prompt": "When selecting few-shot examples to add to a prompt, what's the recommended source and process?",
+      "answer": "Mine your eval's score-10 outputs and explain why each is ideal",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.6 technique ladder",
+        "choices": [
+          "Use the lowest-scoring outputs to show what to avoid",
+          "Randomly sample outputs regardless of score",
+          "Write synthetic examples from scratch without eval data",
+          "Mine your eval's score-10 outputs and explain why each is ideal"
+        ],
+        "explanation": "The recommended source for multi-shot examples is your own eval's top-scoring outputs, annotated with why each is ideal.",
+        "source": "cca_cheatsheet",
+        "number": 180
+      }
+    },
+    {
+      "prompt": "During an agentic tool-use loop, what signal tells your code that Claude wants to call another tool?",
+      "answer": "stop_reason == \"tool_use\"",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.1 tool loop",
+        "choices": [
+          "The response text contains the word \"tool\"",
+          "The number of content blocks increases",
+          "stop_reason == \"tool_use\"",
+          "Claude explicitly states it needs more information"
+        ],
+        "explanation": "The loop-continuation signal is structural (stop_reason), not something inferred from parsing text or counting blocks.",
+        "source": "cca_cheatsheet",
+        "number": 181
+      }
+    },
+    {
+      "prompt": "In the Messages API, which conversation turn contains the tool_use content block?",
+      "answer": "Assistant turn",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.1 tool loop",
+        "choices": [
+          "User turn",
+          "Assistant turn",
+          "System turn",
+          "A separate tool turn"
+        ],
+        "explanation": "tool_use is what Claude (the assistant) produced; there is no separate tool role in the Messages API.",
+        "source": "cca_cheatsheet",
+        "number": 182
+      }
+    },
+    {
+      "prompt": "The tool_result for a given tool_use rides in which turn?",
+      "answer": "The next User turn",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.1 tool loop",
+        "choices": [
+          "The next User turn",
+          "A dedicated Tool turn",
+          "The following System turn",
+          "The same Assistant turn"
+        ],
+        "explanation": "Tool output is new information coming in, so it is carried on the next user turn, not appended to the assistant turn.",
+        "source": "cca_cheatsheet",
+        "number": 183
+      }
+    },
+    {
+      "prompt": "When making the final API call in a tool-use loop that you expect to be the last, what must you still do?",
+      "answer": "Pass tools=[…] in the request",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.1 tool loop",
+        "choices": [
+          "Set tool_choice to \"none\"",
+          "Send an empty tools array",
+          "Pass tools=[…] in the request",
+          "Omit the tools parameter since no more calls are expected"
+        ],
+        "explanation": "Each call is stateless and re-reads the whole transcript, so the tool schemas must always be present as the legend for prior tool_use/tool_result blocks.",
+        "source": "cca_cheatsheet",
+        "number": 184
+      }
+    },
+    {
+      "prompt": "Who is responsible for maintaining conversation state between tool-use turns?",
+      "answer": "Your application code (Claude is stateless)",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.1 tool loop",
+        "choices": [
+          "The Anthropic API server session",
+          "The tool_choice parameter",
+          "Your application code (Claude is stateless)",
+          "The MCP server"
+        ],
+        "explanation": "Claude does not remember prior turns; the caller must resend the full messages array on every request.",
+        "source": "cca_cheatsheet",
+        "number": 185
+      }
+    },
+    {
+      "prompt": "What happens if you drop a tool_use block from the messages history but keep its tool_result?",
+      "answer": "The tool_result becomes orphaned and the request is invalid",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.1 tool loop",
+        "choices": [
+          "The tool_result becomes orphaned and the request is invalid",
+          "Nothing — tool_use and tool_result are independent",
+          "Claude silently ignores the tool_result",
+          "The API auto-regenerates the missing tool_use block"
+        ],
+        "explanation": "A tool_result must correspond to a tool_use in the same transcript; removing the request leaves the result unpaired.",
+        "source": "cca_cheatsheet",
+        "number": 186
+      }
+    },
+    {
+      "prompt": "When multiple tool_use blocks appear in one turn, how should you return the corresponding tool_result blocks?",
+      "answer": "Match each result to its request via tool_use_id, order-independent",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.2 tool_result mechanics",
+        "choices": [
+          "Return only the first result and let Claude ask for the rest",
+          "Match each result to its request via tool_use_id, order-independent",
+          "Combine them into a single tool_result block",
+          "Return them in the same array order Claude sent them"
+        ],
+        "explanation": "Pairing is done by tool_use_id, so results do not need to preserve the original array order.",
+        "source": "cca_cheatsheet",
+        "number": 187
+      }
+    },
+    {
+      "prompt": "A tool call raises an exception mid-loop. What should your code send back to Claude?",
+      "answer": "A tool_result block with is_error: True and an actionable message",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.2 tool_result mechanics",
+        "choices": [
+          "A tool_result block with is_error: True and an actionable message",
+          "Nothing — skip the failed call and continue",
+          "Drop the tool_use block from history",
+          "A plain-text apology in a new assistant-style message"
+        ],
+        "explanation": "Every tool_use must be answered; a failure is communicated via is_error:True with a message Claude can act on, not skipped or replied to as free text.",
+        "source": "cca_cheatsheet",
+        "number": 188
+      }
+    },
+    {
+      "prompt": "What is the required shape of the content field inside a tool_result block?",
+      "answer": "A serialized string",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.2 tool_result mechanics",
+        "choices": [
+          "A raw Python dict",
+          "A serialized string",
+          "An arbitrary binary blob",
+          "An optional field that can be omitted"
+        ],
+        "explanation": "The tool_result content must be a serialized string (not a raw dict), matching the plain-text/JSON-string format the API expects for tool outputs.",
+        "source": "cca_cheatsheet",
+        "number": 189
+      }
+    },
+    {
+      "prompt": "For a Custom tool like get_current_datetime, who writes the schema and who executes the code?",
+      "answer": "You write the schema and your code executes it",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.3 tool taxonomy",
+        "choices": [
+          "You write the schema and your code executes it",
+          "Anthropic writes the schema and your code executes it",
+          "Anthropic writes the schema and Anthropic executes it",
+          "You write the schema and Anthropic executes it"
+        ],
+        "explanation": "Custom tools are you/you on both the schema and execution axes, unlike client or server built-in tools.",
+        "source": "cca_cheatsheet",
+        "number": 190
+      }
+    },
+    {
+      "prompt": "Which built-in Anthropic tool still requires YOUR code to implement the actual file operations?",
+      "answer": "Text editor (client tool)",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.3 tool taxonomy",
+        "choices": [
+          "Text editor (client tool)",
+          "Web search (server tool)",
+          "Both built-in tools run automatically",
+          "Neither built-in tool requires implementation"
+        ],
+        "explanation": "The text editor is a client tool: Anthropic ships the schema but your code must run the file operations; web search runs entirely on Anthropic's side.",
+        "source": "cca_cheatsheet",
+        "number": 191
+      }
+    },
+    {
+      "prompt": "The text editor tool's type string (e.g., text_editor_20250124) is tied to what?",
+      "answer": "The specific model version",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.3 tool taxonomy",
+        "choices": [
+          "The specific model version",
+          "The MCP server version",
+          "The SDK release version",
+          "The organization's console settings"
+        ],
+        "explanation": "The versioned type string for the text editor built-in tool is tied to the model it was released with.",
+        "source": "cca_cheatsheet",
+        "number": 192
+      }
+    },
+    {
+      "prompt": "Which built-in tool executes entirely on Anthropic's side with no implementation required from you?",
+      "answer": "Web search (server tool)",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.3 tool taxonomy",
+        "choices": [
+          "Bash tool",
+          "Text editor (client tool)",
+          "Web search (server tool)",
+          "Custom tools"
+        ],
+        "explanation": "Web search is a server tool: Anthropic both defines the schema and executes the search.",
+        "source": "cca_cheatsheet",
+        "number": 193
+      }
+    },
+    {
+      "prompt": "Before using the web search built-in tool, what must happen?",
+      "answer": "The organization must enable it in the console",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.3 tool taxonomy",
+        "choices": [
+          "Nothing, it's enabled by default",
+          "The organization must enable it in the console",
+          "You must implement a search function",
+          "The user must grant a browser permission"
+        ],
+        "explanation": "Server-side web search requires the org to enable it in the console first; unlike client tools, you never implement it yourself.",
+        "source": "cca_cheatsheet",
+        "number": 194
+      }
+    },
+    {
+      "prompt": "What does the label \"built-in tool\" actually guarantee?",
+      "answer": "That Anthropic wrote the schema — not that Anthropic executes it",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.3 tool taxonomy",
+        "choices": [
+          "That the tool runs only server-side",
+          "That Anthropic wrote the schema — not that Anthropic executes it",
+          "That the tool requires no schema at all",
+          "That Anthropic executes the tool for you"
+        ],
+        "explanation": "Built-in only answers the schema-authorship question; execution ownership still depends on client vs server tool type.",
+        "source": "cca_cheatsheet",
+        "number": 195
+      }
+    },
+    {
+      "prompt": "During fine-grained streaming, you notice long pauses followed by a rush of tokens for a tool call. What does this indicate?",
+      "answer": "Normal validation buffering of a complete top-level key/value pair",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.4 streaming",
+        "choices": [
+          "Normal validation buffering of a complete top-level key/value pair",
+          "A malformed tool schema",
+          "A rate-limit backoff",
+          "A network bug that should be retried"
+        ],
+        "explanation": "The API buffers and validates a complete top-level key/value pair before releasing it, producing bursty delivery that is expected, not a bug.",
+        "source": "cca_cheatsheet",
+        "number": 196
+      }
+    },
+    {
+      "prompt": "What is the ONLY effect of setting fine_grained=True for tool-use streaming?",
+      "answer": "It disables JSON validation on streamed tool input",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.4 streaming",
+        "choices": [
+          "It disables JSON validation on streamed tool input",
+          "It enables parallel tool execution",
+          "It makes tool calls run faster",
+          "It splits one tool call into multiple sub-tool calls"
+        ],
+        "explanation": "fine_grained's sole job is turning off JSON validation for real-time chunks; it does not affect speed, splitting, or parallelism directly.",
+        "source": "cca_cheatsheet",
+        "number": 197
+      }
+    },
+    {
+      "prompt": "When using fine_grained streaming, what must your code be prepared to handle?",
+      "answer": "Incomplete/invalid JSON, e.g. by wrapping json.loads() in try/except",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.4 streaming",
+        "choices": [
+          "Incomplete/invalid JSON, e.g. by wrapping json.loads() in try/except",
+          "Out-of-order content blocks",
+          "Duplicate tool_use ids",
+          "Missing stop_reason fields"
+        ],
+        "explanation": "With validation disabled you may receive undefined/incomplete JSON, so parsing must be defensively wrapped.",
+        "source": "cca_cheatsheet",
+        "number": 198
+      }
+    },
+    {
+      "prompt": "For most applications, which streaming mode should you default to for tool use?",
+      "answer": "Default mode, with JSON validation on",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.4 streaming",
+        "choices": [
+          "fine_grained=True, since it is strictly better",
+          "Default mode, with JSON validation on",
+          "fine_grained=True with validation re-enabled manually",
+          "Whichever mode has lower latency"
+        ],
+        "explanation": "Fine-grained trades safety for latency and is not a free win, so default validation-on mode is recommended for most apps.",
+        "source": "cca_cheatsheet",
+        "number": 199
+      }
+    },
+    {
+      "prompt": "With tool_choice set to \"auto\", what can the model do?",
+      "answer": "Decide on its own, and may return plain text instead of calling a tool",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.5 tool_choice",
+        "choices": [
+          "It is forced to call a tool every time",
+          "It can only respond with text, never a tool call",
+          "Decide on its own, and may return plain text instead of calling a tool",
+          "It must call every tool in the tools list"
+        ],
+        "explanation": "\"auto\" lets the model choose freely, including answering in text with no tool call at all.",
+        "source": "cca_cheatsheet",
+        "number": 200
+      }
+    },
+    {
+      "prompt": "Which tool_choice value guarantees the model calls SOME tool, without specifying which one?",
+      "answer": "\"any\"",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.5 tool_choice",
+        "choices": [
+          "\"none\"",
+          "\"any\"",
+          "\"auto\"",
+          "\"forced\""
+        ],
+        "explanation": "\"any\" forces a tool call but leaves the choice of which tool up to the model, unlike \"auto\" which may skip tools entirely.",
+        "source": "cca_cheatsheet",
+        "number": 201
+      }
+    },
+    {
+      "prompt": "How do you force the model to call one specific tool, e.g. extract_metadata, first?",
+      "answer": "{\"type\": \"tool\", \"name\": \"extract_metadata\"}",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.5 tool_choice",
+        "choices": [
+          "tool_choice=\"auto\" plus a system prompt instruction",
+          "tool_choice=\"any\" with only one tool defined",
+          "{\"type\": \"forced\", \"tool\": \"extract_metadata\"}",
+          "{\"type\": \"tool\", \"name\": \"extract_metadata\"}"
+        ],
+        "explanation": "Forcing a specific tool uses the {\"type\":\"tool\",\"name\":...} form; \"any\" only forces some tool, not a named one.",
+        "source": "cca_cheatsheet",
+        "number": 202
+      }
+    },
+    {
+      "prompt": "Why is returning a raw \"Error 422: Unprocessable Entity\" string to the model a bad practice?",
+      "answer": "It gives the model nothing actionable, so it gives up or loops forever",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.6 error taxonomy",
+        "choices": [
+          "It is not valid JSON and breaks the API",
+          "It exceeds the tool_result token limit",
+          "It triggers an automatic retry storm",
+          "It gives the model nothing actionable, so it gives up or loops forever"
+        ],
+        "explanation": "Opaque HTTP-style errors give the model no path to recovery; error text must name an actionable next move.",
+        "source": "cca_cheatsheet",
+        "number": 203
+      }
+    },
+    {
+      "prompt": "What flag does MCP use to mark a tool response as an error?",
+      "answer": "isError",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.6 error taxonomy",
+        "choices": [
+          "is_error",
+          "errorFlag",
+          "hasFailed",
+          "isError"
+        ],
+        "explanation": "MCP uses the camelCase isError flag on tool responses (distinct from the Messages API's is_error on tool_result).",
+        "source": "cca_cheatsheet",
+        "number": 204
+      }
+    },
+    {
+      "prompt": "What are the four values of the exam-favored errorCategory field?",
+      "answer": "transient, validation, business, permission",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.6 error taxonomy",
+        "choices": [
+          "transient, validation, business, permission",
+          "retryable, fatal, warning, info",
+          "client, server, timeout, unknown",
+          "network, syntax, logic, auth"
+        ],
+        "explanation": "The taxonomy (mnemonic TVB-P) is transient / validation / business / permission, each a distinct recovery branch the model can pick by name.",
+        "source": "cca_cheatsheet",
+        "number": 205
+      }
+    },
+    {
+      "prompt": "Alongside errorCategory, what boolean field tells the model whether it should attempt the call again?",
+      "answer": "isRetryable",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.6 error taxonomy",
+        "choices": [
+          "isRetryable",
+          "canRetry",
+          "retryFlag",
+          "shouldRetry"
+        ],
+        "explanation": "isRetryable is the named boolean field the exam expects alongside errorCategory in a well-shaped error response.",
+        "source": "cca_cheatsheet",
+        "number": 206
+      }
+    },
+    {
+      "prompt": "For a business-rule violation (not a transient failure), what should the error response set?",
+      "answer": "isRetryable: false",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.6 error taxonomy",
+        "choices": [
+          "isRetryable: true",
+          "isError: false",
+          "isRetryable: false",
+          "errorCategory: transient"
+        ],
+        "explanation": "Business-rule violations won't succeed on retry, so isRetryable should be set to false to signal that to the model.",
+        "source": "cca_cheatsheet",
+        "number": 207
+      }
+    },
+    {
+      "prompt": "A query tool returns zero matching rows. How should this be treated?",
+      "answer": "As a valid, successful empty result — not an error",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.6 error taxonomy",
+        "choices": [
+          "As an access failure requiring a retry decision",
+          "As a permission error",
+          "As is_error: True with errorCategory: transient",
+          "As a valid, successful empty result — not an error"
+        ],
+        "explanation": "Conflating a legitimate empty result with an access failure is a tested trap; a successful query with zero matches is not an error.",
+        "source": "cca_cheatsheet",
+        "number": 208
+      }
+    },
+    {
+      "prompt": "For a calendar API with create/update/cancel/find actions that each need different fields and risk levels, what is the recommended tool design?",
+      "answer": "Split into narrow, per-action tools",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.7 tool granularity",
+        "choices": [
+          "Split into narrow, per-action tools",
+          "One generic tool with an action parameter",
+          "A single tool that infers the action from natural language",
+          "One tool with all fields marked optional"
+        ],
+        "explanation": "A single combined schema forces either all-optional fields (incomplete creates) or inapplicable required fields (invented values), so splitting by risk/shape is preferred.",
+        "source": "cca_cheatsheet",
+        "number": 209
+      }
+    },
+    {
+      "prompt": "Claude Code exposes bash, read, write, edit, glob, and grep as separate tools rather than many specialized ones. What granularity principle does this illustrate?",
+      "answer": "Combine homogeneous, open-ended tasks into a few abstract composable primitives",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.7 tool granularity",
+        "choices": [
+          "Combine homogeneous, open-ended tasks into a few abstract composable primitives",
+          "Wrap each primitive in a confirmation gate",
+          "Maximize tool count to give the model more options",
+          "Split every action into its own narrow tool for safety"
+        ],
+        "explanation": "When actions are homogeneous and composition is open-ended, combining into few abstract primitives beats adding many specialized tools that add wrong choices every turn.",
+        "source": "cca_cheatsheet",
+        "number": 210
+      }
+    },
+    {
+      "prompt": "Three tools are all described as \"returns user information.\" How does the exam frame this problem?",
+      "answer": "As a schema defect — descriptions must be made discriminative",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.7 tool granularity",
+        "choices": [
+          "As a schema defect — descriptions must be made discriminative",
+          "As acceptable, since the model will figure out which to pick",
+          "As a runtime error that will occur",
+          "As a reason to merge all three into one tool"
+        ],
+        "explanation": "Vague overlapping descriptions are scored as a schema defect the definitions must fix, not something to leave for the model to sort out.",
+        "source": "cca_cheatsheet",
+        "number": 211
+      }
+    },
+    {
+      "prompt": "According to the API-docs style guidance, what four elements should a good tool description include?",
+      "answer": "What it does, when to use it over siblings, an example invocation, and error conditions",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.7 tool granularity",
+        "choices": [
+          "Just a short label naming the tool",
+          "What it does, when to use it over siblings, an example invocation, and error conditions",
+          "The tool's version number and author",
+          "The full backend API specification"
+        ],
+        "explanation": "Good descriptions read like API docs: what it does, when to use it over sibling tools, an example call, and error conditions — a short label alone is insufficient.",
+        "source": "cca_cheatsheet",
+        "number": 212
+      }
+    },
+    {
+      "prompt": "A tool wraps a backend endpoint that returns a huge raw response. What should the tool do before returning it to Claude?",
+      "answer": "Curate the results itself (paging/filtering/stitching), not dump the raw response",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.7 tool granularity",
+        "choices": [
+          "Cache the raw response for later tool calls",
+          "Curate the results itself (paging/filtering/stitching), not dump the raw response",
+          "Truncate the response at a fixed byte length",
+          "Return the full raw response and let the model paginate"
+        ],
+        "explanation": "Tools should be designed around the task and return curated results rather than offloading pagination/filtering/stitching onto the model's context.",
+        "source": "cca_cheatsheet",
+        "number": 213
+      }
+    },
+    {
+      "prompt": "How should a consequential action like cancel or delete be handled relative to read-only tools?",
+      "answer": "Gated behind confirmation, following least privilege, while read-only tools stay ungated",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.7 tool granularity",
+        "choices": [
+          "Merged into the same schema as the read tool",
+          "Gated behind confirmation, following least privilege, while read-only tools stay ungated",
+          "Granted equally alongside every other tool",
+          "Disabled entirely and replaced with a read-only equivalent"
+        ],
+        "explanation": "Least privilege means consequential actions get a confirmation gate while low-risk read-only tools remain freely available.",
+        "source": "cca_cheatsheet",
+        "number": 214
+      }
+    },
+    {
+      "prompt": "In an MCP architecture, which side connects outward and runs the Claude tool-use loop?",
+      "answer": "The client (your application)",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.8 MCP roles & primitives",
+        "choices": [
+          "The server",
+          "The model itself",
+          "The client (your application)",
+          "The transport layer"
+        ],
+        "explanation": "The client is your app: it connects out to servers and runs the Claude loop; the server only exposes tools/resources/prompts.",
+        "source": "cca_cheatsheet",
+        "number": 215
+      }
+    },
+    {
+      "prompt": "What does an MCP server expose to a connected client?",
+      "answer": "Tools, resources, and prompts",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.8 MCP roles & primitives",
+        "choices": [
+          "The LLM API key",
+          "The full conversation history",
+          "Tools, resources, and prompts",
+          "Only tools"
+        ],
+        "explanation": "MCP servers wrap an outside service and expose three primitives: tools, resources, and prompts.",
+        "source": "cca_cheatsheet",
+        "number": 216
+      }
+    },
+    {
+      "prompt": "In MCP sampling, which direction does the request flow?",
+      "answer": "Server to client",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.8 MCP roles & primitives",
+        "choices": [
+          "Server directly to Anthropic's API",
+          "Client to server",
+          "Server to client",
+          "Client to Anthropic's API, bypassing the server"
+        ],
+        "explanation": "Sampling lets a server access a language model THROUGH the connected client; the server never calls Claude itself, so the arrow points server → client.",
+        "source": "cca_cheatsheet",
+        "number": 217
+      }
+    },
+    {
+      "prompt": "In MCP sampling, who pays for and holds the API key used to run the LLM call?",
+      "answer": "The client",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.8 MCP roles & primitives",
+        "choices": [
+          "Anthropic, via a shared billing pool",
+          "The server",
+          "Whichever side initiated the connection",
+          "The client"
+        ],
+        "explanation": "Sampling is designed so the client pays and holds the key, which is what makes it viable for public/untrusted servers.",
+        "source": "cca_cheatsheet",
+        "number": 218
+      }
+    },
+    {
+      "prompt": "You want a document's contents injected straight into the prompt for an @mention, with no tool_use/tool_result round-trip. Which MCP primitive is this?",
+      "answer": "Resource",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.8 MCP roles & primitives",
+        "choices": [
+          "Sampling",
+          "Tool",
+          "Prompt",
+          "Resource"
+        ],
+        "explanation": "A Resource is readable data injected directly into the prompt; Tool implies an action with a tool_use/tool_result round-trip.",
+        "source": "cca_cheatsheet",
+        "number": 219
+      }
+    },
+    {
+      "prompt": "What does the MCP acronym stand for?",
+      "answer": "Model Context Protocol",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.8 MCP roles & primitives",
+        "choices": [
+          "Multi-Client Protocol",
+          "Managed Context Pipeline",
+          "Model Control Protocol",
+          "Model Context Protocol"
+        ],
+        "explanation": "MCP is the Model Context Protocol — emphasizing context exchange, not remote control of the model.",
+        "source": "cca_cheatsheet",
+        "number": 220
+      }
+    },
+    {
+      "prompt": "True or false: MCP roots automatically block a server from accessing files outside the declared folder.",
+      "answer": "False — roots are advisory only; you must implement is_path_allowed(path) yourself",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.9 MCP roots & config scope",
+        "choices": [
+          "False — roots are advisory only; you must implement is_path_allowed(path) yourself",
+          "False — roots only apply to remote HTTP servers",
+          "True, but only when using the stdio transport",
+          "True — the SDK enforces the root boundary automatically"
+        ],
+        "explanation": "A root is a \"Staff Only\" sign, not a locked door — enforcement requires the developer to write and call is_path_allowed(path) in every file tool.",
+        "source": "cca_cheatsheet",
+        "number": 221
+      }
+    },
+    {
+      "prompt": "What is the correct order of the MCP connection initialization sequence?",
+      "answer": "Initialize Request → Initialize Result → Initialized Notification",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.9 MCP roots & config scope",
+        "choices": [
+          "Initialized Notification → Initialize Request → Initialize Result",
+          "Initialize Result → Initialize Request → Initialized Notification",
+          "Initialize Request → Initialize Result → Initialized Notification",
+          "Initialize Request → Initialized Notification → Initialize Result"
+        ],
+        "explanation": "You can't acknowledge an answer you haven't received, so the Notification must come last, after the Request/Result exchange.",
+        "source": "cca_cheatsheet",
+        "number": 222
+      }
+    },
+    {
+      "prompt": "Where should a team-shared MCP server configuration live so every teammate gets it on checkout, and how should secrets be referenced?",
+      "answer": ".mcp.json at the project root, version-controlled, with secrets via env expansion like ${GITHUB_TOKEN}",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.9 MCP roots & config scope",
+        "choices": [
+          ".mcp.json at the project root, version-controlled, with secrets via env expansion like ${GITHUB_TOKEN}",
+          ".mcp.json, with credentials committed directly into the file",
+          "~/.claude.json, with secrets hardcoded for convenience",
+          "A .env file only, never committed or shared"
+        ],
+        "explanation": "Project-level, version-controlled .mcp.json shares the server with the whole team, while credentials are referenced via env expansion and never committed.",
+        "source": "cca_cheatsheet",
+        "number": 223
+      }
+    },
+    {
+      "prompt": "Where should you configure an experimental MCP server that's just for your own personal use across projects?",
+      "answer": "~/.claude.json (user/personal scope)",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.9 MCP roots & config scope",
+        "choices": [
+          "~/.claude.json (user/personal scope)",
+          "A shared team config server",
+          ".mcp.json at the project root",
+          "The Anthropic console MCP registry"
+        ],
+        "explanation": "Personal/experimental servers belong in the user-scoped ~/.claude.json, not the version-controlled project-scoped .mcp.json.",
+        "source": "cca_cheatsheet",
+        "number": 224
+      }
+    },
+    {
+      "prompt": "When should you choose a remote/HTTP MCP transport over stdio?",
+      "answer": "Only when the server must live elsewhere, not on the same machine",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.9 MCP roots & config scope",
+        "choices": [
+          "Whenever bidirectional communication is needed",
+          "Always, since HTTP is the modern default",
+          "Only when the server must live elsewhere, not on the same machine",
+          "Only for servers that expose sampling"
+        ],
+        "explanation": "stdio is the simplest transport and gives full bidirectional communication when the server can run as a local subprocess; remote/HTTP is reserved for servers that must live elsewhere.",
+        "source": "cca_cheatsheet",
+        "number": 225
+      }
+    }
+  ]
+}
