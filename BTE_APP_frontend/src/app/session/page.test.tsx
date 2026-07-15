@@ -183,3 +183,99 @@ describe("domain filter", () => {
     expect(screen.queryByLabelText("Domain:")).not.toBeInTheDocument();
   });
 });
+
+describe("scenario + round facets", () => {
+  const s1r1 = mcCard({
+    id: 20,
+    prompt_text: "Atlas R1 agentic question?",
+    metadata: {
+      source: "cca_scenarios",
+      scenario: "Customer Support Resolution Agent",
+      round: 1,
+      domain: "Agentic Architecture & Orchestration",
+      choices: ["a", "b", "c", "d"],
+    },
+  });
+  const s1r2 = mcCard({
+    id: 21,
+    prompt_text: "Atlas R2 prompting question?",
+    metadata: {
+      source: "cca_scenarios",
+      scenario: "Customer Support Resolution Agent",
+      round: 2,
+      domain: "Prompt Engineering & Structured Output",
+      choices: ["a", "b", "c", "d"],
+    },
+  });
+  const s2r1 = mcCard({
+    id: 22,
+    prompt_text: "Research R1 context question?",
+    metadata: {
+      source: "cca_scenarios",
+      scenario: "Multi-Agent Research System",
+      round: 1,
+      domain: "Context Management & Reliability",
+      choices: ["a", "b", "c", "d"],
+    },
+  });
+
+  it("renders Scenario and Round dropdowns with counts", async () => {
+    fetchDecks.mockResolvedValue([mcDeck]);
+    fetchCardsForDeck.mockResolvedValue([s1r1, s1r2, s2r1]);
+    render(<SessionPage />);
+    expect(await screen.findByLabelText("Scenario:")).toBeInTheDocument();
+    expect(screen.getByLabelText("Round:")).toBeInTheDocument();
+    expect(
+      screen.getByRole("option", { name: /All scenarios \(3\)/ })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("option", {
+        name: /Customer Support Resolution Agent \(2\)/,
+      })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("option", { name: /Round 1 \(2\)/ })
+    ).toBeInTheDocument();
+  });
+
+  it("limits the session to the selected scenario", async () => {
+    fetchDecks.mockResolvedValue([mcDeck]);
+    fetchCardsForDeck.mockResolvedValue([s1r1, s1r2, s2r1]);
+    render(<SessionPage />);
+    const select = await screen.findByLabelText("Scenario:");
+    await userEvent.selectOptions(select, "Multi-Agent Research System");
+    await userEvent.click(screen.getByText(/Start Quiz/i));
+    expect(screen.getByText("Research R1 context question?")).toBeInTheDocument();
+    expect(
+      screen.queryByText("Atlas R1 agentic question?")
+    ).not.toBeInTheDocument();
+  });
+
+  it("combines scenario and round filters", async () => {
+    fetchDecks.mockResolvedValue([mcDeck]);
+    fetchCardsForDeck.mockResolvedValue([s1r1, s1r2, s2r1]);
+    render(<SessionPage />);
+    await userEvent.selectOptions(
+      await screen.findByLabelText("Scenario:"),
+      "Customer Support Resolution Agent"
+    );
+    await userEvent.selectOptions(screen.getByLabelText("Round:"), "2");
+    await userEvent.click(screen.getByText(/Start Quiz/i));
+    expect(screen.getByText("Atlas R2 prompting question?")).toBeInTheDocument();
+    expect(
+      screen.queryByText("Atlas R1 agentic question?")
+    ).not.toBeInTheDocument();
+  });
+
+  it("does not render Scenario/Round dropdowns for decks without those fields", async () => {
+    fetchDecks.mockResolvedValue([mcDeck]);
+    fetchCardsForDeck.mockResolvedValue([
+      mcCard({ metadata: { domain: "Agentic Architecture & Orchestration", choices: ["a", "b"] } }),
+    ]);
+    render(<SessionPage />);
+    await waitFor(() => expect(screen.getByText(/Start Quiz/i)).toBeEnabled());
+    expect(screen.queryByLabelText("Scenario:")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Round:")).not.toBeInTheDocument();
+    expect(screen.getByLabelText("Domain:")).toBeInTheDocument();
+  });
+});

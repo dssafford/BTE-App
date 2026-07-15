@@ -33,8 +33,21 @@ const COUNT_OPTIONS = ["5", "10", "20", "all"] as const;
 type CountOption = (typeof COUNT_OPTIONS)[number];
 type Mode = "study" | "quiz";
 
-// Sentinel for the domain <select> meaning "don't filter by domain".
-const ALL_DOMAINS = "__all__";
+// A facet is a card-metadata field the session can be narrowed by. A dropdown
+// renders only when the current deck's cards carry that field, so number/behavior
+// decks (no facets) and the facts deck (domain only) show only what applies.
+const ALL = "__all__";
+type Facet = {
+  key: string;
+  label: string;
+  allLabel: string;
+  format?: (v: string) => string;
+};
+const FACETS: Facet[] = [
+  { key: "scenario", label: "Scenario", allLabel: "All scenarios" },
+  { key: "round", label: "Round", allLabel: "All rounds", format: (v) => `Round ${v}` },
+  { key: "domain", label: "Domain", allLabel: "All domains" },
+];
 
 function ModeToggle({ mode, onChange }: { mode: Mode; onChange: (m: Mode) => void }) {
   return (
@@ -84,10 +97,9 @@ function SessionInner() {
   const [choiceOrders, setChoiceOrders] = useState<(string[] | null)[]>([]);
   const [checked, setChecked] = useState(false);
   const [countOption, setCountOption] = useState<CountOption>("10");
-  // Filter the session to a single domain (card.metadata.domain). Defaults
-  // to ALL_DOMAINS; the dropdown only renders for decks whose cards carry a
-  // domain, so number/behavior decks are unaffected.
-  const [domainFilter, setDomainFilter] = useState<string>(ALL_DOMAINS);
+  // One selected value per facet ("__all__" = unfiltered). Facets absent from
+  // the deck simply never render a dropdown and stay at ALL.
+  const [facetFilters, setFacetFilters] = useState<Record<string, string>>({});
   const [randomize, setRandomize] = useState(true);
   const [threshold, setThreshold] = useState(80);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -134,31 +146,65 @@ function SessionInner() {
     return [];
   }, [deck]);
 
-  // Distinct, sorted domains present in this deck's cards. Empty for decks
-  // whose cards have no metadata.domain (numbers, behaviors) — the dropdown
-  // is hidden in that case.
-  const domains = useMemo<string[]>(() => {
-    const set = new Set<string>();
+  // Distinct values present for each facet, sorted (round numerically, others
+  // lexically). Empty arrays mean the facet's dropdown is hidden.
+  const facetValues = useMemo<Record<string, string[]>>(() => {
+    const sets: Record<string, Set<string>> = {};
+    for (const f of FACETS) sets[f.key] = new Set();
     for (const c of allCards) {
-      const d = c.metadata?.domain;
-      if (typeof d === "string" && d.length > 0) set.add(d);
+      for (const f of FACETS) {
+        const v = c.metadata?.[f.key];
+        if (v !== undefined && v !== null && String(v).length > 0) {
+          sets[f.key].add(String(v));
+        }
+      }
     }
-    return [...set].sort((a, b) => a.localeCompare(b));
+    const out: Record<string, string[]> = {};
+    for (const f of FACETS) {
+      out[f.key] = [...sets[f.key]].sort((a, b) =>
+        f.key === "round" ? Number(a) - Number(b) : a.localeCompare(b)
+      );
+    }
+    return out;
   }, [allCards]);
 
-  // Cards eligible for this session after applying the domain filter.
+  // Cards matching every active facet. A facet at ALL imposes no constraint.
   const availableCards = useMemo<Card[]>(() => {
-    if (domainFilter === ALL_DOMAINS) return allCards;
-    return allCards.filter((c) => c.metadata?.domain === domainFilter);
-  }, [allCards, domainFilter]);
+    return allCards.filter((c) =>
+      FACETS.every((f) => {
+        const sel = facetFilters[f.key] ?? ALL;
+        return sel === ALL || String(c.metadata?.[f.key]) === sel;
+      })
+    );
+  }, [allCards, facetFilters]);
 
-  // A previously-selected domain can disappear when the deck changes; fall
-  // back to ALL_DOMAINS so the filter never points at an absent value.
+  // Count for one facet's options, respecting the OTHER active facets so counts
+  // stay truthful as filters combine.
+  const cardsForFacet = (key: string): Card[] =>
+    allCards.filter((c) =>
+      FACETS.every((f) => {
+        if (f.key === key) return true;
+        const sel = facetFilters[f.key] ?? ALL;
+        return sel === ALL || String(c.metadata?.[f.key]) === sel;
+      })
+    );
+
+  // A selected facet value can vanish when the deck changes; fall back to ALL so
+  // no filter points at an absent value.
   useEffect(() => {
-    if (domainFilter !== ALL_DOMAINS && !domains.includes(domainFilter)) {
-      setDomainFilter(ALL_DOMAINS);
-    }
-  }, [domains, domainFilter]);
+    setFacetFilters((prev) => {
+      let changed = false;
+      const next = { ...prev };
+      for (const f of FACETS) {
+        const sel = prev[f.key];
+        if (sel && sel !== ALL && !facetValues[f.key].includes(sel)) {
+          next[f.key] = ALL;
+          changed = true;
+        }
+      }
+      return changed ? next : prev;
+    });
+  }, [facetValues]);
 
   const startSession = () => {
     let source = availableCards;
@@ -270,33 +316,37 @@ function SessionInner() {
         </header>
 
         <div className="mb-6 flex flex-col items-start gap-4 sm:flex-row sm:flex-wrap sm:items-center">
-          {domains.length > 0 && (
-            <>
-              <label htmlFor="domain" className="font-semibold">
-                Domain:
-              </label>
-              <select
-                id="domain"
-                value={domainFilter}
-                onChange={(e) => setDomainFilter(e.target.value)}
-                className="rounded-md border border-amber-400 bg-zinc-700 px-4 py-2"
-              >
-                <option value={ALL_DOMAINS} className="bg-amber-400 text-zinc-900">
-                  All domains ({allCards.length})
-                </option>
-                {domains.map((d) => {
-                  const n = allCards.filter(
-                    (c) => c.metadata?.domain === d
-                  ).length;
-                  return (
-                    <option key={d} value={d} className="bg-amber-400 text-zinc-900">
-                      {d} ({n})
-                    </option>
-                  );
-                })}
-              </select>
-            </>
-          )}
+          {FACETS.filter((f) => facetValues[f.key].length > 0).map((f) => {
+            const base = cardsForFacet(f.key);
+            const sel = facetFilters[f.key] ?? ALL;
+            return (
+              <span key={f.key} className="flex items-center gap-4">
+                <label htmlFor={f.key} className="font-semibold">
+                  {f.label}:
+                </label>
+                <select
+                  id={f.key}
+                  value={sel}
+                  onChange={(e) =>
+                    setFacetFilters((prev) => ({ ...prev, [f.key]: e.target.value }))
+                  }
+                  className="rounded-md border border-amber-400 bg-zinc-700 px-4 py-2"
+                >
+                  <option value={ALL} className="bg-amber-400 text-zinc-900">
+                    {f.allLabel} ({base.length})
+                  </option>
+                  {facetValues[f.key].map((v) => {
+                    const n = base.filter((c) => String(c.metadata?.[f.key]) === v).length;
+                    return (
+                      <option key={v} value={v} className="bg-amber-400 text-zinc-900">
+                        {(f.format ? f.format(v) : v)} ({n})
+                      </option>
+                    );
+                  })}
+                </select>
+              </span>
+            );
+          })}
           <label htmlFor="count" className="font-semibold">
             Session size:
           </label>
