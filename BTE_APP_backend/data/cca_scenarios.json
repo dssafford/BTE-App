@@ -5554,37 +5554,37 @@
       }
     },
     {
-      "prompt": "You are the architect of a Claude-powered customer-support assistant. Incoming tickets are heterogeneous — billing disputes, technical troubleshooting, return requests. The assistant looks up order and account data through internal tools, drafts a reply, holds multi-turn conversations with the customer, and escalates hard cases to a human. The team is actively iterating on the prompts and hardening it for scale and new integrations.\n\nEngineers testing new agent behavior locally are pointed at the production CRM and billing credentials, risking real customer PII exposure during routine dev testing. What is the root-cause fix?",
-      "answer": "Establish environment-based configuration separation so local/dev testing always uses sandboxed, non-production credentials",
+      "prompt": "You are the architect of a Claude-powered customer-support assistant. Incoming tickets are heterogeneous — billing disputes, technical troubleshooting, return requests. The assistant looks up order and account data through internal tools, drafts a reply, holds multi-turn conversations with the customer, and escalates hard cases to a human. The team is actively iterating on the prompts and hardening it for scale and new integrations.\n\nLocal dev testing environment variables point straight at the production CRM and billing credentials because those values are hardcoded in the project's committed configuration, so every engineer's local agent session touches real customer PII during routine testing. What is the root-cause fix?",
+      "answer": "Move production credentials out of the git-tracked project settings and load sandboxed dev credentials through personal, gitignored settings.local.json so local sessions never see production secrets",
       "metadata": {
         "scenario": "Customer Support Resolution Agent",
         "round": 1,
         "domain": "Claude Code Configuration & Workflows",
         "choices": [
-          "Add a warning comment near the credentials file",
-          "Log all access to production credentials during testing",
-          "Establish environment-based configuration separation so local/dev testing always uses sandboxed, non-production credentials",
-          "Ask engineers to be extra careful when testing locally"
+          "Add a warning comment above the credentials in the config file",
+          "Move production credentials out of the git-tracked project settings and load sandboxed dev credentials through personal, gitignored settings.local.json so local sessions never see production secrets",
+          "Ask engineers to double-check which environment they're pointed at before running tests",
+          "Rotate the production credentials more frequently"
         ],
-        "explanation": "Environment-based config separation, not individual carefulness, is what reliably keeps dev testing off production data.",
+        "explanation": "Claude Code's settings precedence lets personal, gitignored settings.local.json override committed project settings, which is exactly how sandboxed dev credentials should be kept out of git and out of production's reach.",
         "source": "cca_scenarios",
         "number": 309
       }
     },
     {
-      "prompt": "You are the architect of a Claude-powered customer-support assistant. Incoming tickets are heterogeneous — billing disputes, technical troubleshooting, return requests. The assistant looks up order and account data through internal tools, drafts a reply, holds multi-turn conversations with the customer, and escalates hard cases to a human. The team is actively iterating on the prompts and hardening it for scale and new integrations.\n\nAn engineer's tweak to the escalation logic in the system prompt goes straight to production the same day it's written, with no one else looking at it before customers are affected. What is the root-cause fix?",
-      "answer": "Establish a version-controlled review workflow (e.g., PR review) that prompt and config changes must pass through before deployment",
+      "prompt": "You are the architect of a Claude-powered customer-support assistant. Incoming tickets are heterogeneous — billing disputes, technical troubleshooting, return requests. The assistant looks up order and account data through internal tools, drafts a reply, holds multi-turn conversations with the customer, and escalates hard cases to a human. The team is actively iterating on the prompts and hardening it for scale and new integrations.\n\nAn engineer's tweak to the escalation logic lives entirely in their personal ~/.claude/CLAUDE.md, so it takes effect in their own sessions immediately and ships to production the same day, without ever passing through the team's pull-request review. What is the root-cause fix?",
+      "answer": "Move the escalation logic into the project's git-tracked .claude/CLAUDE.md so changes to it are committed, diffed, and reviewed through the normal PR process like any other code",
       "metadata": {
         "scenario": "Customer Support Resolution Agent",
         "round": 1,
         "domain": "Claude Code Configuration & Workflows",
         "choices": [
-          "Manually test the change once before deploying",
-          "Get verbal sign-off from a teammate in chat before deploying",
-          "Establish a version-controlled review workflow (e.g., PR review) that prompt and config changes must pass through before deployment",
-          "Add more logging so problems can be found after the fact"
+          "Move the escalation logic into the project's git-tracked .claude/CLAUDE.md so changes to it are committed, diffed, and reviewed through the normal PR process like any other code",
+          "Ask the engineer to message the team before editing their personal CLAUDE.md",
+          "Periodically diff everyone's personal CLAUDE.md files against each other",
+          "Add a comment at the top of the personal file noting it affects production"
         ],
-        "explanation": "Prompt and config changes should go through the same version-controlled review workflow as code.",
+        "explanation": "Only project-level CLAUDE.md is git-tracked and version-controlled; personal user-level CLAUDE.md changes bypass review entirely, so compliance-relevant logic must live at the project layer.",
         "source": "cca_scenarios",
         "number": 310
       }
@@ -5806,55 +5806,55 @@
       }
     },
     {
-      "prompt": "You are the architect of a Claude-powered customer-support assistant. Incoming tickets are heterogeneous — billing disputes, technical troubleshooting, return requests. The assistant looks up order and account data through internal tools, drafts a reply, holds multi-turn conversations with the customer, and escalates hard cases to a human. The team is actively iterating on the prompts and hardening it for scale and new integrations.\n\nNew prompt versions go straight to production because there's no way to check them against a set of known past cases before shipping, and regressions are only caught after customers complain. What is the root-cause fix?",
-      "answer": "Build an eval/regression test harness that runs each new prompt version against a known test set before it's deployed",
+      "prompt": "You are the architect of a Claude-powered customer-support assistant. Incoming tickets are heterogeneous — billing disputes, technical troubleshooting, return requests. The assistant looks up order and account data through internal tools, drafts a reply, holds multi-turn conversations with the customer, and escalates hard cases to a human. The team is actively iterating on the prompts and hardening it for scale and new integrations.\n\nNew prompt versions go straight to production because there's no scripted way to run them against a set of known past tickets before shipping — someone would have to open Claude Code interactively and manually re-type each test case to check for regressions. What is the root-cause fix?",
+      "answer": "Script the regression check with Claude Code's headless mode (claude -p with --output-format json) so each new prompt version runs against the full test-case set automatically and its structured output is diffed before deploy",
       "metadata": {
         "scenario": "Customer Support Resolution Agent",
         "round": 2,
         "domain": "Claude Code Configuration & Workflows",
         "choices": [
-          "Rely on customer complaints to catch problems early",
-          "Build an eval/regression test harness that runs each new prompt version against a known test set before it's deployed",
-          "Deploy new versions during low-traffic hours to limit blast radius",
-          "Do a manual spot check of the new prompt before deploying"
+          "Script the regression check with Claude Code's headless mode (claude -p with --output-format json) so each new prompt version runs against the full test-case set automatically and its structured output is diffed before deploy",
+          "Have a prompt engineer manually retype a few test conversations before each release",
+          "Deploy first and monitor customer complaints closely afterward",
+          "Add more unit tests for the surrounding application code"
         ],
-        "explanation": "An automated eval/regression harness catches prompt regressions before deployment, rather than after customers are affected.",
+        "explanation": "Headless invocation (-p) with structured --output-format json turns manual spot-checks into a scriptable, automatable eval harness that can run against the whole test set.",
         "source": "cca_scenarios",
         "number": 323
       }
     },
     {
-      "prompt": "You are the architect of a Claude-powered customer-support assistant. Incoming tickets are heterogeneous — billing disputes, technical troubleshooting, return requests. The assistant looks up order and account data through internal tools, drafts a reply, holds multi-turn conversations with the customer, and escalates hard cases to a human. The team is actively iterating on the prompts and hardening it for scale and new integrations.\n\nTwo engineers each set up the project locally with different Python versions and different sets of environment variables, and a bug that only reproduces under one engineer's local configuration costs the team a full day to track down before anyone realizes it's an environment mismatch, not a real regression. What is the root-cause fix?",
-      "answer": "Standardize on a reproducible local development environment (pinned dependency versions, a documented .env template, or containerization) so setup is consistent across engineers",
+      "prompt": "You are the architect of a Claude-powered customer-support assistant. Incoming tickets are heterogeneous — billing disputes, technical troubleshooting, return requests. The assistant looks up order and account data through internal tools, drafts a reply, holds multi-turn conversations with the customer, and escalates hard cases to a human. The team is actively iterating on the prompts and hardening it for scale and new integrations.\n\nEach engineer's tool-permission rules live only in their own personal, gitignored settings.local.json, so one engineer's agent can run a Bash command the other's can't — and a change that fails for only one of them costs the team a full day of debugging before anyone realizes it's a permissions difference, not a real regression. What is the root-cause fix?",
+      "answer": "Move the shared, required permission rules into the git-tracked project .claude/settings.json so every engineer's agent has identical tool access, reserving settings.local.json for genuinely personal overrides",
       "metadata": {
         "scenario": "Customer Support Resolution Agent",
         "round": 2,
         "domain": "Claude Code Configuration & Workflows",
         "choices": [
-          "Add more print statements to narrow down where behavior diverges",
-          "Ask engineers to document their personal setup in a wiki page",
-          "Have engineers verbally confirm their versions match before debugging together",
-          "Standardize on a reproducible local development environment (pinned dependency versions, a documented .env template, or containerization) so setup is consistent across engineers"
+          "Have engineers verbally confirm their permission rules match before debugging together",
+          "Move the shared, required permission rules into the git-tracked project .claude/settings.json so every engineer's agent has identical tool access, reserving settings.local.json for genuinely personal overrides",
+          "Ask engineers to document their personal settings in a wiki page",
+          "Add more logging so permission-related failures are easier to spot after the fact"
         ],
-        "explanation": "Environment drift between engineers' local setups is solved by a standardized, reproducible dev environment, not manual coordination or extra debugging output.",
+        "explanation": "Settings precedence means project-level .claude/settings.json is git-tracked and shared, while settings.local.json is personal and gitignored — required rules belong in the former so they're consistent across engineers.",
         "source": "cca_scenarios",
         "number": 324
       }
     },
     {
-      "prompt": "You are the architect of a Claude-powered customer-support assistant. Incoming tickets are heterogeneous — billing disputes, technical troubleshooting, return requests. The assistant looks up order and account data through internal tools, drafts a reply, holds multi-turn conversations with the customer, and escalates hard cases to a human. The team is actively iterating on the prompts and hardening it for scale and new integrations.\n\nA new engineer builds a duplicate lookup_shipping_status tool because they didn't realize an equivalent tool already existed in the codebase. What is the root-cause fix?",
-      "answer": "Maintain discoverable documentation or a registry of existing tools and configs that new engineers can consult",
+      "prompt": "You are the architect of a Claude-powered customer-support assistant. Incoming tickets are heterogeneous — billing disputes, technical troubleshooting, return requests. The assistant looks up order and account data through internal tools, drafts a reply, holds multi-turn conversations with the customer, and escalates hard cases to a human. The team is actively iterating on the prompts and hardening it for scale and new integrations.\n\nA new engineer builds a duplicate lookup_shipping_status tool because they had no quick way to see what the project's CLAUDE.md already documented about existing tools before starting work. What is the root-cause fix?",
+      "answer": "Have new engineers run /memory to open the project's CLAUDE.md and review the documented tool inventory before building anything new",
       "metadata": {
         "scenario": "Customer Support Resolution Agent",
         "round": 2,
         "domain": "Claude Code Configuration & Workflows",
         "choices": [
-          "Maintain discoverable documentation or a registry of existing tools and configs that new engineers can consult",
           "Rely on tribal knowledge from senior engineers",
-          "Ask in the team chat before building anything new",
-          "Search the codebase manually each time before adding a tool"
+          "Search the codebase manually each time before adding a tool",
+          "Have new engineers run /memory to open the project's CLAUDE.md and review the documented tool inventory before building anything new",
+          "Ask in the team chat before building anything new"
         ],
-        "explanation": "A discoverable tool/config registry prevents duplicate work far more reliably than ad hoc chat questions or tribal knowledge.",
+        "explanation": "The /memory slash command opens the project's CLAUDE.md directly, making a maintained tool inventory quickly discoverable instead of relying on tribal knowledge or ad hoc questions.",
         "source": "cca_scenarios",
         "number": 325
       }
@@ -6076,8 +6076,8 @@
       }
     },
     {
-      "prompt": "You are the architect of a Claude-powered customer-support assistant. Incoming tickets are heterogeneous — billing disputes, technical troubleshooting, return requests. The assistant looks up order and account data through internal tools, drafts a reply, holds multi-turn conversations with the customer, and escalates hard cases to a human. The team is actively iterating on the prompts and hardening it for scale and new integrations.\n\nThe team wants to gradually enable a newly built write-capable refund action for real customers, but the current deployment mechanism only supports flipping the capability on for the entire customer base at once, with no way to try it on a small slice of tickets first. What is the root-cause fix?",
-      "answer": "Add feature-flag or percentage-based rollout capability to the deployment configuration so risky new capabilities can be enabled gradually instead of switched on for everyone simultaneously",
+      "prompt": "You are the architect of a Claude-powered customer-support assistant. Incoming tickets are heterogeneous — billing disputes, technical troubleshooting, return requests. The assistant looks up order and account data through internal tools, drafts a reply, holds multi-turn conversations with the customer, and escalates hard cases to a human. The team is actively iterating on the prompts and hardening it for scale and new integrations.\n\nThe team wants to try the newly built write-capable refund action on a small slice of tickets before trusting it broadly, but the single support agent handles every ticket with the same full tool access, so there's no way to give only some conversations the new capability. What is the root-cause fix?",
+      "answer": "Define a separate, restricted-tool subagent (.claude/agents/) that alone has access to the write-capable refund action, and route only the pilot slice of tickets to it",
       "metadata": {
         "scenario": "Customer Support Resolution Agent",
         "round": 3,
@@ -6085,10 +6085,10 @@
         "choices": [
           "Enable the new capability during off-peak hours to limit exposure",
           "Have an engineer manually watch the first hour of tickets after enabling it",
-          "Add feature-flag or percentage-based rollout capability to the deployment configuration so risky new capabilities can be enabled gradually instead of switched on for everyone simultaneously",
+          "Define a separate, restricted-tool subagent (.claude/agents/) that alone has access to the write-capable refund action, and route only the pilot slice of tickets to it",
           "Announce the change to the support team before enabling it"
         ],
-        "explanation": "Gradually de-risking a new capability requires feature-flag or percentage-based rollout configuration, not off-peak timing or manual observation after an all-or-nothing switch.",
+        "explanation": "Subagents defined in .claude/agents/ carry their own tool restrictions, so a pilot capability can be scoped to a dedicated subagent instead of switched on for the single agent handling every ticket.",
         "source": "cca_scenarios",
         "number": 338
       }
@@ -6112,19 +6112,19 @@
       }
     },
     {
-      "prompt": "You are the architect of a Claude-powered customer-support assistant. Incoming tickets are heterogeneous — billing disputes, technical troubleshooting, return requests. The assistant looks up order and account data through internal tools, drafts a reply, holds multi-turn conversations with the customer, and escalates hard cases to a human. The team is actively iterating on the prompts and hardening it for scale and new integrations.\n\nDeploying a new prompt or tool-configuration version requires briefly taking the support agent offline while the switch happens, and any conversation that was mid-flight during that window is silently dropped, leaving the customer stuck with no reply. What is the root-cause fix?",
-      "answer": "Adopt a zero-downtime deployment strategy (e.g., blue-green or rolling deployment) so configuration updates never interrupt in-flight conversations",
+      "prompt": "You are the architect of a Claude-powered customer-support assistant. Incoming tickets are heterogeneous — billing disputes, technical troubleshooting, return requests. The assistant looks up order and account data through internal tools, drafts a reply, holds multi-turn conversations with the customer, and escalates hard cases to a human. The team is actively iterating on the prompts and hardening it for scale and new integrations.\n\nBefore the write-capable refund and cancellation tools are allowed to touch production billing, the team wants a human to see exactly which tool calls the agent intends to make on a risky ticket — but today every tool call the agent decides on executes immediately, with no chance to review it first. What is the root-cause fix?",
+      "answer": "Run risky conversations in plan mode so the agent proposes its intended tool calls for human review before any of them execute, instead of executing directly",
       "metadata": {
         "scenario": "Customer Support Resolution Agent",
         "round": 3,
         "domain": "Claude Code Configuration & Workflows",
         "choices": [
-          "Show the customer a \"we'll be right back\" message during deploys",
-          "Schedule deployments for the lowest-traffic hour of the day",
-          "Warn customers in advance that brief outages may occur",
-          "Adopt a zero-downtime deployment strategy (e.g., blue-green or rolling deployment) so configuration updates never interrupt in-flight conversations"
+          "Show the customer a message asking them to wait for manual review",
+          "Run risky conversations in plan mode so the agent proposes its intended tool calls for human review before any of them execute, instead of executing directly",
+          "Log every tool call so it can be audited after the fact",
+          "Restrict risky tool calls to business hours when more staff are available"
         ],
-        "explanation": "Interrupting in-flight conversations during releases is solved by a zero-downtime deployment strategy, not by timing deploys for low traffic or messaging around the outage.",
+        "explanation": "Plan mode has the agent present its intended actions for approval before execution, which is exactly the preview-then-approve step risky write actions need.",
         "source": "cca_scenarios",
         "number": 340
       }
@@ -6346,8 +6346,8 @@
       }
     },
     {
-      "prompt": "You are the architect of a Claude-powered customer-support assistant. Incoming tickets are heterogeneous — billing disputes, technical troubleshooting, return requests. The assistant looks up order and account data through internal tools, drafts a reply, holds multi-turn conversations with the customer, and escalates hard cases to a human. The team is actively iterating on the prompts and hardening it for scale and new integrations.\n\nDuring an incident, on-call engineers can't quickly tell which version of the prompt and tool configuration is actually live, slowing down diagnosis and rollback. What is the root-cause fix?",
-      "answer": "Adopt versioned/tagged deployments for prompts and configs so the live version is always identifiable and rollback is traceable",
+      "prompt": "You are the architect of a Claude-powered customer-support assistant. Incoming tickets are heterogeneous — billing disputes, technical troubleshooting, return requests. The assistant looks up order and account data through internal tools, drafts a reply, holds multi-turn conversations with the customer, and escalates hard cases to a human. The team is actively iterating on the prompts and hardening it for scale and new integrations.\n\nDuring an incident, on-call engineers can't quickly tell which version of the prompt and tool configuration is actually live, so they waste time guessing from git log or asking whoever deployed last. What is the root-cause fix?",
+      "answer": "Add a project slash command (.claude/commands/) that on-call engineers run to print the exact active prompt/config version, instead of reconstructing it by hand during an incident",
       "metadata": {
         "scenario": "Customer Support Resolution Agent",
         "round": 4,
@@ -6355,10 +6355,10 @@
         "choices": [
           "Redeploy from memory of what should be running",
           "Check the git log manually to guess what's deployed",
-          "Ask whoever deployed last what they changed",
-          "Adopt versioned/tagged deployments for prompts and configs so the live version is always identifiable and rollback is traceable"
+          "Add a project slash command (.claude/commands/) that on-call engineers run to print the exact active prompt/config version, instead of reconstructing it by hand during an incident",
+          "Ask whoever deployed last what they changed"
         ],
-        "explanation": "Versioned, tagged deployments make the live configuration identifiable and rollback traceable during incidents.",
+        "explanation": "A project-defined slash command in .claude/commands/ gives on-call engineers a single, consistent way to surface the live configuration version instead of reconstructing it under incident pressure.",
         "source": "cca_scenarios",
         "number": 353
       }
@@ -6382,8 +6382,8 @@
       }
     },
     {
-      "prompt": "You are the architect of a Claude-powered customer-support assistant. Incoming tickets are heterogeneous — billing disputes, technical troubleshooting, return requests. The assistant looks up order and account data through internal tools, drafts a reply, holds multi-turn conversations with the customer, and escalates hard cases to a human. The team is actively iterating on the prompts and hardening it for scale and new integrations.\n\nAnyone on the team can merge changes to the fraud and billing escalation logic without any designated reviewer responsible for compliance-sensitive flows. What is the root-cause fix?",
-      "answer": "Establish a governance workflow requiring designated approval for changes to compliance-sensitive configuration",
+      "prompt": "You are the architect of a Claude-powered customer-support assistant. Incoming tickets are heterogeneous — billing disputes, technical troubleshooting, return requests. The assistant looks up order and account data through internal tools, drafts a reply, holds multi-turn conversations with the customer, and escalates hard cases to a human. The team is actively iterating on the prompts and hardening it for scale and new integrations.\n\nAny engineer's Claude Code session can directly Edit or Write the fraud and billing escalation logic files with no distinction from routine prompt tweaks, so compliance-sensitive changes ship with the same casual review as everything else. What is the root-cause fix?",
+      "answer": "Add a permissions rule (deny/ask) that blocks direct Edit/Write access to the compliance-sensitive escalation-logic files unless a designated reviewer's approval is attached",
       "metadata": {
         "scenario": "Customer Support Resolution Agent",
         "round": 4,
@@ -6391,10 +6391,10 @@
         "choices": [
           "Conduct a post-hoc audit of changes periodically",
           "Rely on good-faith review from whoever is available",
-          "Establish a governance workflow requiring designated approval for changes to compliance-sensitive configuration",
+          "Add a permissions rule (deny/ask) that blocks direct Edit/Write access to the compliance-sensitive escalation-logic files unless a designated reviewer's approval is attached",
           "Use general code review for all changes without distinction"
         ],
-        "explanation": "Compliance-sensitive configuration needs a governance workflow with designated required approval, not generic or after-the-fact review.",
+        "explanation": "Permission rules can deny or require ask-approval for Edit/Write on specific paths, letting compliance-sensitive files be gated behind designated-reviewer approval instead of routine review.",
         "source": "cca_scenarios",
         "number": 355
       }

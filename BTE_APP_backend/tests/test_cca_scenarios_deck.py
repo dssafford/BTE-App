@@ -90,3 +90,22 @@ def test_prompt_contains_setup_and_explanation_nonempty():
 def test_numbers_unique_and_complete():
     numbers = sorted(c["metadata"]["number"] for c in load()["cards"])
     assert numbers == list(range(1, 361))
+
+
+def test_stems_distinct_within_scenario():
+    """The spec requires the 4 rounds of a scenario to be genuinely distinct.
+    Each prompt is '<shared setup paragraph>\n\n<stem>'; within a scenario the
+    stems (everything after the first blank-line split) must all differ."""
+    cards = load()["cards"]
+    by_scenario = {}
+    for c in cards:
+        by_scenario.setdefault(c["metadata"]["scenario"], []).append(c)
+    for scenario, group in by_scenario.items():
+        stems = []
+        for c in group:
+            parts = c["prompt"].split("\n\n", 1)
+            stem = parts[1] if len(parts) == 2 else c["prompt"]
+            stems.append(" ".join(stem.split()).lower())
+        assert len(set(stems)) == len(stems), (
+            f"{scenario}: {len(stems) - len(set(stems))} duplicate stem(s) across rounds"
+        )
