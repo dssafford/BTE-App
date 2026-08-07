@@ -784,13 +784,13 @@
           "Project > Managed > Local > User",
           "User > Project > Local > Managed (most specific wins)"
         ],
-        "explanation": "Scalar settings resolve by strict file-rank override, highest layer wins: Managed > Local > Project > User; the other orders and 'merge to most restrictive' describe permission evaluation, not scalar settings.",
+        "explanation": "Scalar settings resolve by strict file-rank override, highest layer wins: Managed > Local > Project > User; the other orders and 'merge to most restrictive' describe permission evaluation, not scalar settings. ⚠️ Scope: this is the FILE rank. The docs also list command-line arguments as a distinct layer sitting between managed policy and local settings, so the full chain is Managed > CLI args > Local > Project > User. Ranking the files alone, the order above is correct.",
         "source": "cca_cheatsheet",
         "number": 46
       }
     },
     {
-      "prompt": "What mnemonic represents the Claude Code settings precedence order (Managed > Local > Project > User)?",
+      "prompt": "What mnemonic represents the Claude Code settings FILE precedence order (Managed > Local > Project > User)?",
       "answer": "ML-PU",
       "metadata": {
         "domain": "Claude Code Configuration & Workflows",
@@ -801,7 +801,7 @@
           "SO-PV",
           "D-A-A"
         ],
-        "explanation": "ML-PU spells out Managed-Local-Project-User; D-A-A is the permission order mnemonic and SO-PV is the settings-vs-permissions mnemonic, so both are plausible but wrong here.",
+        "explanation": "ML-PU spells out Managed-Local-Project-User; D-A-A is the permission order mnemonic and SO-PV is the settings-vs-permissions mnemonic, so both are plausible but wrong here. ⚠️ Scope: this is the FILE rank. The docs also list command-line arguments as a distinct layer sitting between managed policy and local settings, so the full chain is Managed > CLI args > Local > Project > User. Ranking the files alone, the order above is correct.",
         "source": "cca_cheatsheet",
         "number": 47
       }
@@ -886,7 +886,7 @@
           ".claude/settings.json in the repo root",
           "~/.claude/settings.json"
         ],
-        "explanation": "Managed settings are deployed by IT/MDM to a fixed system path outside user or project control, which is why they always win the Managed>Local>Project>User precedence; the other options are user- or project-controlled locations that don't have managed rank.",
+        "explanation": "Managed settings are deployed by IT/MDM to a fixed system path outside user or project control, which is why they always win the settings FILE rank (Managed > Local > Project > User); the other options are user- or project-controlled locations that don't have managed rank. ⚠️ Scope: that chain is the FILE rank and it governs scalar settings; command-line arguments are a further layer just below managed, and permission rules are not rank-governed at all.",
         "source": "cca_cheatsheet",
         "number": 52
       }

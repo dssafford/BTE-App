@@ -666,12 +666,12 @@ C(D3, "3.1 files and locations",
   "Directory per skill; the file is always SKILL.md. Contrast slash commands, where the FILENAME becomes /name.")
 
 C(D3, "3.2 settings precedence",
-  "Rank the settings layers from highest to lowest, for scalar settings.",
+  "Rank ALL the scalar-settings precedence layers from highest to lowest — not just the settings FILES, but every layer the docs list.",
   "managed-settings.json → command-line arguments → .claude/settings.local.json → .claude/settings.json → user settings",
   "managed-settings.json → .claude/settings.local.json → .claude/settings.json → command-line arguments → user settings",
   "command-line arguments → managed-settings.json → .claude/settings.json → .claude/settings.local.json → user settings",
   "user settings → .claude/settings.json → .claude/settings.local.json → command-line arguments → managed-settings.json",
-  "Five layers, not four: the docs list command-line arguments as a distinct layer between managed policy and local settings. Mnemonic: OVERRIDE for settings, VETO for permissions.")
+  "FIVE layers, not four — command-line arguments are a distinct layer between managed policy and local settings. ⚠️ This does NOT contradict the file-rank cards elsewhere in the bank: rank the FILES alone and Managed > Local > Project > User is right, because CLI arguments are not a file. The chain only grows when non-file layers are in scope, and this stem puts them in scope. Mnemonic: OVERRIDE for settings, VETO for permissions.")
 
 C(D3, "3.2 settings precedence",
   "A tool is allowed in the local layer and denied in the project layer. Result — and does the layer RANKING decide it?",

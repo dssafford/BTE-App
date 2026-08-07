@@ -6028,36 +6028,36 @@
     },
     {
       "prompt": "A repo's committed .claude/settings.json denies a Bash command, but one engineer's gitignored .claude/settings.local.json allows that same command. No managed policy is involved. Which setting applies for that engineer?",
-      "answer": "The local settings.local.json rule",
+      "answer": "The project's deny — a deny vetoes from any scope, so it wins even though local outranks project",
       "metadata": {
         "source": "cca_reference",
         "number": 11,
         "domain": "Claude Code Configuration & Workflows",
         "subdomain": "Reference · Settings precedence",
         "choices": [
-          "The local settings.local.json rule",
-          "The shared settings.json rule, since team-wide config always wins",
-          "Neither — Claude asks the engineer to confirm each time",
-          "Whichever rule appears first alphabetically in the merged config"
+          "The local settings.local.json rule, since local outranks project in the settings precedence chain",
+          "The project's deny — a deny vetoes from any scope, so it wins even though local outranks project",
+          "Neither — Claude asks the engineer to confirm each time the command comes up",
+          "The local rule for that engineer's interactive session, while CI still sees the project deny"
         ],
-        "explanation": "Precedence is Managed > Local > Project > User — the counter-intuitive part is that the gitignored local file outranks the shared, committed project file."
+        "explanation": "⚠️ This is the discriminating case: rank and veto point in OPPOSITE directions, and veto wins. Local genuinely does outrank project — for scalar settings. For a permission it is irrelevant, so the gitignored allow does NOT buy the engineer the command. Permission rules are NOT resolved by file rank. They merge across every layer and are evaluated deny -> ask -> allow, so a deny vetoes from any scope regardless of where it sits in the chain. File rank (Managed > Local > Project > User) governs SCALAR settings only — model, env and the like. Mnemonic: settings OVERRIDE, permissions VETO."
       }
     },
     {
       "prompt": "A contractor's personal ~/.claude/settings.json allows a tool that the project's committed .claude/settings.json denies, with no managed or local override present. Which one governs?",
-      "answer": "The project's settings.json, since project outranks user scope",
+      "answer": "The project's deny — because a deny vetoes from any scope, not because project outranks user",
       "metadata": {
         "source": "cca_reference",
         "number": 12,
         "domain": "Claude Code Configuration & Workflows",
         "subdomain": "Reference · Settings precedence",
         "choices": [
-          "The project's settings.json, since project outranks user scope",
-          "The user's settings.json, since personal preferences take priority",
-          "Neither — Claude asks for confirmation since they conflict",
-          "The tool is allowed since at least one scope permits it"
+          "The project's deny — because a deny vetoes from any scope, not because project outranks user",
+          "The project's settings.json, because project scope outranks user scope in the precedence chain",
+          "The user's settings.json, since personal preferences take priority over shared defaults",
+          "The tool is allowed, since at least one scope in the merged configuration permits it"
         ],
-        "explanation": "In the precedence order Managed > Local > Project > User, project settings beat user settings whenever there's no local or managed override in play."
+        "explanation": "The verdict is right either way here, because rank and veto happen to agree — which is what makes 'project outranks user' feel like the explanation. It is not. Flip the layers (user denies, project allows) and the rank reasoning gives the WRONG answer while the veto reasoning still gives the right one. Permission rules are NOT resolved by file rank. They merge across every layer and are evaluated deny -> ask -> allow, so a deny vetoes from any scope regardless of where it sits in the chain. File rank (Managed > Local > Project > User) governs SCALAR settings only — model, env and the like. Mnemonic: settings OVERRIDE, permissions VETO."
       }
     },
     {
@@ -6074,7 +6074,7 @@
           "Local project > Managed > Project (shared) > User",
           "User > Project (shared) > Local project > Managed"
         ],
-        "explanation": "The documented order is Managed > Local > Project > User; local project settings rank second, above the shared project file and user settings."
+        "explanation": "The documented FILE rank is Managed > Local > Project > User; local project settings rank second, above the shared project file and user settings. ⚠️ Scope: this is the FILE rank. The docs also list command-line arguments as a distinct layer sitting between managed policy and local settings, so the full chain is Managed > CLI args > Local > Project > User. Ranking the files alone, the order above is correct."
       }
     },
     {
@@ -6096,19 +6096,19 @@
     },
     {
       "prompt": "A junior engineer reasons: 'the team's shared settings.json denies rm -rf, but my personal ~/.claude/settings.json allows it — since these conflict, Claude must not know which I meant, so it'll just ask me before running the command.' Is this reasoning correct?",
-      "answer": "No — the action is denied outright: deny wins over allow, and project scope also outranks user scope, so there's no fallback to asking",
+      "answer": "No — the action is denied outright: deny wins over allow from any scope, so there is no fallback to asking",
       "metadata": {
         "source": "cca_reference",
         "number": 15,
         "domain": "Claude Code Configuration & Workflows",
         "subdomain": "Reference · Settings precedence",
         "choices": [
-          "No — the action is denied outright: deny wins over allow, and project scope also outranks user scope, so there's no fallback to asking",
-          "Yes — whenever two scopes disagree about a rule, Claude is designed to pause the run and explicitly ask the user which one should apply",
+          "No — the action is denied outright: deny wins over allow from any scope, so there is no fallback to asking",
+          "Yes — whenever two scopes disagree about a rule, Claude pauses the run and asks which one should apply",
           "No — the action is allowed, because personal preferences override team defaults",
           "Yes, but only when the conflicting rule involves a destructive command like rm"
         ],
-        "explanation": "This is a named exam trap: resolution is deterministic, not a fallback to asking. Deny beats allow, and project beats user, so the command is simply denied."
+        "explanation": "A named exam trap: resolution is deterministic, never a fallback to asking. Note the reason is the deny VETO alone — do not add 'and project outranks user' as a co-reason, which is a different mechanism that governs scalar settings. Permission rules are NOT resolved by file rank. They merge across every layer and are evaluated deny -> ask -> allow, so a deny vetoes from any scope regardless of where it sits in the chain. File rank (Managed > Local > Project > User) governs SCALAR settings only — model, env and the like. Mnemonic: settings OVERRIDE, permissions VETO."
       }
     },
     {
@@ -6125,7 +6125,7 @@
           "It beats Managed policy but loses to Project (shared) settings",
           "It beats nothing; all scopes are merged with equal weight"
         ],
-        "explanation": "Local project ranks second overall: above Project and User, but below Managed, which nothing can override."
+        "explanation": "Local project ranks second among the FILES: above Project and User, but below Managed, which nothing can override. ⚠️ Scope: this is the FILE rank. The docs also list command-line arguments as a distinct layer sitting between managed policy and local settings, so the full chain is Managed > CLI args > Local > Project > User. Ranking the files alone, the order above is correct."
       }
     },
     {
@@ -6249,19 +6249,19 @@
     },
     {
       "prompt": "A project-level deny rule for Bash(rm:*) and a user-level allow rule for the same pattern both exist, with no managed or local override. Which rule governs, and why?",
-      "answer": "The project-level deny, reinforced by both deny-over-allow evaluation and project-over-user scope precedence",
+      "answer": "The project-level deny — deny-over-allow evaluation settles it on its own, independently of scope rank",
       "metadata": {
         "source": "cca_reference",
         "number": 24,
         "domain": "Claude Code Configuration & Workflows",
         "subdomain": "Reference · Permissions",
         "choices": [
+          "The project-level deny — deny-over-allow evaluation settles it on its own, independently of scope rank",
           "The project-level deny, reinforced by both deny-over-allow evaluation and project-over-user scope precedence",
-          "The user-level allow, since user settings are most specific to the individual",
-          "Neither applies; Claude asks the user to pick one interactively",
-          "Both apply simultaneously, splitting behavior by read versus write"
+          "The user-level allow, since user settings are the most specific to the individual",
+          "Neither applies; Claude asks the user to pick one interactively"
         ],
-        "explanation": "Two independent rules point the same direction here: deny beats allow in evaluation order, and project scope beats user scope in precedence."
+        "explanation": "The tempting distractor calls scope precedence a second, reinforcing reason. It is not a reason at all here — rank does not apply to permissions, and treating it as backup support is what produces the wrong answer on the case where the two disagree. Permission rules are NOT resolved by file rank. They merge across every layer and are evaluated deny -> ask -> allow, so a deny vetoes from any scope regardless of where it sits in the chain. File rank (Managed > Local > Project > User) governs SCALAR settings only — model, env and the like. Mnemonic: settings OVERRIDE, permissions VETO."
       }
     },
     {
