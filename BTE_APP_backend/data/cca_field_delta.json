@@ -1,0 +1,2845 @@
+{
+  "deck_name": "CCA-F Field Delta",
+  "match_strategy": "multi_choice",
+  "render_config": {
+    "fields": [
+      "domain",
+      "subdomain"
+    ]
+  },
+  "cards": [
+    {
+      "prompt": "In the Python Agent SDK, you set a tool denylist on a ClaudeAgentOptions object and on an AgentDefinition object. Which casing does each take?",
+      "answer": "ClaudeAgentOptions takes snake_case (disallowed_tools); AgentDefinition takes camelCase (disallowedTools)",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.x Agent SDK identifiers",
+        "choices": [
+          "Both take snake_case, because the whole package is Python and Python is snake_case",
+          "ClaudeAgentOptions takes snake_case (disallowed_tools); AgentDefinition takes camelCase (disallowedTools)",
+          "ClaudeAgentOptions takes camelCase (disallowedTools); AgentDefinition takes snake_case (disallowed_tools)",
+          "Both take camelCase, because both mirror the Claude Code JSON settings surface"
+        ],
+        "explanation": "The same concept takes both spellings inside one import. ClaudeAgentOptions is the Python-shaped options object you construct (snake_case); AgentDefinition mirrors subagent markdown frontmatter, which is Claude Code-shaped (camelCase). The casing is a property of the OBJECT, not of the concept — so the word alone can never answer it.",
+        "source": "cca_field_delta",
+        "number": 1,
+        "trouble_card": "miss-D1-7"
+      }
+    },
+    {
+      "prompt": "Which four ClaudeAgentOptions fields have same-named camelCase twins on AgentDefinition?",
+      "answer": "disallowed_tools, mcp_servers, max_turns, permission_mode",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.x Agent SDK identifiers",
+        "choices": [
+          "allowed_tools, system_prompt, model, cwd",
+          "hooks, agents, setting_sources, settings",
+          "disallowed_tools, mcp_servers, max_turns, permission_mode",
+          "resume, fork_session, add_dirs, env"
+        ],
+        "explanation": "The verified pairs are disallowed_tools/disallowedTools, mcp_servers/mcpServers, max_turns/maxTurns, permission_mode/permissionMode. AgentDefinition's full field set is description, prompt, tools, model, disallowedTools, mcpServers, maxTurns, permissionMode.",
+        "source": "cca_field_delta",
+        "number": 2
+      }
+    },
+    {
+      "prompt": "To run Claude Code's agent loop from inside your own Python service, what do you import — and what is NOT importable?",
+      "answer": "Import claude_agent_sdk; claude_code is the CLI binary, not a package — importing it raises ImportError",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.x Agent SDK identifiers",
+        "choices": [
+          "Import claude_code; claude_agent_sdk is the TypeScript-only distribution",
+          "Import claude_agent_sdk; claude_code is the CLI binary, not a package — importing it raises ImportError",
+          "Import anthropic.claude_code; the Agent SDK is only a thin wrapper over it",
+          "Either works — claude_code is an alias that re-exports claude_agent_sdk"
+        ],
+        "explanation": "CLI you run, SDK you import. The pip package is claude-agent-sdk (TypeScript twin: @anthropic-ai/claude-agent-sdk). claude-code is a program, not a library.",
+        "source": "cca_field_delta",
+        "number": 3,
+        "trouble_card": "miss-D3-6"
+      }
+    },
+    {
+      "prompt": "In the Agent SDK, what is the difference between query() and ClaudeSDKClient?",
+      "answer": "query() is one-shot — a new session per call, returning an async iterator of messages; ClaudeSDKClient holds a persistent session across exchanges",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.x Agent SDK identifiers",
+        "choices": [
+          "query() is one-shot — a new session per call, returning an async iterator of messages; ClaudeSDKClient holds a persistent session across exchanges",
+          "query() is synchronous and blocking; ClaudeSDKClient is the async version of the same one-shot call",
+          "query() runs locally against the CLI; ClaudeSDKClient calls the hosted Anthropic agent service",
+          "query() is the streaming interface; ClaudeSDKClient is the batch interface for many prompts at once"
+        ],
+        "explanation": "query() = new session per call, returns an async iterator. ClaudeSDKClient = persistent session, with connect(), receive_response() and interrupt().",
+        "source": "cca_field_delta",
+        "number": 4
+      }
+    },
+    {
+      "prompt": "Which SDK message type is the terminal one, on which stop_reason surfaces?",
+      "answer": "ResultMessage",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.x Agent SDK identifiers",
+        "choices": [
+          "AssistantMessage",
+          "ResultMessage",
+          "SystemMessage",
+          "FinalMessage"
+        ],
+        "explanation": "ResultMessage is the terminal message type. Note that stop_reason is an API (BODY-bin) word riding up through the SDK — its home is the Messages API, not the SDK.",
+        "source": "cca_field_delta",
+        "number": 5
+      }
+    },
+    {
+      "prompt": "Your loop branches on `if stop_reason == \"tool_use\": continue else: done`. Which two stop_reason values make that wrong?",
+      "answer": "max_tokens and refusal — both produce tool-call-free text that looks finished but isn't",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.1 agentic loops",
+        "choices": [
+          "end_turn and stop_sequence — both can be emitted mid-tool-call",
+          "pause_turn and end_turn — both mean the server wants the response passed back",
+          "stop_sequence and pause_turn — both are silent truncations",
+          "max_tokens and refusal — both produce tool-call-free text that looks finished but isn't"
+        ],
+        "explanation": "Branch on stop_reason, never on whether text contains a tool call. end_turn = done. max_tokens = truncated, not done. refusal = declined for safety, possibly with no text block at all. Lumping those into the else-branch is exactly the bug.",
+        "source": "cca_field_delta",
+        "number": 6,
+        "trouble_card": "miss-D1-2"
+      }
+    },
+    {
+      "prompt": "Name all six stop_reason values the Messages API can return in an agentic loop.",
+      "answer": "tool_use, end_turn, max_tokens, stop_sequence, pause_turn, refusal",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.1 agentic loops",
+        "choices": [
+          "tool_use, end_turn, max_tokens, stop_sequence, pause_turn, refusal",
+          "tool_use, end_turn, max_tokens, stop_sequence, error, timeout",
+          "tool_use, end_turn, max_tokens, content_filter, length, refusal",
+          "tool_call, complete, truncated, stop_sequence, paused, refused"
+        ],
+        "explanation": "pause_turn means a long server-tool turn paused — pass the response straight back. max_tokens means truncated, not done.",
+        "source": "cca_field_delta",
+        "number": 7
+      }
+    },
+    {
+      "prompt": "In the tool loop, what must you append to `messages` before appending the tool_result — and what happens if you skip it?",
+      "answer": "Append the assistant turn containing the tool_use block first; skip it and the tool_result has no matching tool_use, giving a 400",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.1 agentic loops",
+        "choices": [
+          "Append the assistant turn containing the tool_use block first; skip it and the tool_result has no matching tool_use, giving a 400",
+          "Append a system turn restating the tool contract first; skip it and the model re-calls the same tool forever",
+          "Append an empty user turn as a separator first; skip it and the roles alternate incorrectly, giving a 429",
+          "Nothing — the tool_result may be appended directly, and the API reconstructs the pairing from tool_use_id"
+        ],
+        "explanation": "The tool_use_id in your tool_result must resolve to a tool_use block that is already in the conversation. Appending the assistant turn first is the loop-wiring rule.",
+        "source": "cca_field_delta",
+        "number": 8
+      }
+    },
+    {
+      "prompt": "Subagent #3 is blocked and needs something subagent #1 produced. What is the correct channel?",
+      "answer": "It returns structured control up to the coordinator, which decides what happens next",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.2 multi-agent orchestration",
+        "choices": [
+          "It messages subagent #1 directly over the peer channel the coordinator opened for them",
+          "It writes to the shared scratchpad that all subagents poll between steps",
+          "It returns structured control up to the coordinator, which decides what happens next",
+          "It re-spawns subagent #1 as its own child so the dependency stays local"
+        ],
+        "explanation": "Hub-and-spoke: subagents never talk peer-to-peer. The three reasons are auditability, loop-safety and context isolation. What travels up is structured control, not prose.",
+        "source": "cca_field_delta",
+        "number": 9
+      }
+    },
+    {
+      "prompt": "Four parallel subagents write DB rows; #3 fails on a rate limit. Why is 're-run all four' wrong?",
+      "answer": "The other three already wrote rows, so a blanket re-run duplicates side effects — retry only the failed unit",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.2 multi-agent orchestration",
+        "choices": [
+          "The other three would exceed the same rate limit, so re-running all four guarantees four failures",
+          "The other three already wrote rows, so a blanket re-run duplicates side effects — retry only the failed unit",
+          "Re-running all four resets the coordinator's context window and loses the original plan",
+          "Nothing is wrong with it — blanket retry is the standard recovery pattern for parallel fan-out"
+        ],
+        "explanation": "This is correctness, not just cost. A rate limit is transient, so #3 should back off and retry locally first; escalate to the coordinator only if it genuinely cannot. Ties to D5 idempotency.",
+        "source": "cca_field_delta",
+        "number": 10,
+        "trouble_card": "miss-D1-3"
+      }
+    },
+    {
+      "prompt": "Which of these is NOT a valid ground for spawning a subagent?",
+      "answer": "The task is multi-step",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.2 multi-agent orchestration",
+        "choices": [
+          "The task needs context isolation from the parent",
+          "The task needs a different permission boundary",
+          "The task can run concurrently with other work",
+          "The task is multi-step"
+        ],
+        "explanation": "The three grounds are context isolation, permission boundary, and concurrency. 'It has several steps' is not one — a multi-step task is just a loop.",
+        "source": "cca_field_delta",
+        "number": 11
+      }
+    },
+    {
+      "prompt": "A coordinator answers 'how does user-export work?' covering only REST controllers; scheduled jobs, admin actions and CLI paths are missing. Every subagent completed successfully. Root cause?",
+      "answer": "The coordinator's decomposition — it never enumerated the other entry points, so this is a missing assignment, not a missing capability",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.2 multi-agent orchestration",
+        "choices": [
+          "The coordinator's decomposition — it never enumerated the other entry points, so this is a missing assignment, not a missing capability",
+          "The subagents' tool grants — none of them could read the job scheduler or CLI source, so their coverage was capped",
+          "The coordinator's context window — the earlier subagent results crowded out the later entry points before synthesis",
+          "The subagent prompts — each was too narrow, so the fix is to widen each prompt to 'inspect everything related to export'"
+        ],
+        "explanation": "The discriminator is 'did anyone fail?' Every worker succeeded, so nothing a worker needed was missing. Spawning more subagents to cover the other paths requires YOU to already know the paths — it fixes the instance, not the system. Scope note: if a worker HAD failed or returned partial, capability could genuinely be the fault.",
+        "source": "cca_field_delta",
+        "number": 12,
+        "trouble_card": "miss-D1-8"
+      }
+    },
+    {
+      "prompt": "Both parallelization and orchestrator-workers fan out to workers. What is the one tell that separates them?",
+      "answer": "Whether the subtasks are pre-known (parallelization) or discovered per-input at runtime (orchestrator-workers)",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.3 pattern selection",
+        "choices": [
+          "Whether the workers run concurrently (parallelization) or sequentially (orchestrator-workers)",
+          "Whether the subtasks are pre-known (parallelization) or discovered per-input at runtime (orchestrator-workers)",
+          "Whether the workers share a context window (parallelization) or each get an isolated one (orchestrator-workers)",
+          "Whether there is a final aggregation step (parallelization) or the workers write directly (orchestrator-workers)"
+        ],
+        "explanation": "Parallelism and isolated context are shared by both, so neither is the tell. 'Translate into these five fixed languages' = parallelization. 'Refactor across an unpredictable set of files' = orchestrator-workers.",
+        "source": "cca_field_delta",
+        "number": 13
+      }
+    },
+    {
+      "prompt": "Which axis separates prompt chaining from orchestrator-workers?",
+      "answer": "Sequential vs adaptive decomposition — whether the plan is fixed in code or discovered at runtime",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.3 pattern selection",
+        "choices": [
+          "Single-model vs multi-model — chaining reuses one model, orchestrators dispatch across tiers",
+          "Stateless vs stateful — chaining passes state forward, orchestrators hold it centrally",
+          "Cost vs latency — chaining optimises tokens, orchestrators optimise wall-clock",
+          "Sequential vs adaptive decomposition — whether the plan is fixed in code or discovered at runtime"
+        ],
+        "explanation": "Both decompose. Chaining's decomposition is written by you in advance; the orchestrator's is produced by a model at runtime.",
+        "source": "cca_field_delta",
+        "number": 14
+      }
+    },
+    {
+      "prompt": "(a) The agent must verify the customer before it may refund. (b) The agent escalates easy cases and attempts hard ones. Which is fixed with code and which with a prompt?",
+      "answer": "(a) code — a checkable precondition gating the refund tool; (b) prompt — explicit escalation criteria plus examples",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.4 intervention selection",
+        "choices": [
+          "(a) prompt — state the verification requirement clearly; (b) code — a confidence threshold that routes to a human",
+          "Both code — protection is always code the model cannot talk its way around",
+          "(a) code — a checkable precondition gating the refund tool; (b) prompt — explicit escalation criteria plus examples",
+          "Both prompt — both are policy decisions, and policy belongs in the system prompt"
+        ],
+        "explanation": "The discriminator is: is the condition CHECKABLE? A required sequence with a boolean can be gated. 'Is this case complex enough?' is a judgment with no boolean — you can only specify it. 'Protection is code you write' has an edge, and this is it.",
+        "source": "cca_field_delta",
+        "number": 15,
+        "trouble_card": "miss-tier2-overgeneralization"
+      }
+    },
+    {
+      "prompt": "Four failures. Which one's correct fix lives at the STRUCTURE layer rather than the INSTRUCTION layer? (i) invoice JSON arrives wrapped in markdown fences a few percent of the time (ii) a 600-line CLAUDE.md is increasingly ignored (iii) guidance is needed for every *.test.tsx wherever it lives",
+      "answer": "(i) only — a downstream parser needs a guarantee, so the shape must come from a tool schema, not from wording",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.4 intervention selection",
+        "choices": [
+          "(ii) only — file bloat is a structural defect and must be solved with @import splitting",
+          "(iii) only — path-scoped guidance requires a hook that matches on the file path",
+          "All three — a guarantee is always preferable to an instruction when both are available",
+          "(i) only — a downstream parser needs a guarantee, so the shape must come from a tool schema, not from wording"
+        ],
+        "explanation": "The decider: does something downstream need a GUARANTEE? A guarantee cannot be probabilistic, so it has to live in the mechanism. A preference or a piece of guidance needs no guarantee, and there the instruction layer is the correct and cheaper tool, not a weak substitute. 'Always pick the structural option' is the next failure.",
+        "source": "cca_field_delta",
+        "number": 16,
+        "trouble_card": "miss-X-4"
+      }
+    },
+    {
+      "prompt": "A document-analysis subagent has a generic fetch_url tool and keeps citing blogs it found linked inside the approved PDFs. Best fix?",
+      "answer": "Replace fetch_url with a validating load_document tool that only resolves approved sources",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.4 intervention selection",
+        "choices": [
+          "Add a CLAUDE.md rule stating that only the approved PDFs may be cited",
+          "Replace fetch_url with a validating load_document tool that only resolves approved sources",
+          "Add few-shot examples of good citations to the subagent's prompt",
+          "Lower the subagent's temperature so it stops following speculative links"
+        ],
+        "explanation": "A permission boundary needs a guarantee, and a guarantee cannot be probabilistic. The tool contract is the mechanism that produced the failure and you own it — so change it rather than asking the model more firmly.",
+        "source": "cca_field_delta",
+        "number": 17
+      }
+    },
+    {
+      "prompt": "The exam offers 'switch to a higher-tier model' as an option. When is it the keyed answer?",
+      "answer": "Almost never — but genuinely when the stem says the criteria are already precise and correctly applied elsewhere",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.5 reliability",
+        "choices": [
+          "Whenever the agent's failures are inconsistent between runs, since inconsistency is a capability signal",
+          "Whenever the task involves multi-step reasoning, since smaller models cannot chain reliably",
+          "Almost never — but genuinely when the stem says the criteria are already precise and correctly applied elsewhere",
+          "Never — a model upgrade is always a distractor on this exam, without exception"
+        ],
+        "explanation": "If the stem names a fixable design defect (vague criteria, a starved tool description, a missing gate), the model-upgrade option is the distractor: a definitionally-broken prompt does not become correct on a bigger model. The other half is real but rare — a sound prompt a small model simply cannot apply is a capability failure.",
+        "source": "cca_field_delta",
+        "number": 18
+      }
+    },
+    {
+      "prompt": "An agent has a hard safety limit ('never refund more than $500'). Where does it belong?",
+      "answer": "In code the model cannot talk its way around, because the condition is checkable",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.5 reliability",
+        "choices": [
+          "In the system prompt, stated as an absolute rule with emphasis",
+          "In code the model cannot talk its way around, because the condition is checkable",
+          "In the tool's description, so the model sees it at selection time",
+          "In a few-shot example showing a refusal at $501"
+        ],
+        "explanation": "This is the checkable half of the rule. A dollar threshold is a boolean; gate it. Contrast the judgment half — 'when should this escalate?' — which can only be specified in the prompt.",
+        "source": "cca_field_delta",
+        "number": 19
+      }
+    },
+    {
+      "prompt": "A subagent needs one capability for 85% of its cases; the remaining 15% need the coordinator's full toolset. What do you grant?",
+      "answer": "A single scoped tool for the 85% case, leaving the coordinator delegation intact for the 15%",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.5 reliability",
+        "choices": [
+          "A single scoped tool for the 85% case, leaving the coordinator delegation intact for the 15%",
+          "The full toolset, since the subagent will eventually need all of it anyway",
+          "Nothing new — batch the needs and hand them all to the coordinator at the end of the run",
+          "A speculative pre-cache of likely results, so the subagent rarely has to call out at all"
+        ],
+        "explanation": "Least privilege: right-size the grant to the common case. Handing over the full toolset fixes latency and destroys separation of concerns plus the coordinator's audit trail. Batching to the end creates blocking dependencies when later steps depend on earlier verified facts.",
+        "source": "cca_field_delta",
+        "number": 20,
+        "trouble_card": "miss-D1-6"
+      }
+    },
+    {
+      "prompt": "A field named inputSchema and a field named input_schema both exist. Which surface owns which?",
+      "answer": "inputSchema is the MCP wire (camelCase); input_schema is the Messages API request body (snake_case)",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.0 surface binning",
+        "choices": [
+          "inputSchema is the Messages API request body; input_schema is the MCP wire",
+          "inputSchema is the TypeScript SDK; input_schema is the Python SDK — same surface, two languages",
+          "They are aliases on the same surface and the API accepts either spelling",
+          "inputSchema is the MCP wire (camelCase); input_schema is the Messages API request body (snake_case)"
+        ],
+        "explanation": "The Messages API body is snake_case; the MCP protocol is camelCase. Same concept, two surfaces, two spellings — and every such pair is a distractor the exam can build a question out of.",
+        "source": "cca_field_delta",
+        "number": 21
+      }
+    },
+    {
+      "prompt": "Match the four MCP↔API casing pairs: the tool failed, why generation stopped, the content type label, the list changed.",
+      "answer": "is_error/isError, stop_reason:\"end_turn\"/stopReason:\"endTurn\", mimeType (MCP only), listChanged (MCP only)",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.0 surface binning",
+        "choices": [
+          "is_error/isError, stop_reason:\"end_turn\"/stopReason:\"endTurn\", mimeType (MCP only), listChanged (MCP only)",
+          "isError/is_error, stopReason/stop_reason, mime_type (API only), list_changed (API only)",
+          "error/isError, reason/stopReason, contentType/mimeType, changed/listChanged",
+          "is_error and isError are different concepts; the rest have no cross-surface twin"
+        ],
+        "explanation": "MCP re-implements half the Messages API's vocabulary in camelCase. mimeType and listChanged have no Messages API twin at all — they are MCP-only.",
+        "source": "cca_field_delta",
+        "number": 22
+      }
+    },
+    {
+      "prompt": "Casing alone won't settle it. What is the test that always works?",
+      "answer": "Ask who is talking to whom: a field in the JSON you POST to api.anthropic.com is BODY; a field in a JSON-RPC message between a client and a separate server process is PROCESS",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.0 surface binning",
+        "choices": [
+          "Ask which SDK exposes it: if it appears in the Python SDK it is BODY, otherwise it is PROCESS",
+          "Ask whether Anthropic documents it: Anthropic-documented fields are BODY, community-documented fields are PROCESS",
+          "Ask who is talking to whom: a field in the JSON you POST to api.anthropic.com is BODY; a field in a JSON-RPC message between a client and a separate server process is PROCESS",
+          "Ask how long the identifier is: BODY fields are short and single-word, PROCESS fields are namespaced"
+        ],
+        "explanation": "tool_choice is something you tell the model, so BODY. roots is something a client tells a server, so PROCESS. Casing is a fast check, never a proof — it breaks entirely on your own JSON payloads, where the casing is whatever you chose.",
+        "source": "cca_field_delta",
+        "number": 23,
+        "trouble_card": "miss-X-1"
+      }
+    },
+    {
+      "prompt": "Bin each: is_path_allowed · tool_choice · acceptEdits · is_error · roots · allowed_tools · stateless_http",
+      "answer": "MCP · API · Claude Code · API · MCP · Claude Code · MCP",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.0 surface binning",
+        "choices": [
+          "API · MCP · Claude Code · MCP · API · Agent SDK · Claude Code",
+          "MCP · API · Claude Code · API · MCP · Claude Code · MCP",
+          "MCP · API · Agent SDK · API · MCP · Agent SDK · Claude Code",
+          "Agent SDK · API · Claude Code · API · Agent SDK · Claude Code · MCP"
+        ],
+        "explanation": "The most-missed item in the whole deck. The word never decides the bin — where you EXPRESS it does. stateless_http SOUNDS like infrastructure config, so it feels like Claude Code; it is a FastMCP server flag. A term that NAMES a surface is the signal to check the other axis.",
+        "source": "cca_field_delta",
+        "number": 24,
+        "trouble_card": "miss-X-1"
+      }
+    },
+    {
+      "prompt": "Bin each: tool_use · tools/call · /mcp__github__review · resources/read · .mcp.json · initialize",
+      "answer": "Messages API · MCP · Claude Code · MCP · Claude Code · MCP",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.0 surface binning",
+        "choices": [
+          "MCP · MCP · MCP · MCP · Claude Code · MCP",
+          "Messages API · Messages API · Claude Code · MCP · Claude Code · Messages API",
+          "Messages API · MCP · Claude Code · MCP · Claude Code · MCP",
+          "Messages API · MCP · MCP · MCP · MCP · MCP"
+        ],
+        "explanation": "The tell ladder: tool_use / input_schema → API. A slash-separated JSON-RPC method (x/y) → MCP. An mcp__ prefix, an @, a slash-command or a dotfile → the client's own surface.",
+        "source": "cca_field_delta",
+        "number": 25,
+        "trouble_card": "miss-X-3"
+      }
+    },
+    {
+      "prompt": "Does the Messages API contain any MCP?",
+      "answer": "No — none whatsoever; MCP is one optional way a client may fulfil a tool_use block",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.0 surface binning",
+        "choices": [
+          "No — none whatsoever; MCP is one optional way a client may fulfil a tool_use block",
+          "Yes — tools/call is the Messages API's internal name for a tool invocation",
+          "Yes — the Messages API embeds the MCP handshake whenever tools are present",
+          "Only for server tools like web_search, which are implemented as built-in MCP servers"
+        ],
+        "explanation": "Three stacked layers, and the exam tests the seams. MCP is an open spec that non-Anthropic apps speak; 'MCP is how Claude calls tools' is false. Plenty of tool use involves no MCP at all.",
+        "source": "cca_field_delta",
+        "number": 26
+      }
+    },
+    {
+      "prompt": "In a multi-turn tool loop, how often must the `tools` array be sent?",
+      "answer": "On every request in the loop, not just the first",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.1 defining a tool",
+        "choices": [
+          "Only on the first request; the API caches the definitions for the session",
+          "Only when the definitions change from the previous turn",
+          "On every request in the loop, not just the first",
+          "Once per tool_use_id; re-sending them invalidates the pairing"
+        ],
+        "explanation": "The Messages API is stateless. Every call carries the full tools array, which is also why adding a tool invalidates a cache prefix — tools sit at the front.",
+        "source": "cca_field_delta",
+        "number": 27
+      }
+    },
+    {
+      "prompt": "Which field on a tool definition is the model's selection mechanism?",
+      "answer": "description — the model picks by description, not by name",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.1 defining a tool",
+        "choices": [
+          "name — the model matches the user's phrasing against the tool name",
+          "input_schema — the model picks whichever schema its intended arguments satisfy",
+          "description — the model picks by description, not by name",
+          "the array position — earlier tools are tried first"
+        ],
+        "explanation": "This is why two tools with thin descriptions ('Retrieves customer information' / 'Retrieves order details') is a schema defect, not a prompt problem. The description is the API the model programs against.",
+        "source": "cca_field_delta",
+        "number": 28
+      }
+    },
+    {
+      "prompt": "What does `strict: true` on a custom tool definition buy you?",
+      "answer": "Constrained decoding — the call is guaranteed to conform exactly to the input_schema",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.1 defining a tool",
+        "choices": [
+          "A validation pass after generation, with an automatic retry when the arguments fail",
+          "A guarantee that the model will call the tool rather than answering in text",
+          "Constrained decoding — the call is guaranteed to conform exactly to the input_schema",
+          "A guarantee that the argument VALUES are semantically correct, not just well-typed"
+        ],
+        "explanation": "strict:true restricts the sampler to a grammar derived from your schema, so invalid JSON is impossible by construction. It still guarantees only SHAPE — a schema saying total:number is satisfied by a wrong total.",
+        "source": "cca_field_delta",
+        "number": 29
+      }
+    },
+    {
+      "prompt": "Name the four tool_choice values, and say which one guarantees a call while letting the model pick which tool.",
+      "answer": "auto, any, tool, none — and `any` guarantees a call while letting the model pick",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.2 tool_choice",
+        "choices": [
+          "auto, any, tool, none — and `any` guarantees a call while letting the model pick",
+          "auto, required, named, off — and `required` guarantees a call while letting the model pick",
+          "auto, any, tool, none — and `tool` guarantees a call while letting the model pick",
+          "default, acceptEdits, plan, bypassPermissions — and `plan` guarantees a call"
+        ],
+        "explanation": "auto = may tool or text (default). any = must call SOME tool, model picks. {type:tool,name} = must call THAT tool. none = may not call. Note the fourth option is Claude Code's permission modes — a different quartet of four mode names, and a documented interference trap.",
+        "source": "cca_field_delta",
+        "number": 30,
+        "trouble_card": "miss-D3-8"
+      }
+    },
+    {
+      "prompt": "When tool_choice forces a call (any or a named tool), what stop_reason comes back?",
+      "answer": "Always tool_use — never end_turn",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.2 tool_choice",
+        "choices": [
+          "Always tool_use — never end_turn",
+          "Always end_turn, because the forced call terminates the turn",
+          "stop_sequence, because forcing inserts an implicit stop sequence",
+          "It varies: any gives tool_use, a named tool gives end_turn"
+        ],
+        "explanation": "Forcing means the turn cannot end without a tool call, so the stop_reason is always tool_use. The named form is the forced-extraction / structured-output trick.",
+        "source": "cca_field_delta",
+        "number": 31
+      }
+    },
+    {
+      "prompt": "You want at most one tool call per turn. Which key, and where does it go?",
+      "answer": "disable_parallel_tool_use — a key INSIDE the tool_choice object",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.2 tool_choice",
+        "choices": [
+          "disable_parallel_tool_use — a top-level request parameter beside tool_choice",
+          "disable_parallel_tool_use — a key INSIDE the tool_choice object",
+          "max_parallel_tools: 1 — a top-level request parameter",
+          "parallel_tool_calls: false — a key inside each tool definition"
+        ],
+        "explanation": "It is a sibling of `type` inside tool_choice, not a parameter beside it.",
+        "source": "cca_field_delta",
+        "number": 32
+      }
+    },
+    {
+      "prompt": "Which field links a tool_result back to the model's call, and how do you flag a tool failure?",
+      "answer": "tool_use_id must equal the tool_use block's id; flag failure with is_error: true and still send the result",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.3 the tool loop",
+        "choices": [
+          "tool_call_id must equal the tool_use block's name; flag failure by omitting the result entirely",
+          "tool_use_id must equal the tool_use block's id; flag failure by raising an exception in your handler",
+          "tool_result_id is generated by you; flag failure with a non-zero exit code from the handler",
+          "tool_use_id must equal the tool_use block's id; flag failure with is_error: true and still send the result"
+        ],
+        "explanation": "Omitting a failed result breaks the pairing and gives a 400. Errors are data you send back, not exceptions you throw.",
+        "source": "cca_field_delta",
+        "number": 33,
+        "trouble_card": "miss-D2-2"
+      }
+    },
+    {
+      "prompt": "Which role does a tool_result block live in?",
+      "answer": "A user turn — the tool does not get a role of its own",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.3 the tool loop",
+        "choices": [
+          "A user turn — the tool does not get a role of its own",
+          "A tool turn — the API defines a third role for exactly this",
+          "An assistant turn — it continues the assistant's tool_use turn",
+          "A system turn — results are injected as authoritative context"
+        ],
+        "explanation": "There are only user and assistant roles (plus the top-level `system` parameter, which is a parameter, not a message). Tool results ride in a user turn.",
+        "source": "cca_field_delta",
+        "number": 34
+      }
+    },
+    {
+      "prompt": "What form does the `content` of a tool_result take?",
+      "answer": "A string — json.dumps your dict before sending it",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.3 the tool loop",
+        "choices": [
+          "A string — json.dumps your dict before sending it",
+          "A native JSON object, which the API validates against the tool's input_schema",
+          "A list of content blocks, one per return field",
+          "A base64-encoded payload, so binary results are supported uniformly"
+        ],
+        "explanation": "It is a string. Serialize structured results yourself.",
+        "source": "cca_field_delta",
+        "number": 35
+      }
+    },
+    {
+      "prompt": "A teammate says 'the text editor tool is Anthropic-defined, so we just read the result out of the response — no handler needed.' Correct them.",
+      "answer": "Wrong — text_editor is an Anthropic-schema CLIENT tool: Anthropic publishes the schema, but YOUR app executes it and returns the tool_result",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.4 tool taxonomy",
+        "choices": [
+          "Wrong — text_editor is an Anthropic-schema CLIENT tool: Anthropic publishes the schema, but YOUR app executes it and returns the tool_result",
+          "Right — Anthropic-defined tools are executed by Anthropic and the result arrives in the same response",
+          "Wrong — text_editor is a server tool, so it needs no handler but does need an explicit beta header",
+          "Right for text_editor specifically, but wrong for bash and computer, which you must execute"
+        ],
+        "explanation": "'Anthropic-defined' is not 'Anthropic-executed'. Three families: your own tools (you write the schema, you execute); Anthropic-schema client tools — memory, bash, text_editor, computer (you pass only {type, name} with NO input_schema, and you still execute); server tools (Anthropic runs them, result already in the response, no tool_result loop).",
+        "source": "cca_field_delta",
+        "number": 36,
+        "trouble_card": "miss-D2-21"
+      }
+    },
+    {
+      "prompt": "Sort by who executes: text_editor · web_search · computer · code_execution",
+      "answer": "You · Anthropic · You · Anthropic",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.4 tool taxonomy",
+        "choices": [
+          "You · Anthropic · You · Anthropic",
+          "You · Anthropic · You · You",
+          "Anthropic · Anthropic · You · Anthropic",
+          "You · You · You · Anthropic"
+        ],
+        "explanation": "The seam word is WHERE THE CODE RUNS, never who wrote the schema. code_execution is a SERVER tool — Anthropic runs the sandbox, you enable it and get results back. The counter-case that stops the rule over-firing: web_search is Anthropic-defined AND Anthropic-executed, so 'it's Anthropic-defined' is evidence for neither side.",
+        "source": "cca_field_delta",
+        "number": 37,
+        "trouble_card": "miss-D2-21"
+      }
+    },
+    {
+      "prompt": "Which of these are server tools — run at Anthropic, with results already in the response and no tool_result loop?",
+      "answer": "web_search, web_fetch, code_execution (plus tool_search and advisor)",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.4 tool taxonomy",
+        "choices": [
+          "web_search, web_fetch, code_execution (plus tool_search and advisor)",
+          "bash, text_editor, memory, computer",
+          "web_search, bash, memory, computer",
+          "Only web_search; everything else requires a handler you write"
+        ],
+        "explanation": "Server tools need no handler code at all. Client tools — even Anthropic-schema ones — always come back to you.",
+        "source": "cca_field_delta",
+        "number": 38
+      }
+    },
+    {
+      "prompt": "Two sibling tools have thin descriptions and similar inputs; the model keeps picking the wrong one. Most effective FIRST step?",
+      "answer": "Expand both descriptions with input formats, example queries, edge cases and explicit boundaries against the sibling",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.5 tool design judgment",
+        "choices": [
+          "Expand both descriptions with input formats, example queries, edge cases and explicit boundaries against the sibling",
+          "Add few-shot examples to the system prompt showing which tool to use when",
+          "Add a routing layer that classifies the request before the model sees the tools",
+          "Consolidate them into one lookup_entity tool with an action parameter"
+        ],
+        "explanation": "Descriptions ARE the selection mechanism, so thin descriptions are the root cause, not a symptom. Few-shot pays tokens every turn to compensate for a starved description and only covers the shapes you thought to write. A routing layer is over-engineered; consolidation is a legitimate architecture change but far too heavy for a first step.",
+        "source": "cca_field_delta",
+        "number": 39,
+        "trouble_card": "miss-tier2-fewshot"
+      }
+    },
+    {
+      "prompt": "A tool description says 'never call this without user confirmation.' It fires anyway. What can a description enforce?",
+      "answer": "Nothing — a description is input to a probabilistic decision function; it shifts likelihood and cannot constrain",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.5 tool design judgment",
+        "choices": [
+          "It enforces the constraint whenever the model is above a certain capability tier",
+          "Nothing — a description is input to a probabilistic decision function; it shifts likelihood and cannot constrain",
+          "It enforces the constraint only if the same sentence also appears in the system prompt",
+          "It enforces the constraint at the API layer, which rejects calls that violate stated preconditions"
+        ],
+        "explanation": "Same class as MCP roots: advisory. Rewording it 'more explicitly' is the wrong fix CLASS. What stops the call is code in the CLIENT that gates before it executes the function. Descriptions persuade; code prevents.",
+        "source": "cca_field_delta",
+        "number": 40,
+        "trouble_card": "miss-D2-12"
+      }
+    },
+    {
+      "prompt": "Why split a calendar tool into create/update/cancel rather than one manage_calendar(action, ...)?",
+      "answer": "Distinct required fields per action — one combined tool forces every field optional, so incomplete creates get through; and cancel is destructive, so it deserves its own permission",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.5 tool design judgment",
+        "choices": [
+          "Efficiency — three small schemas are cheaper to send than one large one",
+          "Discoverability — the model reads tool names before descriptions, so three names are easier to match",
+          "Rate limiting — separate tools can be throttled independently",
+          "Distinct required fields per action — one combined tool forces every field optional, so incomplete creates get through; and cancel is destructive, so it deserves its own permission"
+        ],
+        "explanation": "The mechanism is the schema, not efficiency. A combined tool cannot express 'attendees are required for create but meaningless for cancel', so it degrades to all-optional and loses the contract.",
+        "source": "cca_field_delta",
+        "number": 41,
+        "trouble_card": "miss-D2-4"
+      }
+    },
+    {
+      "prompt": "What shape should a tool error take when you return it to the model?",
+      "answer": "An actionable message the MODEL can act on — 'this event is in the past; use update_event instead of cancelling'",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.5 tool design judgment",
+        "choices": [
+          "The upstream status code and body verbatim, so nothing is lost in translation",
+          "An actionable message the MODEL can act on — 'this event is in the past; use update_event instead of cancelling'",
+          "A short opaque code the client maps to a message, keeping tokens low",
+          "An exception, so the loop terminates and the caller can decide"
+        ],
+        "explanation": "Errors are for the model, not the engineer. 'Error 422' tells it nothing it can do differently. Note that errorCategory/isRetryable are YOUR payload — the MCP-vs-API casing rule does not apply to your own JSON.",
+        "source": "cca_field_delta",
+        "number": 42
+      }
+    },
+    {
+      "prompt": "Match each MCP primitive to who controls it: tools, resources, prompts.",
+      "answer": "tools = model-controlled · resources = application-driven · prompts = user-controlled",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.6 MCP primitives",
+        "choices": [
+          "tools = model-controlled · resources = model-controlled · prompts = application-driven",
+          "tools = application-driven · resources = user-controlled · prompts = model-controlled",
+          "tools = model-controlled · resources = application-driven · prompts = user-controlled",
+          "All three are model-controlled; the categories describe who registers them, not who invokes them"
+        ],
+        "explanation": "The most-tested distinction in the domain, and it is about CONTROL, not capability. Prompts are typically surfaced as slash commands.",
+        "source": "cca_field_delta",
+        "number": 43
+      }
+    },
+    {
+      "prompt": "Connecting a server that exposes a `resources` list — does that auto-load the docs into Claude's context?",
+      "answer": "No — the CLIENT calls resources/read and the CLIENT injects the content into the conversation; the model never fetches",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.6 MCP primitives",
+        "choices": [
+          "Yes — resources are eagerly loaded at initialize and prepended to the system prompt",
+          "No — the model calls resources/read itself when it decides it needs the document",
+          "Only if the client also declares the roots capability, which is what delivers resource content",
+          "No — the CLIENT calls resources/read and the CLIENT injects the content into the conversation; the model never fetches"
+        ],
+        "explanation": "The model never perceives 'a resource' or 'a prompt' — only message content. Ownership says who DECIDES; the mechanism says who makes the call and where the bytes go, and the exam asks for the mechanism.",
+        "source": "cca_field_delta",
+        "number": 44,
+        "trouble_card": "miss-D2-11"
+      }
+    },
+    {
+      "prompt": "Give the INVOKE method for each MCP primitive — tool, prompt, resource — plus each one's params.",
+      "answer": "tools/call {name, arguments} · prompts/get {name, arguments} · resources/read {uri}",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.7 JSON-RPC methods",
+        "choices": [
+          "tools/call {name, arguments} · prompts/get {name, arguments} · resources/read {uri}",
+          "tools/call {name, arguments} · prompts/call {name, arguments} · resources/get {name}",
+          "tools/invoke {name, input} · prompts/get {name, arguments} · resources/read {uri}",
+          "tools/call {name, input_schema} · prompts/render {name} · resources/fetch {uri}"
+        ],
+        "explanation": "The verb encodes the control model: call = model-controlled (side effects), get = user-controlled (a template comes back, nothing executes), read = app-controlled (the client reads and decides what to inject). The odd param is uri — resources are addressed by URI, not by name. prompts/call, resources/get and tools/invoke do not exist.",
+        "source": "cca_field_delta",
+        "number": 45,
+        "trouble_card": "miss-D2-14"
+      }
+    },
+    {
+      "prompt": "tools/call returns `content`. What does resources/read return?",
+      "answer": "contents — plural, an array of {uri, mimeType, text or blob}",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.7 JSON-RPC methods",
+        "choices": [
+          "contents — plural, an array of {uri, mimeType, text or blob}",
+          "content — the same singular field, for symmetry across primitives",
+          "resources — an array of resource descriptors, which the client then fetches individually",
+          "data — a base64 blob plus a mimeType sibling"
+        ],
+        "explanation": "Singular for a tool call, plural for a resource read. The mimeType inside is camelCase, as the whole MCP wire is.",
+        "source": "cca_field_delta",
+        "number": 46
+      }
+    },
+    {
+      "prompt": "Which MCP messages travel server → client?",
+      "answer": "sampling/createMessage and roots/list (plus notifications/tools/list_changed)",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.7 JSON-RPC methods",
+        "choices": [
+          "tools/call and resources/read",
+          "initialize and notifications/initialized",
+          "roots/list and notifications/roots/list_changed",
+          "sampling/createMessage and roots/list (plus notifications/tools/list_changed)"
+        ],
+        "explanation": "Almost everything is client → server; sampling and roots are the two that travel backwards. Note the direction split within roots: the server asks with roots/list, but notifications/roots/list_changed goes client → server.",
+        "source": "cca_field_delta",
+        "number": 47
+      }
+    },
+    {
+      "prompt": "Which method discovers parameterized resources?",
+      "answer": "resources/templates/list",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.7 JSON-RPC methods",
+        "choices": [
+          "resources/list with a template: true parameter",
+          "resources/templates/list",
+          "templates/list",
+          "resources/subscribe"
+        ],
+        "explanation": "resources/subscribe watches ONE resource for changes — and subscribe is a resources-only sub-capability.",
+        "source": "cca_field_delta",
+        "number": 48
+      }
+    },
+    {
+      "prompt": "Who sends notifications/initialized in the MCP handshake, and where does it fall?",
+      "answer": "The CLIENT sends it, and it is LAST — a third message after the initialize request and the initialize result",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.8 the handshake",
+        "choices": [
+          "The SERVER sends it, and it is last — it is how the server signals it finished registering primitives",
+          "The CLIENT sends it, and it is SECOND — before the server's initialize result, to confirm the version",
+          "The SERVER sends it, and it is second — it is simply the notification form of the initialize result",
+          "The CLIENT sends it, and it is LAST — a third message after the initialize request and the initialize result"
+        ],
+        "explanation": "Request → Result → Notification, and the last one is sent by the CLIENT, last. A common miss is placing initialized second and attributing it to the server.",
+        "source": "cca_field_delta",
+        "number": 49,
+        "trouble_card": "miss-D2-6"
+      }
+    },
+    {
+      "prompt": "What is negotiated at initialize, and what constrains its use?",
+      "answer": "protocolVersion and capabilities — and only negotiated capabilities may be used afterwards",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.8 the handshake",
+        "choices": [
+          "protocolVersion and capabilities — and only negotiated capabilities may be used afterwards",
+          "protocolVersion and transport — and the transport may be renegotiated at any time",
+          "Only clientInfo/serverInfo, which are identity strings with no functional effect",
+          "The session id, which the client generates and the server echoes back"
+        ],
+        "explanation": "capabilities is the contract. Using a capability neither side declared is a protocol error.",
+        "source": "cca_field_delta",
+        "number": 50
+      }
+    },
+    {
+      "prompt": "Which of these is a CLIENT capability rather than a server capability?",
+      "answer": "sampling",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.8 the handshake",
+        "choices": [
+          "tools",
+          "resources",
+          "sampling",
+          "completions"
+        ],
+        "explanation": "Client caps: roots, sampling, elicitation. Server caps: tools, resources, prompts, logging, completions. Sampling being a CLIENT capability is the whole reason it travels server → client.",
+        "source": "cca_field_delta",
+        "number": 51
+      }
+    },
+    {
+      "prompt": "What is the hard rule for an MCP server on the stdio transport?",
+      "answer": "It MUST NOT write non-MCP output to stdout — logs go to stderr",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.9 transports",
+        "choices": [
+          "It MUST NOT write non-MCP output to stdout — logs go to stderr",
+          "It MUST NOT write to stderr, because the client treats stderr as a protocol error",
+          "It MUST issue an Mcp-Session-Id on its first response, as HTTP servers do",
+          "It MUST be launched independently and connected to, never spawned as a subprocess"
+        ],
+        "explanation": "With stdio the client launches the server as a subprocess and stdout IS the wire. A stray print() corrupts the protocol.",
+        "source": "cca_field_delta",
+        "number": 52
+      }
+    },
+    {
+      "prompt": "Which HTTP header carries the MCP session, and when is it sent?",
+      "answer": "Mcp-Session-Id — issued on the InitializeResult, then sent on every later request",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.9 transports",
+        "choices": [
+          "MCP-Session-Id — issued by the client at initialize and echoed by the server",
+          "Authorization — the session is a bearer token scoped to the connection",
+          "Mcp-Session-Id — issued on the InitializeResult, then sent on every later request",
+          "X-MCP-Session — issued on the first tools/call, not at initialize"
+        ],
+        "explanation": "Note the capitalisation differs from MCP-Protocol-Version, which carries the version. Both headers are real and they are capitalised differently.",
+        "source": "cca_field_delta",
+        "number": 53
+      }
+    },
+    {
+      "prompt": "A stateful streamable-HTTP MCP server receives a follow-up request with no session id. What status?",
+      "answer": "400 — missing session id",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.9 transports",
+        "choices": [
+          "401 — unauthenticated",
+          "400 — missing session id",
+          "404 — session not found",
+          "405 — method not allowed"
+        ],
+        "explanation": "The three worth knowing: 400 = missing session id on a stateful server. 404 = session not found or terminated (this is what a second replica returns when the session lives on the first). 405 = the endpoint offers no SSE stream or no DELETE.",
+        "source": "cca_field_delta",
+        "number": 54
+      }
+    },
+    {
+      "prompt": "A teammate says 'our tool results come back unstructured — set json_response=True on the server.' Will that change the tool result?",
+      "answer": "No, not one byte of the payload — json_response swaps the SSE envelope for a single JSON body; the JSON-RPC inside is byte-identical",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.9 transports",
+        "choices": [
+          "Yes — it forces every tool result to be serialized as a JSON object rather than a text block",
+          "Yes — it enables the server's outputSchema, which is what structures tool results",
+          "No — it only affects the initialize handshake, which is unrelated to tool results either way",
+          "No, not one byte of the payload — json_response swaps the SSE envelope for a single JSON body; the JSON-RPC inside is byte-identical"
+        ],
+        "explanation": "A distractor built out of a TRUE fact: real flag, real server, wrong layer. It swaps content-type text/event-stream for application/json. The real fix for payload shape is the tool's own schema and output contract. The pipe, not the payload.",
+        "source": "cca_field_delta",
+        "number": 55,
+        "trouble_card": "miss-D2-17"
+      }
+    },
+    {
+      "prompt": "stateless_http=True on an MCP server. Name the one thing that stops being issued, and what that buys.",
+      "answer": "The mcp-session-id stops being issued — which buys ROUTABILITY: any replica can serve any request, so you get horizontal scale with no sticky sessions",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.9 transports",
+        "choices": [
+          "The SSE stream stops being issued — which buys lower latency, since responses no longer stream",
+          "The mcp-session-id stops being issued — which buys speed, since the server no longer looks up session state",
+          "The mcp-session-id stops being issued — which buys ROUTABILITY: any replica can serve any request, so you get horizontal scale with no sticky sessions",
+          "The initialize result stops being issued — which buys a shorter handshake for high-volume clients"
+        ],
+        "explanation": "Not a performance flag; nothing here is faster. Measured with two replicas: stateless, initialize on A then tools/list on B → 200. Stateful, same split → 404 Session not found.",
+        "source": "cca_field_delta",
+        "number": 56,
+        "trouble_card": "miss-D2-10/18"
+      }
+    },
+    {
+      "prompt": "What does sampling/createMessage do, and why does stateless_http kill it?",
+      "answer": "The server asks the CLIENT to run the client's LLM — and it needs a return address, which IS the session id, so stateless leaves it holding a request it cannot address",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.10 sampling and roots",
+        "choices": [
+          "The server collects the conversation for analytics — and stateless mode disables logging, so nothing is collected",
+          "The server asks the CLIENT to run the client's LLM — and it needs a return address, which IS the session id, so stateless leaves it holding a request it cannot address",
+          "The server calls Anthropic directly with its own API key — and stateless mode strips the credential header",
+          "The server samples a subset of tool calls for tracing — and stateless mode removes the trace context"
+        ],
+        "explanation": "No server API key is needed — that is the point of sampling. 'It's how the server collects data' is the documented decoy. Measured: stateful → the client's callback fires; stateless → silent timeout, callback never fires.",
+        "source": "cca_field_delta",
+        "number": 57,
+        "trouble_card": "miss-D2-19"
+      }
+    },
+    {
+      "prompt": "A colleague says 'sampling is broken on our MCP server.' Name the two ways it can die and which is more dangerous.",
+      "answer": "① Stateful but no sampling_callback → immediate McpError: Sampling not supported. ② stateless_http → silent timeout. ② is worse because it looks like slowness, not like an error",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.10 sampling and roots",
+        "choices": [
+          "① Stateful but no sampling_callback → immediate McpError: Sampling not supported. ② stateless_http → silent timeout. ② is worse because it looks like slowness, not like an error",
+          "① Stateless → immediate McpError. ② No sampling_callback → silent timeout. ① is worse because the error is unactionable",
+          "Both produce the same 400 response; the only difference is which side logs it, so neither is more dangerous",
+          "① Missing capability declaration → 405. ② Wrong protocolVersion → 400. ① is worse because it is silent"
+        ],
+        "explanation": "'Sampling is broken' does NOT imply the server is stateless — that inference is the trap. An error message is a gift; a hang is not. Read WHICH failure you have before you touch a flag.",
+        "source": "cca_field_delta",
+        "number": 58,
+        "trouble_card": "miss-D2-20"
+      }
+    },
+    {
+      "prompt": "An MCP server receives a roots list and reads a path outside it anyway. Protocol violation?",
+      "answer": "No — roots are ADVISORY. The protocol enforces nothing; the code you write (is_path_allowed) is what stops it",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.10 sampling and roots",
+        "choices": [
+          "No — roots are ADVISORY. The protocol enforces nothing; the code you write (is_path_allowed) is what stops it",
+          "Yes — the client rejects any resources/read whose uri falls outside the declared roots",
+          "Yes — the transport layer sandboxes the server process to the declared roots",
+          "No — but only because the roots capability was never negotiated at initialize"
+        ],
+        "explanation": "Spec language: servers SHOULD respect boundaries. A sign, not a door. Same shape as the memory tool's /memories prefix: advisory boundary, your enforcement.",
+        "source": "cca_field_delta",
+        "number": 59,
+        "trouble_card": "miss-D2-5"
+      }
+    },
+    {
+      "prompt": "What are the fields of an MCP root, and what constraint applies?",
+      "answer": "uri (which MUST be a file:// URI) plus an optional name",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.10 sampling and roots",
+        "choices": [
+          "path (an absolute filesystem path) plus an optional mode of read or write",
+          "uri (any scheme) plus a required name used in permission strings",
+          "uri (which MUST be a file:// URI) plus an optional name",
+          "glob (a path pattern) plus an optional recursive boolean"
+        ],
+        "explanation": "roots/list travels server → client, and the uri must be file://.",
+        "source": "cca_field_delta",
+        "number": 60
+      }
+    },
+    {
+      "prompt": "modelPreferences on a sampling request — what are its parts, and how binding are they?",
+      "answer": "hints plus costPriority, speedPriority and intelligencePriority — all advisory; the client picks the model",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.10 sampling and roots",
+        "choices": [
+          "model plus max_tokens — binding; the client must honour the named model or error",
+          "hints plus costPriority, speedPriority and intelligencePriority — all advisory; the client picks the model",
+          "tier plus fallback — binding for tier, advisory for fallback",
+          "provider plus region — advisory, used only for routing"
+        ],
+        "explanation": "camelCase throughout, and contrast maxTokens here with max_tokens in the Messages API body. Hints are advisory by design — the client owns the model choice and the bill.",
+        "source": "cca_field_delta",
+        "number": 61
+      }
+    },
+    {
+      "prompt": "Which side owns sampling_callback, and which side owns ctx.session.create_message(...)?",
+      "answer": "sampling_callback is the CLIENT's (on ClientSession); ctx.session.create_message is the SERVER's way of issuing the request",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.11 FastMCP / Python SDK",
+        "choices": [
+          "Both are the server's — the server registers a callback and then invokes it",
+          "sampling_callback is the CLIENT's (on ClientSession); ctx.session.create_message is the SERVER's way of issuing the request",
+          "sampling_callback is the server's; ctx.session.create_message is the client's",
+          "Both are the client's — the server never touches sampling directly"
+        ],
+        "explanation": "The server asks via Context/ctx; the client answers via sampling_callback. A stateful server with no sampling_callback on the client fails instantly with McpError: Sampling not supported.",
+        "source": "cca_field_delta",
+        "number": 62
+      }
+    },
+    {
+      "prompt": "Why are the FastMCP identifiers snake_case when the MCP wire is camelCase?",
+      "answer": "They are library names, not protocol names — Python naming applies, and this is the one place the casing rule inverts",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.11 FastMCP / Python SDK",
+        "choices": [
+          "They are library names, not protocol names — Python naming applies, and this is the one place the casing rule inverts",
+          "FastMCP predates the camelCase decision in the spec and kept its original names for compatibility",
+          "The Python SDK translates casing at the transport boundary, so both spellings are on the wire",
+          "They are not — @mcp.tool and ctx.reportProgress are camelCase like the rest of MCP"
+        ],
+        "explanation": "@mcp.tool, @mcp.resource, @mcp.prompt, ClientSession, sampling_callback, is_path_allowed are library spellings. Learn them as the implementation OF the wire, not as the wire.",
+        "source": "cca_field_delta",
+        "number": 63
+      }
+    },
+    {
+      "prompt": "Edit refuses a call whose old_string occupies exactly one line. Why?",
+      "answer": "Edit matches SUBSTRINGS, not lines — a string owning one whole line can still sit inside a longer identifier elsewhere",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.12 tool selection in practice",
+        "choices": [
+          "Edit requires old_string to include the surrounding blank lines, which were stripped",
+          "Edit matches SUBSTRINGS, not lines — a string owning one whole line can still sit inside a longer identifier elsewhere",
+          "Edit rejects any old_string shorter than three lines, to avoid ambiguous matches",
+          "Edit matches lines, but the line-number prefix from Read was left in the string"
+        ],
+        "explanation": "text_parts = [] is contained in resource_text_parts = []. The error is a match-COUNT error: 'Found 2 matches of the string to replace, but replace_all is false.' Distinct from 'String to replace not found', which means your text didn't match at all — usually stripped indentation or a copied Read prefix.",
+        "source": "cca_field_delta",
+        "number": 64,
+        "trouble_card": "miss-D2-15"
+      }
+    },
+    {
+      "prompt": "Edit reports two matches. Name the three fixes in preference order.",
+      "answer": "1. Expand old_string with an adjacent line until unique · 2. replace_all: true when you genuinely want every occurrence · 3. Read + Write the whole file",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.12 tool selection in practice",
+        "choices": [
+          "1. Expand old_string with an adjacent line until unique · 2. replace_all: true when you genuinely want every occurrence · 3. Read + Write the whole file",
+          "1. replace_all: true · 2. Read + Write the whole file · 3. Expand old_string",
+          "1. Read + Write the whole file · 2. Expand old_string · 3. replace_all: true",
+          "1. Retry the same Edit — the match count is nondeterministic · 2. Expand old_string · 3. replace_all: true"
+        ],
+        "explanation": "Expanding is surgical and costs one write. replace_all changes semantics, so it is only right when you mean it. Rewriting the file costs the entire file and is for restructuring.",
+        "source": "cca_field_delta",
+        "number": 65
+      }
+    },
+    {
+      "prompt": "Two ways to pick the wrong search tool: content-search when you wanted FILENAMES, or path-search when you wanted CONTENTS. Which is more dangerous, and why?",
+      "answer": "Path-search-for-content — it returns ZERO results, and zero is indistinguishable from 'the fact isn't in this repo', so you stop looking and conclude something false",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.12 tool selection in practice",
+        "choices": [
+          "Content-search-for-paths — it returns hundreds of hits, and the noise buries the one file you needed",
+          "They are equally dangerous — both waste exactly one turn and are self-correcting",
+          "Path-search-for-content — it returns ZERO results, and zero is indistinguishable from 'the fact isn't in this repo', so you stop looking and conclude something false",
+          "Content-search-for-paths — it can time out on a large repo, ending the session"
+        ],
+        "explanation": "Grep = contents, Glob = paths. Content-search-for-path returns TOO MANY: obviously wrong, one turn, self-correcting. A silent failure is the one that makes you confidently wrong.",
+        "source": "cca_field_delta",
+        "number": 66,
+        "trouble_card": "miss-D2-16"
+      }
+    },
+    {
+      "prompt": "Does the MCP server ever see Claude's message?",
+      "answer": "No — the client is a hard boundary; Claude and the MCP server never talk to each other",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.x MCP scope",
+        "choices": [
+          "Yes — the client forwards the assistant turn so the server can interpret intent",
+          "Only for prompts, which are rendered server-side against the conversation",
+          "No — the client is a hard boundary; Claude and the MCP server never talk to each other",
+          "Yes, when sampling is enabled — that is what sampling forwards"
+        ],
+        "explanation": "MCP is not 'a different way of tool-calling'. The client speaks TWO protocols: the Messages API to Anthropic, and MCP to the server. Keep PROTOCOL (Messages API / MCP) separate from TRANSPORT (stdio / streamable HTTP).",
+        "source": "cca_field_delta",
+        "number": 67,
+        "trouble_card": "miss-D2-7"
+      }
+    },
+    {
+      "prompt": "You want Claude to use one calculator tool in a plain Python script. What are the two halves of the answer, and does @mcp.tool appear in either?",
+      "answer": "① DECLARATION: a hand-written tool dict in tools=[...] · ② EXECUTION: your own function, called when stop_reason == \"tool_use\", returned as a tool_result. @mcp.tool appears in neither",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.x MCP scope",
+        "choices": [
+          "① DECLARATION: @mcp.tool on the function · ② EXECUTION: the MCP client runs it and returns the result",
+          "① DECLARATION: a tool dict in tools=[...] · ② EXECUTION: @mcp.tool, which wires the handler to the loop",
+          "① DECLARATION: a hand-written tool dict in tools=[...] · ② EXECUTION: your own function, called when stop_reason == \"tool_use\", returned as a tool_result. @mcp.tool appears in neither",
+          "① DECLARATION: an input_schema file · ② EXECUTION: Anthropic runs it, since arithmetic is a server tool"
+        ],
+        "explanation": "No MCP at all, in either half. Reaching for @mcp.tool here is the tell that you have left bare tool use behind.",
+        "source": "cca_field_delta",
+        "number": 68,
+        "trouble_card": "miss-D2-8"
+      }
+    },
+    {
+      "prompt": "Three spellings of the same idea, one per surface. Match them: allowed-tools, --allowedTools, allowed_tools.",
+      "answer": "allowed-tools = slash-command frontmatter · --allowedTools = the CLI flag / settings JSON style · allowed_tools = ClaudeAgentOptions in Python",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.0 the three spellings",
+        "choices": [
+          "allowed-tools = slash-command frontmatter · --allowedTools = the CLI flag / settings JSON style · allowed_tools = ClaudeAgentOptions in Python",
+          "allowed-tools = the CLI flag · --allowedTools = slash-command frontmatter · allowed_tools = settings.json",
+          "allowed-tools = subagent frontmatter · --allowedTools = ClaudeAgentOptions · allowed_tools = the CLI flag",
+          "All three are accepted everywhere; Claude Code normalises the casing before reading them"
+        ],
+        "explanation": "The rule: hyphen → markdown frontmatter. camelCase → Claude Code JSON, flags and hook output. snake_case → the Python Agent SDK. Scope it honestly: this is a Python rule — the TypeScript SDK is camelCase too, which is why the WORD never decides the bin, the PLACE does.",
+        "source": "cca_field_delta",
+        "number": 69
+      }
+    },
+    {
+      "prompt": "Where do project-scope MCP servers get configured?",
+      "answer": ".mcp.json at the repo root — checked in, and NOT inside .claude/",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.1 files and locations",
+        "choices": [
+          ".claude/mcp.json — checked in alongside the other project settings",
+          ".mcp.json at the repo root — checked in, and NOT inside .claude/",
+          ".claude/settings.json under an mcpServers key",
+          "mcp.config.json at the repo root, gitignored by default"
+        ],
+        "explanation": "User- and local-scope MCP config lives in a different file in the home directory — a different file with a different job from the user settings file.",
+        "source": "cca_field_delta",
+        "number": 70
+      }
+    },
+    {
+      "prompt": "You want instructions that apply only to files under api/, or to every *.test.tsx wherever it lives. Where do they go and how are they matched?",
+      "answer": ".claude/rules/ — scoped instruction files with YAML frontmatter, matched by a paths glob, so location doesn't matter",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.1 files and locations",
+        "choices": [
+          "MCP roots — declare api/ as a root and the server scopes its guidance to it",
+          ".claude/rules/ — scoped instruction files with YAML frontmatter, matched by a paths glob, so location doesn't matter",
+          "A skill in .claude/skills/<name>/SKILL.md, which the model loads when it sees a matching file",
+          "A per-directory CLAUDE.md in api/ and another beside each test file"
+        ],
+        "explanation": "The three wrong answers are all 'scoping' mechanisms, which is why they pull. roots is MCP path ENFORCEMENT — different domain, different verb. Skills must be invoked or chosen, so they are probabilistic; the word 'automatically' rules them out on its own. Per-directory CLAUDE.md is directory-bound and cannot catch files scattered across many dirs.",
+        "source": "cca_field_delta",
+        "number": 71,
+        "trouble_card": "miss-D3-10"
+      }
+    },
+    {
+      "prompt": "How does .claude/rules/ differ from CLAUDE.md in WHEN it loads?",
+      "answer": "CLAUDE.md loads every turn for everything; a rule applies only when a file matching its glob is in play",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.1 files and locations",
+        "choices": [
+          "Both load at session start; rules are simply narrower in content",
+          "CLAUDE.md loads on the first turn only; rules reload on every turn",
+          "Rules load at session start and CLAUDE.md is fetched on demand when the model asks for conventions",
+          "CLAUDE.md loads every turn for everything; a rule applies only when a file matching its glob is in play"
+        ],
+        "explanation": "'Read when the model first runs' is CLAUDE.md's behaviour, not rules'. That distinction is the whole point — and it is why CLAUDE.md bloat is a permanent per-turn tax.",
+        "source": "cca_field_delta",
+        "number": 72,
+        "trouble_card": "miss-D3-10"
+      }
+    },
+    {
+      "prompt": "What is the filename convention for a skill?",
+      "answer": "Always SKILL.md, inside a directory per skill under .claude/skills/<name>/",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.1 files and locations",
+        "choices": [
+          "Always <name>.md, directly inside .claude/skills/",
+          "Always SKILL.md, inside a directory per skill under .claude/skills/<name>/",
+          "Always skill.yaml, inside .claude/skills/<name>/",
+          "Any .md filename; the frontmatter name field is what matters"
+        ],
+        "explanation": "Directory per skill; the file is always SKILL.md. Contrast slash commands, where the FILENAME becomes /name.",
+        "source": "cca_field_delta",
+        "number": 73
+      }
+    },
+    {
+      "prompt": "Rank the settings layers from highest to lowest, for scalar settings.",
+      "answer": "managed-settings.json → command-line arguments → .claude/settings.local.json → .claude/settings.json → user settings",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.2 settings precedence",
+        "choices": [
+          "managed-settings.json → .claude/settings.local.json → .claude/settings.json → command-line arguments → user settings",
+          "command-line arguments → managed-settings.json → .claude/settings.json → .claude/settings.local.json → user settings",
+          "user settings → .claude/settings.json → .claude/settings.local.json → command-line arguments → managed-settings.json",
+          "managed-settings.json → command-line arguments → .claude/settings.local.json → .claude/settings.json → user settings"
+        ],
+        "explanation": "Five layers, not four: the docs list command-line arguments as a distinct layer between managed policy and local settings. Mnemonic: OVERRIDE for settings, VETO for permissions.",
+        "source": "cca_field_delta",
+        "number": 74
+      }
+    },
+    {
+      "prompt": "A tool is allowed in the local layer and denied in the project layer. Result — and does the layer RANKING decide it?",
+      "answer": "Denied. Permissions merge across all layers and deny wins from ANY layer, rank-independent",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.2 settings precedence",
+        "choices": [
+          "Allowed. local outranks project, and the higher layer's allow overrides the lower layer's deny",
+          "Denied, because project always outranks local for permissions specifically",
+          "Undefined — conflicting permission rules across layers cause Claude Code to prompt the user",
+          "Denied. Permissions merge across all layers and deny wins from ANY layer, rank-independent"
+        ],
+        "explanation": "The trap is that local genuinely DOES outrank project — for scalar settings like model and env. Permissions are not ranked; they are a merged pool with a deny veto.",
+        "source": "cca_field_delta",
+        "number": 75,
+        "trouble_card": "miss-D3-1"
+      }
+    },
+    {
+      "prompt": "In what order are the three permission rule lists evaluated?",
+      "answer": "deny → ask → allow",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.3 permissions",
+        "choices": [
+          "allow → deny → ask",
+          "ask → deny → allow",
+          "They are evaluated simultaneously and the most specific specifier wins",
+          "deny → ask → allow"
+        ],
+        "explanation": "deny is checked first and wins from any scope. additionalDirectories lives in the same permissions object as the three lists.",
+        "source": "cca_field_delta",
+        "number": 76
+      }
+    },
+    {
+      "prompt": "Name Claude Code's four permission modes.",
+      "answer": "default, acceptEdits, plan, bypassPermissions",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.3 permissions",
+        "choices": [
+          "auto, any, tool, none",
+          "default, autoApprove, readOnly, unsafe",
+          "ask, allow, deny, bypass",
+          "default, acceptEdits, plan, bypassPermissions"
+        ],
+        "explanation": "auto/any/tool/none are the tool_choice values — a second quartet of four mode names, and a documented interference trap. The discriminator is not the count (both are four), it is WHERE you type it: tool_choice crosses the wire in a request body; permission modes are typed into settings.json or passed as a CLI flag and never cross any wire.",
+        "source": "cca_field_delta",
+        "number": 77,
+        "trouble_card": "miss-D3-8"
+      }
+    },
+    {
+      "prompt": "You want to allowlist every tool on one MCP server in Claude Code. What do you write, and which surface owns that string?",
+      "answer": "One mcp__<server>__<tool> entry per tool — there is no glob form — and the string is a CLAUDE CODE permission entry, not MCP",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.3 permissions",
+        "choices": [
+          "mcp__<server>__* — a glob covering the server, and the string is a Claude Code permission entry",
+          "The bare server name, which Claude Code expands to every tool the server registered",
+          "One mcp__<server>__<tool> entry per tool, and the string belongs to the MCP surface, since mcp__ names the protocol",
+          "One mcp__<server>__<tool> entry per tool — there is no glob form — and the string is a CLAUDE CODE permission entry, not MCP"
+        ],
+        "explanation": "Double underscores, both places, no glob, no bare server name. Two directions of pull: the bare tool name is the API's tools=[...] shape, and the mcp__ prefix makes it LOOK like MCP when the string is a Claude Code permission entry. Ask where it gets typed.",
+        "source": "cca_field_delta",
+        "number": 78,
+        "trouble_card": "miss-D3-11"
+      }
+    },
+    {
+      "prompt": "Which settings key sets the permission mode, and which CLI flag does the same job?",
+      "answer": "defaultMode in settings.json; --permission-mode on the CLI",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.3 permissions",
+        "choices": [
+          "permissionMode in settings.json; --default-mode on the CLI",
+          "mode in settings.json; --mode on the CLI",
+          "defaultMode in both — the CLI accepts the settings spelling",
+          "defaultMode in settings.json; --permission-mode on the CLI"
+        ],
+        "explanation": "Same concept, a different identifier per surface. Rule syntax elsewhere in the object is Tool(specifier): Bash(npm run test:*), Read(./.env), WebFetch(domain:example.com).",
+        "source": "cca_field_delta",
+        "number": 79
+      }
+    },
+    {
+      "prompt": "Which hook event is the only one that carries permissionDecision?",
+      "answer": "PreToolUse",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.4 hooks — events",
+        "choices": [
+          "PostToolUse",
+          "PreToolUse",
+          "UserPromptSubmit",
+          "PreCompact"
+        ],
+        "explanation": "permissionDecision is PreToolUse-only vocabulary. Every OTHER blocking event uses a top-level `decision` field with the value \"block\" instead.",
+        "source": "cca_field_delta",
+        "number": 80,
+        "trouble_card": "miss-D3-7"
+      }
+    },
+    {
+      "prompt": "Which of these hook events CANNOT block?",
+      "answer": "PostToolUse — the tool already ran; it can only feed a reason back",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.4 hooks — events",
+        "choices": [
+          "Stop — the main agent finishing is not an interceptable moment",
+          "PreCompact — compaction is server-side and cannot be cancelled",
+          "SubagentStop — subagent lifecycle is outside the hook system",
+          "PostToolUse — the tool already ran; it can only feed a reason back"
+        ],
+        "explanation": "The exam-scope set: PreToolUse (blocks), PostToolUse (no), UserPromptSubmit (blocks), Notification (no), Stop (blocks — forces continuation), SubagentStop (blocks), SessionStart (no — injects context instead), SessionEnd (no), PreCompact (blocks).",
+        "source": "cca_field_delta",
+        "number": 81
+      }
+    },
+    {
+      "prompt": "A PreToolUse hook must deny with a structured reason, or hand back rewritten arguments. Name the second interface: exit code, stream, format, and the decision field.",
+      "answer": "exit 0, JSON on stdout, with hookSpecificOutput.permissionDecision (allow/deny/ask) and permissionDecisionReason",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.4 hooks — return interfaces",
+        "choices": [
+          "exit 2, JSON on stderr, with a top-level decision field set to \"block\" and a reason sibling",
+          "exit 0, JSON on stdio, with a top-level permissionDecision field and a reason sibling",
+          "exit 1, JSON on stdout, with hookSpecificOutput.decision and hookSpecificOutput.reason",
+          "exit 0, JSON on stdout, with hookSpecificOutput.permissionDecision (allow/deny/ask) and permissionDecisionReason"
+        ],
+        "explanation": "The consumer is CLAUDE CODE, not the model — which is why this doesn't contradict 'the model is deaf to stdout'. Discriminator: can a bare number say it? Block → exit 2 + stderr. Decide or rewrite → exit 0 + JSON on stdout. Note the stream is stdout; stdio is the MCP TRANSPORT word.",
+        "source": "cca_field_delta",
+        "number": 82,
+        "trouble_card": "miss-D3-7"
+      }
+    },
+    {
+      "prompt": "Which hook exit code blocks a tool call, and what do the others do?",
+      "answer": "Only exit 2 blocks, with the reason on stderr fed back to Claude. Every other non-zero fails OPEN — the tool runs, stderr shown to the user only",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.4 hooks — return interfaces",
+        "choices": [
+          "exit 1 blocks with the reason on stderr; exit 2 aborts the whole session",
+          "Only exit 2 blocks, with the reason on stderr fed back to Claude. Every other non-zero fails OPEN — the tool runs, stderr shown to the user only",
+          "Any non-zero exit blocks; exit 0 allows; the reason is always read from stdout",
+          "Only exit 2 blocks, and its stderr is discarded — which is why you must also write to stdout"
+        ],
+        "explanation": "The half that most often goes missing: on exit 2 the stderr IS fed back to Claude, which is the entire reason you block with a reason rather than a number. A buggy hook must never brick the session, so exit 1 (a generic Unix crash code) fails open.",
+        "source": "cca_field_delta",
+        "number": 83,
+        "trouble_card": "miss-D3-2"
+      }
+    },
+    {
+      "prompt": "Two PreToolUse hooks share one casing typo in the JSON key. Hook A tries to DENY a Read; hook B tries to ALLOW a Write the CLI never allowlisted. Both exit 0. What happens?",
+      "answer": "A: the Read RUNS (fails open). B: the Write is REFUSED (fails closed). An unknown key is a no-op, so the DIRECTION is set by your hook's intent",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.4 hooks — return interfaces",
+        "choices": [
+          "Both fail open — an unrecognised key is ignored and the default is always to proceed",
+          "Both fail closed — Claude Code refuses to act on a hook whose output it cannot parse",
+          "Both error visibly — an unknown key in hookSpecificOutput is a schema violation and the session reports it",
+          "A: the Read RUNS (fails open). B: the Write is REFUSED (fails closed). An unknown key is a no-op, so the DIRECTION is set by your hook's intent"
+        ],
+        "explanation": "A no-op on a DENY leaves the default (allow) standing; a no-op on an ALLOW leaves the default (deny) standing. Identical defect, identical silence, opposite blast radius. A is the dangerous one and it is the direction a security control lives in: no error, no warning, exit code 0, nothing in any log.",
+        "source": "cca_field_delta",
+        "number": 84,
+        "trouble_card": "miss-D3-13"
+      }
+    },
+    {
+      "prompt": "What is the nesting wrapper for per-event hook JSON fields, and what must go inside it?",
+      "answer": "hookSpecificOutput, which must contain hookEventName naming the event you are answering as",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.4 hooks — return interfaces",
+        "choices": [
+          "hookOutput, which must contain event naming the event",
+          "output, which must contain matcher naming the tool the decision applies to",
+          "There is no wrapper — permissionDecision is a top-level field",
+          "hookSpecificOutput, which must contain hookEventName naming the event you are answering as"
+        ],
+        "explanation": "The right field at the wrong nesting is a silent no-op. Note the split: hookSpecificOutput.permissionDecision for PreToolUse, but a TOP-LEVEL `decision` (value \"block\") with a top-level `reason` for PostToolUse, UserPromptSubmit, Stop, SubagentStop and PreCompact.",
+        "source": "cca_field_delta",
+        "number": 85
+      }
+    },
+    {
+      "prompt": "Which hook JSON field injects text into the session, and on which events?",
+      "answer": "additionalContext, under hookSpecificOutput, on SessionStart and UserPromptSubmit",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.4 hooks — return interfaces",
+        "choices": [
+          "additionalContext, under hookSpecificOutput, on SessionStart and UserPromptSubmit",
+          "systemMessage, top-level, on any event",
+          "reason, top-level, paired with decision",
+          "stopReason, top-level, paired with continue"
+        ],
+        "explanation": "The common top-level fields that work on any event are different: continue (a boolean that stops the whole turn), stopReason (the message shown when continue is false), suppressOutput (hide stdout from the transcript) and systemMessage (a warning shown to the user).",
+        "source": "cca_field_delta",
+        "number": 86
+      }
+    },
+    {
+      "prompt": "permissionDecision accepts \"allow\", \"deny\" or \"ask\". What happens if you write \"Deny\"?",
+      "answer": "It fails open silently — the value set is case-sensitive and an unrecognised value is a no-op",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.4 hooks — return interfaces",
+        "choices": [
+          "It fails open silently — the value set is case-sensitive and an unrecognised value is a no-op",
+          "It is normalised to lowercase and works as intended",
+          "The hook errors visibly and the tool call is blocked as a precaution",
+          "It is treated as \"ask\", prompting the user instead of denying"
+        ],
+        "explanation": "The identifiers that matter most are the ones that do NOT throw when you get them wrong. A misspelled Python kwarg throws instantly; a misspelled hook key never throws.",
+        "source": "cca_field_delta",
+        "number": 87
+      }
+    },
+    {
+      "prompt": "A PreToolUse hook with matcher `Read` denies with exit 2 on every call, correctly — and the agent still returns the file's contents. What happened?",
+      "answer": "The model called a different tool — Bash (cat) — which the matcher never covered",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.4 hooks — matchers",
+        "choices": [
+          "exit 2 failed open because the hook also wrote to stdout, and stdout takes precedence",
+          "The model called a different tool — Bash (cat) — which the matcher never covered",
+          "The hook fired after the read had already been performed, since PreToolUse is advisory",
+          "The model read the file from its own cached context, so no tool call occurred at all"
+        ],
+        "explanation": "A matcher guards a TOOL NAME, not the BYTES. Grep, Glob and anything else reaching the same resource are the same hole. Scope a guard to the CAPABILITY (every tool that can touch the thing) or to the RESOURCE, never to the one tool name you thought of first. This is D2-5 from the opposite side: there the guard was advisory; here the code is real, enforced and correct, and the SCOPE is wrong.",
+        "source": "cca_field_delta",
+        "number": 88,
+        "trouble_card": "miss-D3-12"
+      }
+    },
+    {
+      "prompt": "Are hook matchers only tool names?",
+      "answer": "No — SessionStart takes startup/resume/clear/compact, and PreCompact takes manual/auto",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.4 hooks — matchers",
+        "choices": [
+          "Yes — matcher is always a tool-name string or regex, on every event",
+          "No — SessionStart takes startup/resume/clear/compact, and PreCompact takes manual/auto",
+          "No — matcher also accepts file globs on any event that touches a file",
+          "Yes for command hooks; other handler types use a different key entirely"
+        ],
+        "explanation": "A matcher that doesn't match is a silent no-op, on every event.",
+        "source": "cca_field_delta",
+        "number": 89
+      }
+    },
+    {
+      "prompt": "Hook input arrives on stdin. What casing do the input fields use?",
+      "answer": "snake_case on the way IN (tool_name, tool_input.file_path) and camelCase on the way OUT",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.4 hooks — input",
+        "choices": [
+          "camelCase both ways, matching the rest of the Claude Code JSON surface",
+          "snake_case both ways, because hooks are shell scripts and shells prefer underscores",
+          "camelCase in, snake_case out — the inverse",
+          "snake_case on the way IN (tool_name, tool_input.file_path) and camelCase on the way OUT"
+        ],
+        "explanation": "One of the few places a single surface uses both casings, and the direction is what decides.",
+        "source": "cca_field_delta",
+        "number": 90
+      }
+    },
+    {
+      "prompt": "In slash-command frontmatter, what is the tool-grant key called?",
+      "answer": "allowed-tools — hyphenated, and neither the CLI flag nor the SDK field",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.5 slash commands and skills",
+        "choices": [
+          "allowedTools — camelCase, matching the CLI flag",
+          "tools — the same key subagent frontmatter uses",
+          "allowed-tools — hyphenated, and neither the CLI flag nor the SDK field",
+          "permissions.allow — the same shape settings.json uses"
+        ],
+        "explanation": "Frontmatter is hyphenated throughout: allowed-tools, argument-hint, disable-model-invocation. Note the trap next door: SUBAGENT frontmatter uses `tools`, not allowed-tools — different file, different key.",
+        "source": "cca_field_delta",
+        "number": 91
+      }
+    },
+    {
+      "prompt": "How do arguments reach the body of a slash-command file?",
+      "answer": "$ARGUMENTS for all args as one string, $1 and $2 for positional args",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.5 slash commands and skills",
+        "choices": [
+          "{{args}} for all args, {{1}} and {{2}} for positional args",
+          "%ARGS% for all args; positional args are not supported",
+          "They are passed as frontmatter values under an args key",
+          "$ARGUMENTS for all args as one string, $1 and $2 for positional args"
+        ],
+        "explanation": "argument-hint (hyphenated) documents what the command expects.",
+        "source": "cca_field_delta",
+        "number": 92
+      }
+    },
+    {
+      "prompt": "What does disable-model-invocation: true do on a skill?",
+      "answer": "The skill runs only when the user explicitly asks for it — the model may not choose to load it",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.5 slash commands and skills",
+        "choices": [
+          "The skill is disabled entirely until re-enabled in settings",
+          "The skill runs only when the user explicitly asks for it — the model may not choose to load it",
+          "The skill runs without invoking a model, executing its script directly",
+          "The skill is hidden from /help but still model-invocable"
+        ],
+        "explanation": "Hyphenated, like the rest of frontmatter. This is also why 'a skill' is the wrong answer to 'apply this AUTOMATICALLY' — skills are invoked or chosen, which makes them probabilistic.",
+        "source": "cca_field_delta",
+        "number": 93
+      }
+    },
+    {
+      "prompt": "A 600-line CLAUDE.md, and Claude increasingly ignores parts of it. Best fix?",
+      "answer": "Trim it toward under 200 lines — CLAUDE.md loads every turn, so bloat is a permanent per-turn attention tax",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.6 CLAUDE.md",
+        "choices": [
+          "Trim it toward under 200 lines — CLAUDE.md loads every turn, so bloat is a permanent per-turn attention tax",
+          "Split it with @import so each section lives in its own file",
+          "Add 'follow all rules carefully' at the top and bottom",
+          "Move the content into settings.json so it loads as configuration rather than prose"
+        ],
+        "explanation": "This is context rot (Domain 5) wearing Domain 3 clothing. @import doesn't shrink anything — same tokens, different file. 'Follow all rules carefully' spends tokens to fix a token problem. settings.json holds config, not instructions.",
+        "source": "cca_field_delta",
+        "number": 94,
+        "trouble_card": "miss-D3-5"
+      }
+    },
+    {
+      "prompt": "In a headless run (-p, no TTY), a tool requiring permission isn't in the allowlist. Asked or denied?",
+      "answer": "Denied immediately — with no human to prompt, a permission request would hang CI forever",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.7 headless / CI",
+        "choices": [
+          "Denied immediately — with no human to prompt, a permission request would hang CI forever",
+          "Asked — the request is written to stderr and the run blocks until a decision arrives",
+          "Allowed — headless mode defaults to permissive so pipelines don't break",
+          "Denied, but only if the MCP server exposing it was never registered"
+        ],
+        "explanation": "No TTY means nothing can prompt. Scope correction worth knowing: default-allowed read-only tools (Read) can still run with no allowlist entry at all, so 'not in the allowlist' is not the same as 'gated' — the allowlist gates tools that REQUIRE permission.",
+        "source": "cca_field_delta",
+        "number": 95,
+        "trouble_card": "miss-D3-3"
+      }
+    },
+    {
+      "prompt": "What values does --output-format take?",
+      "answer": "text, json, stream-json",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.7 headless / CI",
+        "choices": [
+          "text, json, stream-json",
+          "text, json, ndjson",
+          "plain, structured, streaming",
+          "text, json, xml"
+        ],
+        "explanation": "--input-format takes text and stream-json. -p / --print is the headless switch itself.",
+        "source": "cca_field_delta",
+        "number": 96
+      }
+    },
+    {
+      "prompt": "Which CLI flag branches a session instead of continuing it, and what is its SDK spelling?",
+      "answer": "--fork-session on the CLI; fork_session in ClaudeAgentOptions",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.7 headless / CI",
+        "choices": [
+          "--branch-session on the CLI; branch_session in ClaudeAgentOptions",
+          "--fork-session on the CLI; fork_session in ClaudeAgentOptions",
+          "--fork-session on the CLI; forkSession in ClaudeAgentOptions",
+          "--resume --new on the CLI; resume_new in ClaudeAgentOptions"
+        ],
+        "explanation": "Hyphens on the CLI, snake_case in the Python SDK — one of fourteen words that live on both the FILE and PROGRAM surfaces.",
+        "source": "cca_field_delta",
+        "number": 97
+      }
+    },
+    {
+      "prompt": "--resume vs fork_session — and which one repairs a saved investigation whose EVIDENCE has gone stale?",
+      "answer": "--resume continues the same session, fork_session branches a copy — and NEITHER repairs stale evidence; both inherit the polluted baseline",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.7 headless / CI",
+        "choices": [
+          "--resume continues the same session, fork_session branches a copy — and fork_session repairs it by letting you diverge from the stale point",
+          "--resume reloads persisted memory, fork_session starts fresh — so --resume repairs it by re-reading the sources",
+          "--resume continues the same session, fork_session branches a copy — and NEITHER repairs stale evidence; both inherit the polluted baseline",
+          "--resume continues the same session, fork_session branches a copy — and --resume repairs it if you instruct it to ignore pre-weekend material"
+        ],
+        "explanation": "It is about session LINEAGE, not persistence. Forking branches FROM the polluted baseline, so 'the most internally consistent branch' is consistency among stale citations. Resuming plus 'ignore anything from before the weekend' is an instruction issued against context still in the window. The fix is structural: a FRESH session seeded with a structured summary of what is still valid. Fork is for exploring divergent approaches from a baseline that is still VALID.",
+        "source": "cca_field_delta",
+        "number": 98,
+        "trouble_card": "miss-D3-9"
+      }
+    },
+    {
+      "prompt": "claude mcp add --scope project vs --scope user/local — where does each land?",
+      "answer": "project → .mcp.json at the repo root (shared and checked in); user/local → the user-level Claude config in the home directory",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.8 MCP from Claude Code",
+        "choices": [
+          "project → .mcp.json at the repo root (shared and checked in); user/local → the user-level Claude config in the home directory",
+          "project → .claude/settings.json; user/local → .claude/settings.local.json",
+          "project → .claude/mcp.json; user/local → /etc/claude/mcp.json",
+          "Both land in .mcp.json; the scope only controls whether the server auto-starts"
+        ],
+        "explanation": "Two settings keys govern approval of .mcp.json servers: enabledMcpjsonServers and disabledMcpjsonServers — note the lowercase 'json' inside the camelCase.",
+        "source": "cca_field_delta",
+        "number": 99
+      }
+    },
+    {
+      "prompt": "Which of these is a Claude Code settings key rather than an MCP protocol word?",
+      "answer": "enabledMcpjsonServers",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.8 MCP from Claude Code",
+        "choices": [
+          "protocolVersion",
+          "listChanged",
+          "sampling/createMessage",
+          "enabledMcpjsonServers"
+        ],
+        "explanation": "The mcp__ / Mcp / MCP prefixes are exactly the signal to run the physical test: does it cross the wire, or do you type it into a file? A term that NAMES a surface is the cue to check the other axis.",
+        "source": "cca_field_delta",
+        "number": 100
+      }
+    },
+    {
+      "prompt": "What is the most-repeated fact about structured output on the Messages API?",
+      "answer": "There is no output_schema field — you define a tool whose input_schema is the shape you want back and force it with tool_choice",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.0 structured output",
+        "choices": [
+          "output_schema is a top-level request parameter that accepts any JSON Schema",
+          "There is no output_schema field — you define a tool whose input_schema is the shape you want back and force it with tool_choice",
+          "response_format: {type: json_object} is the supported mechanism, as on other providers",
+          "The system prompt must contain the schema; there is no request-level mechanism at all"
+        ],
+        "explanation": "The inversion is the whole domain: your OUTPUT contract is written in an INPUT schema. Everything else hangs off it.",
+        "source": "cca_field_delta",
+        "number": 101
+      }
+    },
+    {
+      "prompt": "Forced tool use and strict:true both guarantee something. What do they NOT guarantee?",
+      "answer": "Semantics — the values can be wrong. total:100 is schema-valid when the line items sum to 59.99",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.0 structured output",
+        "choices": [
+          "Shape — the model can still emit malformed JSON under load, which is why you retry",
+          "Semantics — the values can be wrong. total:100 is schema-valid when the line items sum to 59.99",
+          "Delivery — the model may answer in text instead, which is why you also need a stop sequence",
+          "Nothing — a schema guarantee covers types, ranges and cross-field consistency"
+        ],
+        "explanation": "A shape technique guarantees SHAPE, never SEMANTICS. That gap is why every correct answer here is shape technique PLUS a validation-retry loop, and why 'add few-shot examples' is a distractor when a guarantee is available.",
+        "source": "cca_field_delta",
+        "number": 102,
+        "trouble_card": "miss-D4-5"
+      }
+    },
+    {
+      "prompt": "Mechanically, what is strict:true / constrained decoding doing?",
+      "answer": "The sampler is restricted to a grammar derived from your schema AT GENERATION, so invalid output is impossible by construction",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.0 structured output",
+        "choices": [
+          "The model drafts, then reviews its own output against the schema before returning it",
+          "The client validates after the response arrives and silently retries on failure",
+          "The sampler is restricted to a grammar derived from your schema AT GENERATION, so invalid output is impossible by construction",
+          "The API strips any fields not present in the schema before returning the response"
+        ],
+        "explanation": "Nothing checks after; the sampler simply cannot emit bad tokens. Decoding shapes the MOLD; retry checks the MEANING.",
+        "source": "cca_field_delta",
+        "number": 103,
+        "trouble_card": "miss-D4-3"
+      }
+    },
+    {
+      "prompt": "A field is legitimately ABSENT from the source vs MALFORMED by the model. Treat them how?",
+      "answer": "Absent → model it as nullable in the schema, so it is valid and needs no retry. Malformed → a validation error, so retry",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.1 the validation-retry loop",
+        "choices": [
+          "Both → retry, since neither produced a usable value",
+          "Both → accept, since a missing field and a bad field are equally recoverable downstream",
+          "Absent → retry with a stronger instruction. Malformed → accept and repair client-side",
+          "Absent → model it as nullable in the schema, so it is valid and needs no retry. Malformed → a validation error, so retry"
+        ],
+        "explanation": "Absent is not malformed. Give the model a legal way to say 'not found' or it will invent certainty. Same idea behind conflict_detected / detected_pattern fields: give it a place to put uncertainty.",
+        "source": "cca_field_delta",
+        "number": 104,
+        "trouble_card": "miss-D4-6"
+      }
+    },
+    {
+      "prompt": "What does the validation-retry loop feed back on a failure?",
+      "answer": "The specific violation, re-asking with that violation named, and a cap on attempts",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.1 the validation-retry loop",
+        "choices": [
+          "The original prompt verbatim, with the temperature lowered each round",
+          "A generic 'that was invalid, try again' so the model doesn't anchor on the mistake",
+          "The specific violation, re-asking with that violation named, and a cap on attempts",
+          "Nothing — you re-sample until a valid response arrives, which is what makes it a loop"
+        ],
+        "explanation": "validate → repair → retry, with the violation named and attempts capped. Cross-field checks (recompute calculated_total and compare it to stated_total) are the canonical example.",
+        "source": "cca_field_delta",
+        "number": 105
+      }
+    },
+    {
+      "prompt": "Where does a long document go relative to the instruction?",
+      "answer": "Before it — long documents go first, delimited with XML tags, with the instruction after",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.2 prompt structure",
+        "choices": [
+          "After it — the instruction must be read first to frame the document",
+          "Interleaved — the instruction should be repeated between document sections",
+          "In the system parameter, with only the instruction in the user turn",
+          "Before it — long documents go first, delimited with XML tags, with the instruction after"
+        ],
+        "explanation": "system is a top-level request parameter, not a message with role:\"system\". XML tags delimit sections.",
+        "source": "cca_field_delta",
+        "number": 106
+      }
+    },
+    {
+      "prompt": "The replies are too long AND they keep dropping order numbers. You fix them one at a time and the prompt ends up where it started. What rule decides how fixes are batched?",
+      "answer": "Interacting issues → ONE message with the priority stated. Independent issues → sequential, re-scoring between",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.2 prompt structure",
+        "choices": [
+          "Always sequential with verification between, so you can attribute each score change to one edit",
+          "Interacting issues → ONE message with the priority stated. Independent issues → sequential, re-scoring between",
+          "Always one message, since the model re-reads the whole prompt anyway",
+          "Batch by domain: prompt-wording fixes together, schema fixes together"
+        ],
+        "explanation": "THE TEST: does fixing A change what 'fixed' means for B? The mechanism that gets dropped: one-change-at-a-time is an ATTRIBUTION rule, and it only serves attribution while the edits are independent. When two fixes compete for the same budget, isolating them DESTROYS attribution — neither change has a stable meaning without the other, so sequencing hides the tradeoff from the only party who can make it. Length vs identifiers = same budget → one message. ISO dates + cite-the-source = different fields → sequential.",
+        "source": "cca_field_delta",
+        "number": 107,
+        "trouble_card": "miss-D4-8"
+      }
+    },
+    {
+      "prompt": "The guide names a pattern for surfacing considerations before the model commits. What is it?",
+      "answer": "The interview pattern — have Claude ask you questions first",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.2 prompt structure",
+        "choices": [
+          "The critique pattern — have Claude draft, then criticise its own draft",
+          "The rubric pattern — have Claude score the request against criteria before answering",
+          "The chain-of-thought pattern — have Claude enumerate its reasoning before answering",
+          "The interview pattern — have Claude ask you questions first"
+        ],
+        "explanation": "Interview BEFORE generating is strong; self-review AFTER generating, in the same session, is weak. Same model, opposite verdicts, and the session boundary is the whole difference.",
+        "source": "cca_field_delta",
+        "number": 108
+      }
+    },
+    {
+      "prompt": "When do you reach for a code-based grader over a model-based one?",
+      "answer": "Whenever the answer is deterministically checkable — it is the cheapest and most reliable option",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.3 evals — graders",
+        "choices": [
+          "Whenever the answer is deterministically checkable — it is the cheapest and most reliable option",
+          "Whenever the dataset is large, since model graders do not scale past a few hundred cases",
+          "Whenever the task is subjective, since code is unbiased",
+          "Never for agent outputs — agent behaviour is always judgment-shaped"
+        ],
+        "explanation": "Code-based for checkable answers, model-based for judgment-shaped criteria (with its own rubric), human as a last resort used to calibrate the other two.",
+        "source": "cca_field_delta",
+        "number": 109
+      }
+    },
+    {
+      "prompt": "You need an eval dataset generated, the outputs graded, and a task benchmarked. Which model does which job?",
+      "answer": "The cheap model GENERATES the dataset and GRADES the outputs; the strong model runs the TASK UNDER TEST",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.3 evals — graders",
+        "choices": [
+          "The cheap model GENERATES the dataset and GRADES the outputs; the strong model runs the TASK UNDER TEST",
+          "The strong model generates and grades; the cheap model runs the task, to keep the benchmark cheap",
+          "The strong model does all three, since eval quality gates everything downstream",
+          "The cheap model does all three, since eval scaffolding is never the thing being measured"
+        ],
+        "explanation": "Tier the scaffolding, never the subject. Grading is the counterintuitive half — the instinct says judging needs the strong model, but judging against explicit criteria is scaffolding. If the cheap model runs the task under test, you are measuring the wrong model.",
+        "source": "cca_field_delta",
+        "number": 110,
+        "trouble_card": "miss-D4-7"
+      }
+    },
+    {
+      "prompt": "An eval case PASSES on Haiku and FAILS on Sonnet. What does that mean?",
+      "answer": "Your LABEL is wrong, not your model — a weak model can pass by never engaging with the hard part",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.3 evals — graders",
+        "choices": [
+          "Your prompt is too complex for Haiku and needs simplifying until both agree",
+          "Your LABEL is wrong, not your model — a weak model can pass by never engaging with the hard part",
+          "Sonnet is overthinking; lower its temperature until the scores converge",
+          "The case is flaky and should be dropped from the set"
+        ],
+        "explanation": "Look at the reason strings of the cases that PASSED — a score column cannot show this, and spot-checking only failures never finds it. The general rule: fails weak + passes strong → model. Passes weak + fails strong → your label.",
+        "source": "cca_field_delta",
+        "number": 111
+      }
+    },
+    {
+      "prompt": "A policy over- AND under-escalates. Does that prove the criteria are vague?",
+      "answer": "No — necessary but not sufficient. A too-small model on a precise prompt splits both ways too; re-run the SAME prompt on a bigger model and see if the split closes",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.3 evals — graders",
+        "choices": [
+          "No — necessary but not sufficient. A too-small model on a precise prompt splits both ways too; re-run the SAME prompt on a bigger model and see if the split closes",
+          "Yes — a two-sided error is the definition of an underspecified decision boundary, so rewrite the criteria with explicit thresholds",
+          "No — a two-sided error means your eval labels disagree with each other, so the dataset is what needs repair, not the prompt",
+          "Yes, and the fix is more few-shot examples spanning both directions until the boundary is demonstrated rather than described"
+        ],
+        "explanation": "The two levers: a vague adjective ('complex') is definitional, capability cannot help, fix the PROMPT. A precise rule the model cannot apply is capability, fix the MODEL. But keep the exam prior: if the stem names a fixable design defect, the model-upgrade option is the distractor.",
+        "source": "cca_field_delta",
+        "number": 112
+      }
+    },
+    {
+      "prompt": "A grader has both the decision and the model's stated reason. What do you score?",
+      "answer": "The decision — reasons diagnose, they never score",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.3 evals — scoring",
+        "choices": [
+          "The reason — a right answer for the wrong reason will not generalise",
+          "Both, weighted equally, so the score reflects process as well as outcome",
+          "The reason first, and only score the decision when the reason is unparseable",
+          "The decision — reasons diagnose, they never score"
+        ],
+        "explanation": "Measured: a model gave the right reason and chose wrong, twice. Reasons are for diagnosis after the fact.",
+        "source": "cca_field_delta",
+        "number": 113
+      }
+    },
+    {
+      "prompt": "You report v4 scored 11/13 and Haiku scored 10/13. What is wrong with that?",
+      "answer": "It quotes one run rather than the range — both scored 10–11 across runs, so a single run of each can read as a difference that isn't there",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.3 evals — scoring",
+        "choices": [
+          "It uses raw counts rather than percentages, which are not comparable across set sizes",
+          "It compares a prompt version to a model, which are different variables",
+          "Nothing — a single held-out run per configuration is the standard reporting unit",
+          "It quotes one run rather than the range — both scored 10–11 across runs, so a single run of each can read as a difference that isn't there"
+        ],
+        "explanation": "Quote the range, not a run. An instrument gets validated before its null result means anything.",
+        "source": "cca_field_delta",
+        "number": 114
+      }
+    },
+    {
+      "prompt": "Prod is 80% simple / 20% complex. Your 100-case eval set returns one headline score. What makes that number trustworthy?",
+      "answer": "Stratified sampling by PROPORTION — fill the strata to mirror production's 80/20 so the aggregate predicts prod",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.3 evals — datasets",
+        "choices": [
+          "Random sampling from production logs, which reproduces the distribution automatically",
+          "Multi-shot examples covering both case types, so the model is calibrated to each",
+          "A larger set — 1000 cases makes the distribution converge on production's",
+          "Stratified sampling by PROPORTION — fill the strata to mirror production's 80/20 so the aggregate predicts prod"
+        ],
+        "explanation": "A 50/50 set scoring 95% simple and 55% complex reports 75%, but 80/20 prod actually experiences 87%. A 12-point lie that would send you chasing a defect affecting a fifth of traffic.",
+        "source": "cca_field_delta",
+        "number": 115,
+        "trouble_card": "miss-D4-4"
+      }
+    },
+    {
+      "prompt": "Same 80/20 prod, plus a rare-critical failure type at ~1% of traffic. What does strict proportion alone cost you?",
+      "answer": "COVERAGE — strict proportion gives about one rare-critical case per 100, too few to detect anything; oversample the stratum and weight it back down in the aggregate",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.3 evals — datasets",
+        "choices": [
+          "PROPORTION — the rare stratum drags the headline score down and makes the aggregate pessimistic",
+          "Nothing — 1% representation is exactly right, since the aggregate should mirror production",
+          "Statistical power on the majority strata, since the rare cases consume budget",
+          "COVERAGE — strict proportion gives about one rare-critical case per 100, too few to detect anything; oversample the stratum and weight it back down in the aggregate"
+        ],
+        "explanation": "Two halves, and the documented failure is producing one per sitting. Proportion makes the number MEAN something; coverage makes sure nothing is INVISIBLE. Not few-shot — shots go in the PROMPT, strata go in the DATASET.",
+        "source": "cca_field_delta",
+        "number": 116,
+        "trouble_card": "miss-D4-4b"
+      }
+    },
+    {
+      "prompt": "An evaluator-optimizer loop plateaus: the same model drafts and reviews in the same session, and reviews stop catching anything after round two. Mechanism?",
+      "answer": "The reviewer retains the reasoning context that produced the draft, so it will not question its own decisions — the fix is an independent instance without that context",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.4 self-review",
+        "choices": [
+          "The reviewer's rubric is too loose, so it has nothing left to measure against by round three",
+          "The context window is saturated by round two, so the reviewer no longer sees the full draft",
+          "The model's temperature collapses across rounds as the context becomes more self-similar",
+          "The reviewer retains the reasoning context that produced the draft, so it will not question its own decisions — the fix is an independent instance without that context"
+        ],
+        "explanation": "More rounds = more passes by a reviewer that already believes the draft. A stricter rubric is plausible but it isn't failing for lack of criteria. A stronger model inherits the same commitment when it reviews its own generation — the defect is STRUCTURAL, not capability. The guide states this in two domains.",
+        "source": "cca_field_delta",
+        "number": 117,
+        "trouble_card": "miss-D4-9"
+      }
+    },
+    {
+      "prompt": "You add a new option to an agent's answer space (e.g. RESOLVE_AND_FLAG). What must ship in the SAME commit?",
+      "answer": "An eval case that punishes OVERUSE of the new option — a new option is a new way to be wrong",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.4 self-review",
+        "choices": [
+          "Few-shot examples in the prompt demonstrating the new option",
+          "A rubric update explaining when the new option applies",
+          "A migration that re-labels historical cases against the expanded answer space",
+          "An eval case that punishes OVERUSE of the new option — a new option is a new way to be wrong"
+        ],
+        "explanation": "A case with two questions and nothing to flag catches a policy that flags anything containing 'also'. Without it, that shortcut scores full marks.",
+        "source": "cca_field_delta",
+        "number": 118,
+        "trouble_card": "miss-tier2-fewshot"
+      }
+    },
+    {
+      "prompt": "A metric reported three different wrong results across three days, each time confirming the belief already held. What is the defect?",
+      "answer": "The metric was defined in terms of the thing under test — when the subject changed, the metric silently changed MEANING",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.5 measurement discipline",
+        "choices": [
+          "The metric had no baseline, so every reading was unanchored",
+          "The metric was defined in terms of the thing under test — when the subject changed, the metric silently changed MEANING",
+          "The metric was computed on too few runs, so noise dominated",
+          "The metric was computed by the same model that produced the outputs, so it inherited the bias"
+        ],
+        "explanation": "A measurement must not share a variable with its subject. THE TELL: all three confirmed the belief already held — instrument error of this kind arrives as signal, never as noise. And note it is NOT the self-review defect: there the contamination is CONTEXT and the fix is an independent instance; here the defect is in the DEFINITION, and a fresh instance running the same definition reproduces it exactly. Fix: define the metric against something INVARIANT across the comparison.",
+        "source": "cca_field_delta",
+        "number": 119,
+        "trouble_card": "miss-D4-10"
+      }
+    },
+    {
+      "prompt": "You move 10k calls to the Message Batches API to make them faster. What actually happens?",
+      "answer": "They get slower — batches are asynchronous — and what you get is a 50% cost reduction plus high throughput",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.6 batches",
+        "choices": [
+          "They get faster, since batch requests bypass per-request rate limiting",
+          "They get slower — batches are asynchronous — and what you get is a 50% cost reduction plus high throughput",
+          "Latency is unchanged; the only difference is that results arrive as one file",
+          "They get slower, and the only benefit is a higher rate limit — cost is unchanged"
+        ],
+        "explanation": "Never a latency lever. Poll until processing_status is ended, then match results by custom_id — order is not guaranteed.",
+        "source": "cca_field_delta",
+        "number": 120,
+        "trouble_card": "miss-D4-2"
+      }
+    },
+    {
+      "prompt": "What values does a batch's processing_status take?",
+      "answer": "Exactly two: in_progress and ended",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.6 batches",
+        "choices": [
+          "Three: processing, complete, failed",
+          "Four: queued, in_progress, succeeded, errored",
+          "Exactly two: in_progress and ended",
+          "Two: pending and complete"
+        ],
+        "explanation": "Not 'processing', not 'complete'. The per-REQUEST result types are the four in request_counts: succeeded, errored, canceled, expired (plus processing) — and you are not billed for the last three.",
+        "source": "cca_field_delta",
+        "number": 121
+      }
+    },
+    {
+      "prompt": "How do you match a batch result back to the request that produced it?",
+      "answer": "custom_id — you set it per request, and order is not guaranteed",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.6 batches",
+        "choices": [
+          "custom_id — you set it per request, and order is not guaranteed",
+          "The array index — results come back in submission order",
+          "request_id — assigned by the API and returned in the batch manifest",
+          "The message id — echoed from the original request"
+        ],
+        "explanation": "custom_id is 1–64 chars from [a-zA-Z0-9_-]. Results land at results_url as .jsonl, which you stream rather than downloading whole.",
+        "source": "cca_field_delta",
+        "number": 122
+      }
+    },
+    {
+      "prompt": "What are the batch expiration and retention windows?",
+      "answer": "24-hour expiration (most finish under an hour); results stay downloadable for 29 days",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.6 batches",
+        "choices": [
+          "24-hour expiration (most finish under an hour); results stay downloadable for 29 days",
+          "4-hour submission windows against a 30-hour SLA; results retained 7 days",
+          "1-hour expiration; results retained 24 hours",
+          "No expiration; results retained indefinitely until deleted"
+        ],
+        "explanation": "Size cap: 100,000 requests or 256 MB, whichever is reached first. Results are available when all requests finish or at 24 hours, whichever comes first.",
+        "source": "cca_field_delta",
+        "number": 123
+      }
+    },
+    {
+      "prompt": "Can you run an agentic tool loop inside a Message Batch?",
+      "answer": "No — each request is processed independently and returns one response, so nothing executes a tool_use and feeds a tool_result back; a PRE-BUILT multi-turn history is fine",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.6 batches",
+        "choices": [
+          "No — each request is processed independently and returns one response, so nothing executes a tool_use and feeds a tool_result back; a PRE-BUILT multi-turn history is fine",
+          "Yes — tool use and multi-turn conversations are both batchable, and the batch runner executes each tool_use and feeds the tool_result back for you",
+          "No — tool use is rejected outright in batch requests, which is why batches are only for single-shot classification and extraction work",
+          "Yes, but only for server tools like web_search, since those execute at Anthropic and need no round trip through your handler"
+        ],
+        "explanation": "The docs do list tool use and multi-turn as batchable — what you cannot do is run a LIVE loop. Also: stream:true is not supported; results come back as one file.",
+        "source": "cca_field_delta",
+        "number": 124
+      }
+    },
+    {
+      "prompt": "Assistant prefill and `temperature` — what is their exam status?",
+      "answer": "Both are out of scope: prefill is never mentioned in the official guide and 400s on Sonnet 5; temperature is deprecated on the newest models",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.7 scope",
+        "choices": [
+          "Both are in scope and commonly tested as prompt-control levers",
+          "Prefill is in scope as the structured-output mechanism; temperature is out of scope",
+          "Both are out of scope: prefill is never mentioned in the official guide and 400s on Sonnet 5; temperature is deprecated on the newest models",
+          "Temperature is in scope for eval reproducibility; prefill is out of scope"
+        ],
+        "explanation": "Keep prefill recognisable so you can REJECT it — the in-scope substitute is always forced tool use. Token counting, rate limits and embeddings are also on the out-of-scope list.",
+        "source": "cca_field_delta",
+        "number": 125
+      }
+    },
+    {
+      "prompt": "Name each context mechanism's side and verb, then say which one PRESERVES old turns.",
+      "answer": "Compaction = server, SUMMARIZE (preserves, compressed). Context editing = client-declared, DELETE. Memory tool = client, PERSIST. Compaction preserves; context editing discards verbatim",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.0 the three mechanisms",
+        "choices": [
+          "Compaction = client, SUMMARIZE. Context editing = server, DELETE. Memory = client, PERSIST. Context editing preserves, because deletion is reversible from the transcript",
+          "Compaction = server, DELETE. Context editing = client, SUMMARIZE. Memory = server, PERSIST. Context editing preserves",
+          "All three run server-side and all three preserve; they differ only in how aggressively they compress",
+          "Compaction = server, SUMMARIZE (preserves, compressed). Context editing = client-declared, DELETE. Memory tool = client, PERSIST. Compaction preserves; context editing discards verbatim"
+        ],
+        "explanation": "Summarize (server) / delete (client) / persist (client). A lossy rewrite still carries the gist forward; context editing deletes whole stale tool_results verbatim, so what it drops is gone with no trace. Measured: deletion left NO hole and the model confabulated 'I never read auth.py'.",
+        "source": "cca_field_delta",
+        "number": 126,
+        "trouble_card": "miss-D5-3"
+      }
+    },
+    {
+      "prompt": "Which request field now houses BOTH context editing and compaction?",
+      "answer": "context_management.edits — an array of strategies, each distinguished by its type",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.0 the three mechanisms",
+        "choices": [
+          "context_control.strategies — editing and compaction are separate arrays inside it",
+          "context_management.edits — an array of strategies, each distinguished by its type",
+          "They are separate fields: context_editing and compaction, each top-level",
+          "system_management.window — a single object with an editing sub-key"
+        ],
+        "explanation": "This is new since the older reference sheets and it changes how a stem can be worded: the same array, differing only by type string.",
+        "source": "cca_field_delta",
+        "number": 127
+      }
+    },
+    {
+      "prompt": "What is the strategy type string for dropping old tool results, and what are its defaults?",
+      "answer": "clear_tool_uses_20250919 — trigger defaults to 100,000 input tokens, keep defaults to 3 tool uses",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.1 context editing",
+        "choices": [
+          "clear_tool_results — trigger defaults to 50,000 input tokens, keep defaults to 5 tool uses",
+          "clear_tool_uses_20250919 — trigger defaults to 100,000 input tokens, keep defaults to 3 tool uses",
+          "tool_use_clear_v1 — trigger defaults to 80% of the window, keep defaults to 3",
+          "clear_tool_uses — there is no date suffix, and both trigger and keep are required"
+        ],
+        "explanation": "The DATE is part of the identifier. trigger is {\"type\":\"input_tokens\",\"value\":N}; keep is {\"type\":\"tool_uses\",\"value\":N}. Other knobs: clear_at_least (minimum cleared per activation), exclude_tools (never clear these), clear_tool_inputs (also drop call parameters, default false).",
+        "source": "cca_field_delta",
+        "number": 128
+      }
+    },
+    {
+      "prompt": "There is a second, newer editing strategy. What is it and what is its ordering constraint?",
+      "answer": "clear_thinking_20251015 — if combined with another strategy, it must be listed FIRST",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.1 context editing",
+        "choices": [
+          "clear_system_20251015 — it must be listed LAST, after all tool strategies",
+          "clear_thinking — it cannot be combined with clear_tool_uses at all",
+          "clear_thinking_20251015 — if combined with another strategy, it must be listed FIRST",
+          "compact_20260112 — it must be listed first, because compaction runs before editing"
+        ],
+        "explanation": "The beta header for context management is anthropic-beta: context-management-2025-06-27.",
+        "source": "cca_field_delta",
+        "number": 129
+      }
+    },
+    {
+      "prompt": "What is the compaction strategy type, and what stop_reason signals a summary was generated?",
+      "answer": "compact_20260112, and stop_reason: \"compaction\" — a seventh stop_reason introduced in this beta",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.2 compaction",
+        "choices": [
+          "compaction_v1, and stop_reason: \"summarized\"",
+          "compact_20260112, and stop_reason: \"end_turn\" — compaction is transparent to the caller",
+          "auto_compact, and stop_reason: \"max_tokens\"",
+          "compact_20260112, and stop_reason: \"compaction\" — a seventh stop_reason introduced in this beta"
+        ],
+        "explanation": "Note the header/type mismatch: the beta header uses hyphens (compact-2026-01-12) while the type string uses underscores. trigger is input_tokens only, minimum 50,000. pause_after_compaction stops after summarizing; instructions REPLACES the default summarization prompt entirely rather than appending to it.",
+        "source": "cca_field_delta",
+        "number": 130
+      }
+    },
+    {
+      "prompt": "What must you do with the compaction content block on later requests?",
+      "answer": "Pass it back — it carries the summary, and dropping it loses the shortened context",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.2 compaction",
+        "choices": [
+          "Discard it — it is a receipt, and re-sending it double-counts the summarized tokens",
+          "Replace the summarized turns with it locally and send neither",
+          "Nothing — the server holds the summary against the session id",
+          "Pass it back — it carries the summary, and dropping it loses the shortened context"
+        ],
+        "explanation": "Also worth knowing: compaction BUSTS the cache, because rewriting the prefix invalidates it.",
+        "source": "cca_field_delta",
+        "number": 131
+      }
+    },
+    {
+      "prompt": "What does the memory tool's config block look like, and what is conspicuously absent?",
+      "answer": "{\"type\":\"memory_20250818\",\"name\":\"memory\"} — with NO input_schema, because Anthropic provides it",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.3 the memory tool",
+        "choices": [
+          "{\"type\":\"memory\",\"name\":\"memory\",\"input_schema\":{...}} — you supply the schema as with any custom tool",
+          "{\"type\":\"memory_20250818\"} plus a required anthropic-beta header, since it is still in beta",
+          "{\"name\":\"memory\",\"description\":\"...\"} — it is an ordinary custom tool with a reserved name",
+          "{\"type\":\"memory_20250818\",\"name\":\"memory\"} — with NO input_schema, because Anthropic provides it"
+        ],
+        "explanation": "Anthropic-schema client tools take only {type, name}. The memory tool is GA — no beta header.",
+        "source": "cca_field_delta",
+        "number": 132
+      }
+    },
+    {
+      "prompt": "Name the six memory tool commands.",
+      "answer": "view, create, str_replace, insert, delete, rename",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.3 the memory tool",
+        "choices": [
+          "read, write, append, edit, delete, list",
+          "view, create, update, delete, list, search",
+          "get, put, patch, delete, move, copy",
+          "view, create, str_replace, insert, delete, rename"
+        ],
+        "explanation": "They all arrive as `command` in the tool input, and YOUR handler executes every one. create takes file_text; str_replace takes old_str/new_str; insert takes insert_line; rename takes old_path/new_path.",
+        "source": "cca_field_delta",
+        "number": 133
+      }
+    },
+    {
+      "prompt": "What is /memories, and who enforces it?",
+      "answer": "A required path prefix your handler maps to real storage — and YOU enforce it; /memories/../../secrets.env escapes unless you validate",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.3 the memory tool",
+        "choices": [
+          "A sandboxed virtual filesystem the API isolates for you, so traversal is impossible",
+          "A reserved directory on Anthropic's servers where memory files are persisted between sessions",
+          "A namespace prefix the API strips before your handler sees the path",
+          "A required path prefix your handler maps to real storage — and YOU enforce it; /memories/../../secrets.env escapes unless you validate"
+        ],
+        "explanation": "Same shape as MCP roots: an advisory boundary with your enforcement. Claude only REQUESTS operations; the memory tool is client-side, so path traversal protection is your responsibility.",
+        "source": "cca_field_delta",
+        "number": 134
+      }
+    },
+    {
+      "prompt": "A scratchpad run wrote perfect notes across the session and still lost the fact. Why?",
+      "answer": "The read-back was never wired up — persist without read-back is no artifact at all",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.3 the memory tool",
+        "choices": [
+          "The read-back was never wired up — persist without read-back is no artifact at all",
+          "The notes exceeded the memory tool's per-file size limit and were silently truncated",
+          "The notes were written after compaction ran, so they described an already-summarized state",
+          "The memory tool is ephemeral within a session; only /memories survives, and the notes went elsewhere"
+        ],
+        "explanation": "Measured in the context-shedding build. Writing is half the mechanism; the model has to read it back for the fact to exist.",
+        "source": "cca_field_delta",
+        "number": 135
+      }
+    },
+    {
+      "prompt": "Accuracy degrades deep in a long session, BEFORE the window is full. Cause, fix, and what does NOT fix it?",
+      "answer": "Context rot — the attention/softmax focus budget spread thinner as tokens grow. Fix by shedding or curating. A bigger window does NOT fix it",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.4 context rot",
+        "choices": [
+          "Window overflow — the earliest turns are silently evicted. Fix with a bigger window, which does fix it",
+          "Context rot — the attention/softmax focus budget spread thinner as tokens grow. Fix by shedding or curating. A bigger window does NOT fix it",
+          "Cache invalidation — the prefix keeps being rewritten. Fix by pinning a cache_control breakpoint",
+          "Prompt drift — the system prompt loses salience. Fix by repeating it every N turns; a bigger window also helps"
+        ],
+        "explanation": "It is not 'running out of room'. The master principle is the smallest set of high-signal tokens — shed, don't hoard. And 'relocate' is a distractor class: moving text into a subagent's context is not reducing it unless the parent DROPS it.",
+        "source": "cca_field_delta",
+        "number": 136,
+        "trouble_card": "miss-D5-2"
+      }
+    },
+    {
+      "prompt": "Which models see their own remaining token budget, and which does not?",
+      "answer": "Sonnet 5/4.6/4.5 and Haiku 4.5 get an injected budget tag with running system_warning updates — Opus does NOT",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.4 context rot",
+        "choices": [
+          "All current models see it; the tag is injected uniformly by the API",
+          "Only Opus sees it, since it has the largest window to manage",
+          "Only Haiku 4.5 sees it; the larger models rely on client-side counting",
+          "Sonnet 5/4.6/4.5 and Haiku 4.5 get an injected budget tag with running system_warning updates — Opus does NOT"
+        ],
+        "explanation": "The classic gotcha is that the BIGGEST model is the one that can't see its budget, so 'all current models track budget' is the trap. Design consequence: Opus can't feel the wall coming, so it won't wrap up early, checkpoint, or shed on its own. On Opus YOU carry the budget — count client-side and compact at thresholds you enforce.",
+        "source": "cca_field_delta",
+        "number": 137,
+        "trouble_card": "miss-D5-9"
+      }
+    },
+    {
+      "prompt": "Adding one more tool to your request destroys the cache hit rate. Why?",
+      "answer": "Tools sit at the FRONT of the prompt, and anything before the cache breakpoint is what gets cached — so changing them invalidates the prefix",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.5 caching",
+        "choices": [
+          "Tool definitions are never cached, so adding one pushes cacheable content past the size threshold",
+          "Each tool gets its own cache entry, and the entries evict each other above a small count",
+          "Cache entries are keyed on the tool count, so any change to it resets the key",
+          "Tools sit at the FRONT of the prompt, and anything before the cache breakpoint is what gets cached — so changing them invalidates the prefix"
+        ],
+        "explanation": "The prefix rule. ttl:\"1h\" is the one-hour cache duration, recommended with batches, which can exceed five minutes. Cache multipliers and internals are explicitly out of scope — know the economics idea, skip the numbers.",
+        "source": "cca_field_delta",
+        "number": 138
+      }
+    },
+    {
+      "prompt": "The case-facts block is moved out of `system=` and prepended as a user turn instead. Content, wording and token cost identical. What breaks?",
+      "answer": "It enters the summarized window, so compaction consumes it like any other history — the block stops being authoritative and becomes more transcript",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.6 case facts",
+        "choices": [
+          "The model deprioritises user turns relative to system content, so the facts lose attention weight",
+          "Nothing breaks — placement is stylistic; the tokens and content are what matter",
+          "It enters the summarized window, so compaction consumes it like any other history — the block stops being authoritative and becomes more transcript",
+          "The block is no longer cacheable, so the cost rises even though the token count is identical"
+        ],
+        "explanation": "⇒ The pattern IS the PLACEMENT — which side of the compaction boundary it sits on — not the existence of the block. And the corollary the exam likes: the block is labelled authoritative and supersedes any summary, so its own errors win over correct history. The risk is in the mitigation.",
+        "source": "cca_field_delta",
+        "number": 139,
+        "trouble_card": "miss-D5-14"
+      }
+    },
+    {
+      "prompt": "Progressive summarization under a hard budget, support case. Which survives — the order number, or whether the refund happened?",
+      "answer": "The order number survives; the STATE goes first, because prose encodes done-vs-discussed in tense and aspect, the most compressible part of a sentence",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.6 case facts",
+        "choices": [
+          "The refund state survives; identifiers are treated as noise and shed first under pressure",
+          "Both survive equally — summarizers preserve entities and predicates at the same rate",
+          "Neither reliably survives; that is why you re-ask the customer rather than trusting a summary",
+          "The order number survives; the STATE goes first, because prose encodes done-vs-discussed in tense and aspect, the most compressible part of a sentence"
+        ],
+        "explanation": "This inverts the intuition, which is why it is carded. In a support case the identifiers ARE the payload, so a summarizer keeps the numbers and sheds the pleasantries — measured 4/4 even squeezed to 90 tokens. Meanwhile 'customer requesting refund; return received' compresses one notch into 'refund processed' and nothing looks wrong. Compaction eats your tense, not your numbers. Note which failure is worse: a lost identifier makes the agent ASK; drifted state makes it DECLINE TO ACT while every number in the reply is correct.",
+        "source": "cca_field_delta",
+        "number": 140,
+        "trouble_card": "miss-D5-13"
+      }
+    },
+    {
+      "prompt": "Name the three escalation triggers, and three things that are NOT triggers.",
+      "answer": "ASKED, COVERAGE, STUCK — and NOT difficulty/complexity, NOT sentiment, NOT the model's self-rated confidence",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.7 escalation",
+        "choices": [
+          "ASKED, COVERAGE, STUCK — and NOT difficulty/complexity, NOT sentiment, NOT the model's self-rated confidence",
+          "ASKED, DIFFICULTY, STUCK — and NOT sentiment, NOT confidence, NOT policy gaps",
+          "SENTIMENT, COVERAGE, CONFIDENCE — and NOT difficulty, NOT explicit requests, NOT time-in-queue",
+          "ASKED, COVERAGE, CONFIDENCE — and NOT difficulty, NOT sentiment, NOT reiteration"
+        ],
+        "explanation": "The customer asks for a human · policy doesn't authorise an answer · no meaningful progress is possible. The guide's phrasing is 'policy exceptions/gaps (not just complex cases)'.",
+        "source": "cca_field_delta",
+        "number": 141,
+        "trouble_card": "miss-D5-4c"
+      }
+    },
+    {
+      "prompt": "The COVERAGE trigger has three flavours. Name them — and say what kind of gap the third one is.",
+      "answer": "Policy is SILENT · policy is AMBIGUOUS · the request EXCEEDS A STATED LIMIT — and the third is a gap in AUTHORITY, not in information",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.7 escalation",
+        "choices": [
+          "Policy is SILENT · policy is AMBIGUOUS · the policy CONTRADICTS itself — and the third is a gap in consistency",
+          "The case is NOVEL · the case is COMPLEX · the case is HIGH-VALUE — and the third is a gap in risk tolerance",
+          "Policy is SILENT · the customer DISPUTES it · the request EXCEEDS A STATED LIMIT — and the third is a gap in evidence",
+          "Policy is SILENT · policy is AMBIGUOUS · the request EXCEEDS A STATED LIMIT — and the third is a gap in AUTHORITY, not in information"
+        ],
+        "explanation": "No rule · unclear rule · rule says no. The third is the one that keeps getting dropped, because it does not fit the grouping 'what the policy text fails to say'. 30-day return policy, customer asks on day 45: nothing is unclear, and the agent still cannot grant it — granting the exception is not its call.",
+        "source": "cca_field_delta",
+        "number": 142,
+        "trouble_card": "miss-D5-4"
+      }
+    },
+    {
+      "prompt": "The guide names two unreliable proxies for case complexity. Give the MECHANISM by which each fails.",
+      "answer": "Self-reported confidence samples the faculty that is already broken; sentiment measures a different variable (how they FEEL) than the real condition (whether the case is WITHIN POLICY)",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.7 escalation",
+        "choices": [
+          "Self-reported confidence samples the faculty that is already broken; sentiment measures a different variable (how they FEEL) than the real condition (whether the case is WITHIN POLICY)",
+          "Self-reported confidence is expensive to compute; sentiment analysis is inaccurate on short messages",
+          "Both fail because they need a second model call, which adds latency the escalation path cannot absorb",
+          "Self-reported confidence is only calibrated on training data; sentiment is only calibrated in English"
+        ],
+        "explanation": "The symptom is that the agent is confidently WRONG on hard cases — asking that model to rate its confidence just re-reads the broken gauge in a new unit. Generalisation: an option that measures something ADJACENT to the real variable (mood, confidence, length, tone) is almost always the distractor. Ask: does this proxy move when, and only when, the real condition moves?",
+        "source": "cca_field_delta",
+        "number": 143,
+        "trouble_card": "miss-D5-10"
+      }
+    },
+    {
+      "prompt": "Customer A says 'put me through to a person.' Customer B is furious about a refund status you can look up. Same action?",
+      "answer": "Opposite. A = ASKED → escalate immediately, no investigation first. B = furious but COVERED → acknowledge and offer to resolve; escalate only if they reiterate",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.7 escalation",
+        "choices": [
+          "Opposite. A = ASKED → escalate immediately, no investigation first. B = furious but COVERED → acknowledge and offer to resolve; escalate only if they reiterate",
+          "Same — both signal the case has exceeded what the agent should handle, so both escalate",
+          "Opposite. A = investigate first so the human gets context; B = escalate immediately, since anger is a trigger",
+          "Same — neither escalates, since an explicit request and an emotional signal are both sentiment"
+        ],
+        "explanation": "Auto-escalating on detected anger IS the sentiment proxy wearing a different hat. An explicit request is obeyed instantly; an emotional signal is not a request.",
+        "source": "cca_field_delta",
+        "number": 144,
+        "trouble_card": "miss-D5-11"
+      }
+    },
+    {
+      "prompt": "One message contains a covered return AND an uncovered shipping question. What is the decision?",
+      "answer": "Partition per request — resolve the covered part, send only the uncovered part to a human (RESOLVE_AND_FLAG)",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.7 escalation",
+        "choices": [
+          "Escalate the whole case, since any uncovered element makes the case uncovered",
+          "Resolve the whole case and note the shipping question in the ticket for later follow-up",
+          "Partition per request — resolve the covered part, send only the uncovered part to a human (RESOLVE_AND_FLAG)",
+          "Escalate, because two questions in one message is itself the trigger"
+        ],
+        "explanation": "Two ways to get it wrong: escalating the WHOLE case punishes the customer for asking a second question, and silently ignoring the tacked-on part is what a weak model does. Two questions is not itself a trigger — two questions, both covered, is a plain resolve.",
+        "source": "cca_field_delta",
+        "number": 145,
+        "trouble_card": "miss-D5-7"
+      }
+    },
+    {
+      "prompt": "A customer lookup returns THREE plausible matching records. What does the agent do, and why is this a reliability question?",
+      "answer": "Ask for an additional identifier — never select heuristically, because a heuristic pick is SILENTLY wrong and the next step may move money on a stranger's account",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.7 escalation",
+        "choices": [
+          "Pick the most recent match and note the ambiguity in the ticket, since asking costs a turn",
+          "Ask for an additional identifier — never select heuristically, because a heuristic pick is SILENTLY wrong and the next step may move money on a stranger's account",
+          "Escalate the whole case to a human, since ambiguous identity is outside the agent's authority",
+          "Pick the highest-confidence match, since confidence scores exist precisely for this"
+        ],
+        "explanation": "Not politeness — a heuristic pick proceeds at full confidence against the wrong account. One extra question costs a turn; a wrong account costs a chargeback. Escalating the whole case is an over-reaction: clarification resolves it.",
+        "source": "cca_field_delta",
+        "number": 146,
+        "trouble_card": "miss-D5-12"
+      }
+    },
+    {
+      "prompt": "A multi-agent run crashes. You scan the output directory, every output you find is complete, and you report success. What did you miss?",
+      "answer": "A worker that was DISPATCHED and died before its first write — the evidence of its existence is the output it failed to produce, so absence leaves no trace",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.8 manifests and recovery",
+        "choices": [
+          "A worker whose output was written but corrupted mid-flush, which a completeness check would catch",
+          "A worker that was DISPATCHED and died before its first write — the evidence of its existence is the output it failed to produce, so absence leaves no trace",
+          "A worker that wrote to the wrong directory, which a wider scan would catch",
+          "Nothing — if every output present is complete, the run is by definition recoverable"
+        ],
+        "explanation": "A listing answers 'what happened?'; recovery asks 'what was supposed to happen?' and no amount of reading the output can answer it. THE ONE LINE: record_dispatch() is called BEFORE the worker runs, so the manifest records an INTENTION, not a completion. Move it after the work and the manifest degrades into a directory listing with extra steps. Keep `attempted` and `completed` as SEPARATE fields or you cannot tell never-started from started-and-died.",
+        "source": "cca_field_delta",
+        "number": 147,
+        "trouble_card": "miss-D5-15"
+      }
+    },
+    {
+      "prompt": "The manifest says a worker was DISPATCHED but produced NO OUTPUT. Is re-running it safe?",
+      "answer": "Only if the effect is REPEATABLE — your state store witnesses what YOU wrote, never what the outside world already saw",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.8 manifests and recovery",
+        "choices": [
+          "Only if the effect is REPEATABLE — your state store witnesses what YOU wrote, never what the outside world already saw",
+          "Yes — no output means no work was done, which is what the manifest is for",
+          "No, never — a dispatched-but-silent worker must always be escalated to a human",
+          "Yes, if you first wipe the partial state and start clean, which is the conservative option"
+        ],
+        "explanation": "NO CHECKPOINT DOES NOT MEAN NO EFFECT. 'No output' is evidence about your disk, not about a payment processor. Repeatable (re-encode a file, overwrite a row) → state is a speed optimisation, re-run. Non-repeatable (charge, email, ship, webhook) → the checkpoint is the only thing between you and doing it twice. 'Wipe and start clean' sounds conservative and DOUBLE-BILLS. And reordering checkpoint-and-charge does not fix it — every order has a window; the fix is an IDEMPOTENCY KEY the processor deduplicates on.",
+        "source": "cca_field_delta",
+        "number": 148,
+        "trouble_card": "miss-D5-16"
+      }
+    },
+    {
+      "prompt": "When is a manifest entry written, and why does that timing carry the whole pattern?",
+      "answer": "When work is DISPATCHED — because a worker that dies before its first write leaves no other trace",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.8 manifests and recovery",
+        "choices": [
+          "When work is DISPATCHED — because a worker that dies before its first write leaves no other trace",
+          "When work COMPLETES — because a manifest of intentions cannot be trusted as a record",
+          "At both points, but the completion entry is the one recovery reads",
+          "Whenever the coordinator compacts, so the manifest survives summarization"
+        ],
+        "explanation": "Task 5.4. A directory listing tells you what happened; only a manifest tells you what was SUPPOSED to happen.",
+        "source": "cca_field_delta",
+        "number": 149
+      }
+    },
+    {
+      "prompt": "What is the correct way to make a retried side effect harmless?",
+      "answer": "An idempotency key the downstream processor deduplicates on, so replaying is harmless by construction",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.9 reliability",
+        "choices": [
+          "A local checkpoint written immediately before the call, so a retry can see it",
+          "A local checkpoint written immediately after the call, so a retry can see it",
+          "An idempotency key the downstream processor deduplicates on, so replaying is harmless by construction",
+          "A retry budget of one, so at most two attempts are ever made"
+        ],
+        "explanation": "You cannot make a local file and a remote effect atomic by ordering two writes: charge-then-checkpoint double-bills, checkpoint-then-charge skips an unbilled customer. Every order has a window.",
+        "source": "cca_field_delta",
+        "number": 150
+      }
+    },
+    {
+      "prompt": "You see `mcp__github__review` in a stem. Which surface owns that string, and what settles it?",
+      "answer": "Claude Code — it NAMES an MCP tool, but the string itself is a permission entry you TYPE into an allowlist; it never crosses the MCP wire",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.x surface binning",
+        "choices": [
+          "MCP — the mcp__ prefix is the protocol's own namespacing convention for tool identifiers",
+          "MCP — it is the wire format the `name` parameter of tools/call takes on the JSON-RPC wire",
+          "Agent SDK — it is the value form used inside the allowed_tools list you construct in code",
+          "Claude Code — it NAMES an MCP tool, but the string itself is a permission entry you TYPE into an allowlist; it never crosses the MCP wire"
+        ],
+        "explanation": "Run the physical test: does it cross the wire, or do you type it into a file? The mcp__ prefix returned ZERO hits on the MCP frame log. This has been missed as a SURFACE question twice while PASSING as a FORMAT question — two different retrievals on one string, and only one of them is stored.",
+        "source": "cca_field_delta",
+        "number": 151,
+        "trouble_card": "miss-X-1"
+      }
+    },
+    {
+      "prompt": "`stateless_http=True` — which surface owns it, and why does it feel like a different one?",
+      "answer": "MCP — it is an argument you pass when CONSTRUCTING a FastMCP server; it feels like Claude Code because it SOUNDS like infrastructure config",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.0 surface binning",
+        "choices": [
+          "Claude Code — a settings key that turns off session persistence for the CLI",
+          "API — a request-body flag telling the Messages API to treat each call independently",
+          "MCP — it is an argument you pass when CONSTRUCTING a FastMCP server; it feels like Claude Code because it SOUNDS like infrastructure config",
+          "Agent SDK — a ClaudeAgentOptions field controlling whether sessions can be resumed"
+        ],
+        "explanation": "There is a second process, so it is PROCESS. The word sounds like config, and that resemblance is the whole trap. Note it has ALSO been missed on meaning — it buys routability, never speed.",
+        "source": "cca_field_delta",
+        "number": 152,
+        "trouble_card": "miss-X-1"
+      }
+    },
+    {
+      "prompt": "`is_path_allowed()` is snake_case, exactly like the Messages API body. Why is it not an API field?",
+      "answer": "The snake_case here is PYTHON, not the API — it is a path check you write inside an MCP server, and FastMCP is the one place the casing rule inverts",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.0 surface binning",
+        "choices": [
+          "It IS an API field — an undocumented one the server-tool sandbox uses to scope filesystem access",
+          "The snake_case here is PYTHON, not the API — it is a path check you write inside an MCP server, and FastMCP is the one place the casing rule inverts",
+          "It is a Claude Code settings key, the mechanism backing the Read(./path) permission specifier",
+          "It is snake_case because it is an Agent SDK helper hanging off ClaudeAgentOptions"
+        ],
+        "explanation": "Casing is a fast check, never a proof. It breaks on the TypeScript SDK (camelCase), on FastMCP (Python, so snake_case), and on your own payloads. Filed under API in a documented miss.",
+        "source": "cca_field_delta",
+        "number": 153,
+        "trouble_card": "miss-X-1"
+      }
+    },
+    {
+      "prompt": "`roots` — which surface owns it, and what does it actually enforce?",
+      "answer": "MCP — a client-to-server advisory directory hint, and it enforces NOTHING; you write the check yourself",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.0 surface binning",
+        "choices": [
+          "MCP — a client-to-server advisory directory hint, and it enforces NOTHING; you write the check yourself",
+          "MCP — a client-to-server directory grant the protocol enforces by rejecting out-of-bounds reads",
+          "Claude Code — the underlying name of the additionalDirectories setting",
+          "API — a request-body field listing the directories a client tool is permitted to touch"
+        ],
+        "explanation": "A sign, not a door. Two documented misses in opposite directions: once as \"setting roots delivers the resources\" (it delivers nothing) and once as \"out-of-bounds is a protocol violation\" (the spec says servers SHOULD respect them).",
+        "source": "cca_field_delta",
+        "number": 154,
+        "trouble_card": "miss-D2-5"
+      }
+    },
+    {
+      "prompt": "`tool_choice` is entirely about invoking tools, which makes it feel like MCP. Which surface owns it?",
+      "answer": "API — it is something you tell the MODEL, in the body you POST; nothing about it crosses an MCP wire",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.0 surface binning",
+        "choices": [
+          "API — it is something you tell the MODEL, in the body you POST; nothing about it crosses an MCP wire",
+          "MCP — it is how a client tells a server which of its registered tools to invoke",
+          "MCP — it is negotiated at initialize as a sub-capability of the server's tools capability",
+          "Claude Code — it is the settings key that backs the four permission modes"
+        ],
+        "explanation": "Ask who is talking to whom: you are talking to the model, so BODY. Filed under MCP in a documented miss. Note the second trap on the same string — its four values (auto/any/tool/none) interfere with Claude Code's four permission modes.",
+        "source": "cca_field_delta",
+        "number": 155,
+        "trouble_card": "miss-X-1"
+      }
+    },
+    {
+      "prompt": "`acceptEdits` is camelCase. Does that make it Agent SDK — and which surface actually owns it?",
+      "answer": "No — camelCase maps to Claude Code JSON, flags and hook output; it is a permission mode set in settings or at the CLI",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.x surface binning",
+        "choices": [
+          "Yes — camelCase is the AgentDefinition convention, so it is a PROGRAM-bin field",
+          "No — camelCase maps to the MCP wire, so it is a PROCESS-bin capability value",
+          "No — camelCase maps to Claude Code JSON, flags and hook output; it is a permission mode set in settings or at the CLI",
+          "Yes — it is the ClaudeAgentOptions value for permission_mode, written in the SDK's own casing"
+        ],
+        "explanation": "hyphen goes to markdown frontmatter, camelCase to Claude Code JSON/flags/hook output, snake_case to the Python Agent SDK. And AgentDefinition being camelCase is precisely why casing alone cannot settle it — the PLACE decides, not the word.",
+        "source": "cca_field_delta",
+        "number": 156,
+        "trouble_card": "miss-X-1"
+      }
+    },
+    {
+      "prompt": "A hook writes its JSON to stdout and a teammate calls that \"the stdio interface.\" What is wrong with that?",
+      "answer": "stdio is the MCP TRANSPORT — a client launching a server as a subprocess. The hook stream is stdout: different word, different surface",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.0 surface binning",
+        "choices": [
+          "Nothing — stdio is the correct collective name for the stdout and stderr a hook writes to",
+          "The stream is also wrong — the hook JSON interface writes to stderr, not stdout",
+          "stdio is the MCP TRANSPORT — a client launching a server as a subprocess. The hook stream is stdout: different word, different surface",
+          "stdio is right, but it belongs in the settings file rather than being written by the hook itself"
+        ],
+        "explanation": "MCP-flavoured strings landing on non-MCP facts is a repeat pattern, not a one-off: stdio for stdout on the hook card, and an mcp_ prefix on a pure Messages API stop_reason, twice.",
+        "source": "cca_field_delta",
+        "number": 157,
+        "trouble_card": "miss-D3-7"
+      }
+    },
+    {
+      "prompt": "`permissionDecision` — which surface owns it, and where exactly does it live?",
+      "answer": "Claude Code — a hook JSON field on stdout, nested under hookSpecificOutput, and PreToolUse ONLY",
+      "metadata": {
+        "domain": "Claude Code Configuration & Workflows",
+        "subdomain": "3.x surface binning",
+        "choices": [
+          "MCP — the client's response to a server's permission elicitation request",
+          "Claude Code — a TOP-LEVEL hook JSON field, usable on every event that can block",
+          "Claude Code — a hook JSON field on stdout, nested under hookSpecificOutput, and PreToolUse ONLY",
+          "Agent SDK — the return value of a permission callback registered through ClaudeAgentOptions"
+        ],
+        "explanation": "Every OTHER blocking event uses a top-level `decision` with the value \"block\". The right field at the wrong nesting is a silent no-op — nothing throws. And the stream is stdout, not stdio.",
+        "source": "cca_field_delta",
+        "number": 158,
+        "trouble_card": "miss-D3-7"
+      }
+    },
+    {
+      "prompt": "`sampling/createMessage` is the MCP method most often filed under the wrong surface. Bin it — then say which DIRECTION it travels, and why that direction follows.",
+      "answer": "MCP, and it travels server-to-client — the server owns no model, so the capability is one the CLIENT declares and answers",
+      "metadata": {
+        "domain": "Tool Design & MCP Integration",
+        "subdomain": "2.0 surface binning",
+        "choices": [
+          "MCP, travelling client-to-server like every other method, since the client is always the initiator",
+          "API, because it is the request-body block that controls how tokens are sampled during generation",
+          "MCP, and it travels server-to-client — the server owns no model, so the capability is one the CLIENT declares and answers",
+          "MCP, travelling server-to-client because the server streams its own generated tokens back"
+        ],
+        "explanation": "The word belongs to the generation family (temperature, top_p), which is what mis-files it. Only two things travel backwards: sampling/createMessage and roots/list. Both do so because both ask the client for something only the client has — a model, and the filesystem boundary.",
+        "source": "cca_field_delta",
+        "number": 159,
+        "trouble_card": "miss-X-1"
+      }
+    },
+    {
+      "prompt": "`AgentDefinition` is camelCase and mirrors subagent markdown frontmatter. Which surface owns it?",
+      "answer": "Agent SDK — a class you construct in your own program; the frontmatter resemblance is exactly why its casing differs from ClaudeAgentOptions",
+      "metadata": {
+        "domain": "Agentic Architecture & Orchestration",
+        "subdomain": "1.x surface binning",
+        "choices": [
+          "Agent SDK — a class you construct in your own program; the frontmatter resemblance is exactly why its casing differs from ClaudeAgentOptions",
+          "Claude Code — it is the parsed form of a subagent markdown file, so it belongs to the FILE bin",
+          "Claude Code — camelCase maps to Claude Code JSON, and subagents are a Claude Code feature",
+          "MCP — it is how a server declares an agent primitive alongside tools and prompts"
+        ],
+        "explanation": "Agent SDK is the SMALLEST bin — 1 of 16 terms in the original drill — so \"when unsure, it is almost never the answer\" is a good prior. This is the case where the prior is wrong, which is what makes it worth carding.",
+        "source": "cca_field_delta",
+        "number": 160,
+        "trouble_card": "miss-X-1"
+      }
+    },
+    {
+      "prompt": "`custom_id` sounds like a correlation id on a wire. Which surface owns it?",
+      "answer": "API — a Message Batches request field, and how you match results back, since batch order is not guaranteed",
+      "metadata": {
+        "domain": "Prompt Engineering & Structured Output",
+        "subdomain": "4.x surface binning",
+        "choices": [
+          "API — a Message Batches request field, and how you match results back, since batch order is not guaranteed",
+          "MCP — the JSON-RPC `id` that pairs a request with its result",
+          "MCP — a client-supplied key on tools/call used to correlate asynchronous tool results",
+          "Claude Code — the session identifier written by --resume and read back on --continue"
+        ],
+        "explanation": "The JSON-RPC id is real, does a similar job, and lives on a different surface — that adjacency is the pull. custom_id is 1-64 chars of [a-zA-Z0-9_-] on a batch request.",
+        "source": "cca_field_delta",
+        "number": 161,
+        "trouble_card": "miss-X-1"
+      }
+    },
+    {
+      "prompt": "The exact string for a mid-generation window overflow has twice been written with an mcp_ prefix, three days apart. What is it really, and whose is it?",
+      "answer": "model_context_window_exceeded — a pure Messages API stop_reason value, with no MCP involvement at all",
+      "metadata": {
+        "domain": "Context Management & Reliability",
+        "subdomain": "5.x surface binning",
+        "choices": [
+          "mcp_context_window_exceeded — correct when the overflow happens inside an MCP tool result",
+          "model_context_window_exceeded — an MCP error code a server returns when its own context fills",
+          "max_tokens — there is no separate window string; one value covers both causes",
+          "model_context_window_exceeded — a pure Messages API stop_reason value, with no MCP involvement at all"
+        ],
+        "explanation": "An MCP prefix landing on a pure Messages API string, twice. The name is the testable part because the name tells you which fix to reach for: max_tokens = YOUR OUTPUT CAP (raise it); model_context_window_exceeded = the WHOLE WINDOW (shed, compact, checkpoint). And the API never compacts on its own — it ACCEPTS the request and STOPS generating.",
+        "source": "cca_field_delta",
+        "number": 162,
+        "trouble_card": "miss-D5-9b"
+      }
+    }
+  ]
+}
