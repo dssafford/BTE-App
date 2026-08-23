@@ -47,6 +47,11 @@ const FACETS: Facet[] = [
   { key: "scenario", label: "Scenario", allLabel: "All scenarios" },
   { key: "round", label: "Round", allLabel: "All rounds", format: (v) => `Round ${v}` },
   { key: "domain", label: "Domain", allLabel: "All domains" },
+  // Bins & Lists. Its values carry an "A - " / "1 - " prefix so localeCompare
+  // orders the dropdowns the way the source sheet reads, with no sort special-case.
+  { key: "bin", label: "Bin", allLabel: "All bins" },
+  { key: "direction", label: "Direction", allLabel: "All directions" },
+  { key: "list", label: "List", allLabel: "All lists" },
 ];
 
 function ModeToggle({ mode, onChange }: { mode: Mode; onChange: (m: Mode) => void }) {
