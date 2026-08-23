@@ -186,6 +186,30 @@ def test_no_fabricated_strings():
     assert not bad, "fabricated strings: %s" % bad[:10]
 
 
+def test_permutation_distractors_only_on_ordered_cards():
+    """An option with the answer's exact membership must only appear where
+    order is the content.
+
+    On an unordered list a reshuffled roster is not a wrong answer — it has the
+    same members, so the card would have two correct options. Only cards that
+    ask "in order" may field a permutation. Caught in review: hook exit codes,
+    session continuation and the permission rule lists were all marked ordered
+    when none of them carries a sequence, which produced exactly that bug.
+    """
+    offenders = []
+    for card in load()["cards"]:
+        answer_members = set(card["answer"].split(" · "))
+        if len(answer_members) < 2:
+            continue
+        for option in card["metadata"]["choices"]:
+            if option == card["answer"]:
+                continue
+            if set(option.split(" · ")) == answer_members:
+                if "in order" not in card["prompt"]:
+                    offenders.append((card["metadata"]["key"], option))
+    assert not offenders, "permutation distractor on an unordered card: %s" % offenders[:5]
+
+
 def test_collision_members_get_a_pair_card():
     """A string in two lists is unanswerable as 'which list?' — it must pair."""
     cards = load()["cards"]

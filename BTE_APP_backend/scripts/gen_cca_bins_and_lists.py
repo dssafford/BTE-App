@@ -188,8 +188,7 @@ BINS = [
           "layer, rank-independent. The same three words are also the permissionDecision values "
           "in a hook's JSON return — ask yourself whether you are writing settings or answering "
           "as a hook.",
-          collides=["Permission evaluation steps", "Permission modes"],
-          ordered=True),
+          collides=["Permission evaluation steps", "Permission modes"]),
         L("Settings precedence layers",
           ["Managed", "command-line args", "Local", "Project", "User"],
           "This governs SCALAR settings only (model, env) — override. Permissions do not use it "
@@ -214,8 +213,7 @@ BINS = [
            "any other = fails OPEN, stderr to the user only"],
           "1 does not block — a buggy hook must never brick the session. The dangerous case is "
           "silent: exit 0 with nothing logged.",
-          collides=["Hook JSON return — the PreToolUse nest"],
-          ordered=True),
+          collides=["Hook JSON return — the PreToolUse nest"]),
         L("Hook JSON return — the PreToolUse nest",
           ["hookSpecificOutput", "hookEventName", "permissionDecision", "permissionDecisionReason"],
           "TWO decision fields, different names, different nesting, different events: "
@@ -241,8 +239,7 @@ BINS = [
           "--resume continues the same session; --fork-session takes a COPY (fork_session in the "
           "SDK). A session is a TRANSCRIPT, not a live view — neither re-reads the filesystem, "
           "and a copy of stale is stale.",
-          collides=["Context mechanisms"],
-          ordered=True),
+          collides=["Context mechanisms"]),
         L("Permission strings & keys",
           ["mcp__<server>__<tool>", "additionalDirectories", "defaultMode", ".mcp.json / mcpServers"],
           "MCP-flavoured words on a Claude Code surface. Double underscores in both places, one "
@@ -439,9 +436,11 @@ def variant_rosters(members, foreign, ordered, key):
         v[0], v[n - 1] = pool[0], pool[1]
         swaps.append(v)
 
-    ordered_first = _shuffled(perms, key) + _shuffled(swaps, key + "s")
-    swaps_first = _shuffled(swaps, key) + _shuffled(perms, key + "p")
-    cands = ordered_first if ordered else swaps_first
+    # For an UNORDERED list a permutation is not a wrong answer — it has the
+    # same membership, so offering one creates a card with two correct options.
+    # Permutations are only ever distractors when order is part of the content.
+    cands = (_shuffled(perms, key) + _shuffled(swaps, key + "s")) if ordered \
+        else _shuffled(swaps, key)
 
     seen, out = {tuple(members)}, []
     for v in cands:
