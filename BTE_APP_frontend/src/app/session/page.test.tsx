@@ -184,6 +184,112 @@ describe("domain filter", () => {
   });
 });
 
+describe("bin + direction + list facets", () => {
+  const binsDeck: Deck = {
+    ...mcDeck,
+    name: "CCA-F Bins & Lists",
+    render_config: { fields: ["bin", "direction", "list"] },
+  };
+
+  const roster = mcCard({
+    id: 30,
+    prompt_text: "stop_reason values — name all SIX.",
+    metadata: {
+      source: "cca_bins_and_lists",
+      bin: "A - API · BODY",
+      direction: "1 - Roster (list to members)",
+      list: "stop_reason values",
+      choices: ["a", "b", "c", "d"],
+    },
+  });
+  const termToBin = mcCard({
+    id: 31,
+    prompt_text: "`nullable` — which surface does it live on?",
+    metadata: {
+      source: "cca_bins_and_lists",
+      bin: "A - API · BODY",
+      direction: "4 - Term to bin",
+      list: "Schema modelling",
+      choices: ["a", "b", "c", "d"],
+    },
+  });
+  const fileCard = mcCard({
+    id: 32,
+    prompt_text: "Permission modes — name all SIX.",
+    metadata: {
+      source: "cca_bins_and_lists",
+      bin: "C - Claude Code · FILE",
+      direction: "1 - Roster (list to members)",
+      list: "Permission modes",
+      choices: ["a", "b", "c", "d"],
+    },
+  });
+
+  it("renders Bin, Direction and List dropdowns with counts", async () => {
+    fetchDecks.mockResolvedValue([binsDeck]);
+    fetchCardsForDeck.mockResolvedValue([roster, termToBin, fileCard]);
+    render(<SessionPage />);
+    expect(await screen.findByLabelText("Bin:")).toBeInTheDocument();
+    expect(screen.getByLabelText("Direction:")).toBeInTheDocument();
+    expect(screen.getByLabelText("List:")).toBeInTheDocument();
+    expect(
+      screen.getByRole("option", { name: /All bins \(3\)/ })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("option", { name: /A - API · BODY \(2\)/ })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("option", { name: /1 - Roster \(list to members\) \(2\)/ })
+    ).toBeInTheDocument();
+  });
+
+  it("limits the session to the selected bin", async () => {
+    fetchDecks.mockResolvedValue([binsDeck]);
+    fetchCardsForDeck.mockResolvedValue([roster, termToBin, fileCard]);
+    render(<SessionPage />);
+    const select = await screen.findByLabelText("Bin:");
+    await userEvent.selectOptions(select, "C - Claude Code · FILE");
+    await userEvent.click(screen.getByText(/Start Quiz/i));
+    expect(screen.getByText("Permission modes — name all SIX.")).toBeInTheDocument();
+    expect(
+      screen.queryByText("stop_reason values — name all SIX.")
+    ).not.toBeInTheDocument();
+  });
+
+  it("combines bin and direction, and counts stay truthful", async () => {
+    fetchDecks.mockResolvedValue([binsDeck]);
+    fetchCardsForDeck.mockResolvedValue([roster, termToBin, fileCard]);
+    render(<SessionPage />);
+    const binSelect = await screen.findByLabelText("Bin:");
+    await userEvent.selectOptions(binSelect, "A - API · BODY");
+    // Direction counts must now reflect the bin filter, not the whole deck.
+    expect(
+      screen.getByRole("option", { name: /All directions \(2\)/ })
+    ).toBeInTheDocument();
+    await userEvent.selectOptions(
+      screen.getByLabelText("Direction:"),
+      "4 - Term to bin"
+    );
+    await userEvent.click(screen.getByText(/Start Quiz/i));
+    expect(
+      screen.getByText("`nullable` — which surface does it live on?")
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByText("stop_reason values — name all SIX.")
+    ).not.toBeInTheDocument();
+  });
+
+  it("does not render the dropdowns for decks whose cards have no bin", async () => {
+    fetchDecks.mockResolvedValue([mcDeck]);
+    fetchCardsForDeck.mockResolvedValue([mcCard()]);
+    render(<SessionPage />);
+    await waitFor(() => expect(screen.getByText(/Start Quiz/i)).toBeEnabled());
+    expect(screen.queryByLabelText("Bin:")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Direction:")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("List:")).not.toBeInTheDocument();
+  });
+});
+
 describe("scenario + round facets", () => {
   const s1r1 = mcCard({
     id: 20,
