@@ -114,7 +114,7 @@
         "choices": [
           "web_search · web_fetch · code_execution · tool_search · bash",
           "web_search · web_fetch · code_execution · tool_search · any",
-          "web_fetch · code_execution · tool_search · advisor · web_search",
+          "web_search · web_fetch · {type:\"tool\",name} · tool_search · advisor",
           "web_search · web_fetch · code_execution · tool_search · advisor"
         ],
         "explanation": "SERVER tools · A - API · BODY. Anthropic executes these and the results come back in the same response — you never write a handler, and there is no second round-trip. That is what \"server\" buys. Still API · BODY.",
@@ -286,7 +286,7 @@
           "default · acceptEdits · plan · bypassPermissions · dontAsk · auto",
           "default · deny · plan · bypassPermissions · dontAsk · auto",
           "default · acceptEdits · plan · any · dontAsk · auto",
-          "auto · default · acceptEdits · plan · bypassPermissions · dontAsk"
+          "default · acceptEdits · deny · bypassPermissions · dontAsk · auto"
         ],
         "explanation": "Permission modes · C - Claude Code · FILE. bypassPermissions fails OPEN · dontAsk fails CLOSED. Both descriptions contain the words \"never asks\" — opposites wearing one phrase. The settings-file spelling is defaultMode; the CLI spelling is --permission-mode. DISCREPANCY: surface-index.html still shows FOUR on a stale row; enumeration-drill was corrected 08-16 to SIX, which is what this deck teaches.",
         "key": "C/Permission modes/roster/a",
@@ -352,17 +352,17 @@
       }
     },
     {
-      "prompt": "Permission rule lists — name all THREE, in order.",
+      "prompt": "Permission rule lists — name all THREE.",
       "answer": "allow · deny · ask",
       "metadata": {
         "bin": "C - Claude Code · FILE",
         "direction": "1 - Roster (list to members)",
         "list": "Permission rule lists",
         "choices": [
-          "deny · allow · ask",
-          "ask · allow · deny",
+          "allow · deny · the MODE",
+          "allow · the MODE · ask",
           "allow · deny · ask",
-          "ask · deny · allow"
+          "allow · plan · ask"
         ],
         "explanation": "Permission rule lists · C - Claude Code · FILE. Evaluated deny → ask → allow. All layers merge into ONE pool, and deny wins from any layer, rank-independent. The same three words are also the permissionDecision values in a hook's JSON return — ask yourself whether you are writing settings or answering as a hook.",
         "key": "C/Permission rule lists/roster/a",
@@ -466,16 +466,16 @@
       }
     },
     {
-      "prompt": "Hook exit codes — name all THREE, in order.",
+      "prompt": "Hook exit codes — name all THREE.",
       "answer": "2 = block, reason to stderr, and that stderr goes back to Claude · 0 = proceed (stdout parsed as JSON if it is JSON) · any other = fails OPEN, stderr to the user only",
       "metadata": {
         "bin": "C - Claude Code · FILE",
         "direction": "1 - Roster (list to members)",
         "list": "Hook exit codes",
         "choices": [
-          "any other = fails OPEN, stderr to the user only · 2 = block, reason to stderr, and that stderr goes back to Claude · 0 = proceed (stdout parsed as JSON if it is JSON)",
-          "0 = proceed (stdout parsed as JSON if it is JSON) · 2 = block, reason to stderr, and that stderr goes back to Claude · any other = fails OPEN, stderr to the user only",
-          "0 = proceed (stdout parsed as JSON if it is JSON) · any other = fails OPEN, stderr to the user only · 2 = block, reason to stderr, and that stderr goes back to Claude",
+          "2 = block, reason to stderr, and that stderr goes back to Claude · hookEventName · any other = fails OPEN, stderr to the user only",
+          "hookEventName · 0 = proceed (stdout parsed as JSON if it is JSON) · any other = fails OPEN, stderr to the user only",
+          "2 = block, reason to stderr, and that stderr goes back to Claude · 0 = proceed (stdout parsed as JSON if it is JSON) · bypassPermissions",
           "2 = block, reason to stderr, and that stderr goes back to Claude · 0 = proceed (stdout parsed as JSON if it is JSON) · any other = fails OPEN, stderr to the user only"
         ],
         "explanation": "Hook exit codes · C - Claude Code · FILE. 1 does not block — a buggy hook must never brick the session. The dangerous case is silent: exit 0 with nothing logged.",
@@ -495,7 +495,7 @@
           "continue · hookEventName · permissionDecision · permissionDecisionReason",
           "hookSpecificOutput · hookEventName · permissionDecision · ask",
           "hookSpecificOutput · hookEventName · permissionDecision · permissionDecisionReason",
-          "hookSpecificOutput · permissionDecision · hookEventName · permissionDecisionReason"
+          "hookSpecificOutput · stopReason · permissionDecision · permissionDecisionReason"
         ],
         "explanation": "Hook JSON return — the PreToolUse nest · C - Claude Code · FILE. TWO decision fields, different names, different nesting, different events: hookSpecificOutput.permissionDecision for PreToolUse ONLY; a top-level `decision` for everything else. Misspell either and nothing throws. Values are case-sensitive — \"Deny\" fails open silently, and the direction of that failure follows intent: deny + typo fails OPEN, allow + typo fails CLOSED.",
         "key": "C/Hook JSON return — the PreToolUse nest/roster/a",
@@ -542,17 +542,17 @@
       }
     },
     {
-      "prompt": "Session continuation — name both, in order.",
+      "prompt": "Session continuation — name both.",
       "answer": "--resume · --fork-session",
       "metadata": {
         "bin": "C - Claude Code · FILE",
         "direction": "1 - Roster (list to members)",
         "list": "Session continuation",
         "choices": [
-          "--fork-session · --resume",
+          "bypassPermissions · --fork-session",
           "acceptEdits · --fork-session",
           "--resume · --fork-session",
-          "--resume · bypassPermissions"
+          "--resume · dontAsk"
         ],
         "explanation": "Session continuation · C - Claude Code · FILE. --resume continues the same session; --fork-session takes a COPY (fork_session in the SDK). A session is a TRANSCRIPT, not a live view — neither re-reads the filesystem, and a copy of stale is stale.",
         "key": "C/Session continuation/roster/a",
@@ -571,7 +571,7 @@
           "mcp__<server>__<tool> · additionalDirectories · default · .mcp.json / mcpServers",
           "mcp__<server>__<tool> · bypassPermissions · defaultMode · .mcp.json / mcpServers",
           "mcp__<server>__<tool> · additionalDirectories · defaultMode · .mcp.json / mcpServers",
-          "additionalDirectories · mcp__<server>__<tool> · defaultMode · .mcp.json / mcpServers"
+          "mcp__<server>__<tool> · additionalDirectories · bypassPermissions · .mcp.json / mcpServers"
         ],
         "explanation": "Permission strings & keys · C - Claude Code · FILE. MCP-flavoured words on a Claude Code surface. Double underscores in both places, one entry per tool — there is no mcp__server__* glob form.",
         "key": "C/Permission strings & keys/roster/a",
@@ -685,7 +685,7 @@
           "prompt chaining · routing · COVERAGE · orchestrator-workers · evaluator-optimizer",
           "COVERAGE · routing · parallelization · orchestrator-workers · evaluator-optimizer",
           "prompt chaining · routing · parallelization · orchestrator-workers · evaluator-optimizer",
-          "prompt chaining · parallelization · routing · orchestrator-workers · evaluator-optimizer"
+          "prompt chaining · context editing · parallelization · orchestrator-workers · evaluator-optimizer"
         ],
         "explanation": "The agentic patterns · E - No surface. The separator is: are the subtasks knowable in advance? Pre-known → parallelization. Discovered per input → orchestrator-workers. Parallelism and isolated context are shared by BOTH, so neither is the tell. These have no surface — assigning one is itself the trap.",
         "key": "E/The agentic patterns/roster/b",
@@ -723,7 +723,7 @@
           "difficulty / complexity · sentiment · self-rated confidence",
           "difficulty / complexity · sentiment · routing",
           "difficulty / complexity · sentiment · orchestrator-workers",
-          "sentiment · difficulty / complexity · self-rated confidence"
+          "difficulty / complexity · orchestrator-workers · self-rated confidence"
         ],
         "explanation": "Escalation NON-triggers · E - No surface. Difficulty is the one that keeps going missing (08-23, twice). Hard is not blocked. Self-rated confidence samples the faculty that is already broken; sentiment measures a different variable.",
         "key": "E/Escalation NON-triggers/roster/a",
@@ -6328,7 +6328,7 @@
           "The MCP handshake · MCP invoke methods · MCP discovery methods · MCP server flags · MCP camelCase wire strings",
           "The MCP handshake · MCP invoke methods · MCP discovery methods · MCP server flags · tool_choice values",
           "SERVER tools · MCP invoke methods · MCP discovery methods · MCP server flags · Permission modes",
-          "The MCP handshake · MCP invoke methods · MCP discovery methods · MCP camelCase wire strings · MCP server flags"
+          "The MCP handshake · tool_choice values · MCP discovery methods · MCP server flags · MCP camelCase wire strings"
         ],
         "explanation": "B - MCP · PROCESS — spoken between a client and a server over a transport. The five lists are: The MCP handshake · MCP invoke methods · MCP discovery methods · MCP server flags · MCP camelCase wire strings.",
         "key": "B/inventory",
@@ -6366,7 +6366,7 @@
           "Permission modes · Permission evaluation steps · Permission rule lists · Settings precedence layers · Hook events that CAN block · Hook events that CANNOT block · Hook exit codes · Batch statuses · Hook JSON return — top-level common fields · --output-format values · Session continuation · Permission strings & keys",
           "Permission modes · Permission evaluation steps · Permission rule lists · Settings precedence layers · Batch statuses · Hook events that CANNOT block · Hook exit codes · Hook JSON return — the PreToolUse nest · Hook JSON return — top-level common fields · --output-format values · Session continuation · Permission strings & keys",
           "Permission modes · Permission evaluation steps · Permission rule lists · Settings precedence layers · Hook events that CAN block · Hook events that CANNOT block · Hook exit codes · Hook JSON return — the PreToolUse nest · Hook JSON return — top-level common fields · --output-format values · Session continuation · Permission strings & keys",
-          "Permission modes · Permission evaluation steps · Settings precedence layers · Permission rule lists · Hook events that CAN block · Hook events that CANNOT block · Hook exit codes · Hook JSON return — the PreToolUse nest · Hook JSON return — top-level common fields · --output-format values · Session continuation · Permission strings & keys"
+          "Schema modelling · Permission evaluation steps · Permission rule lists · Settings precedence layers · Hook events that CAN block · Hook events that CANNOT block · Hook exit codes · Hook JSON return — the PreToolUse nest · Hook JSON return — top-level common fields · --output-format values · Session continuation · Permission strings & keys"
         ],
         "explanation": "C - Claude Code · FILE — typed into a config file or a CLI flag; it never crosses a wire. The twelve lists are: Permission modes · Permission evaluation steps · Permission rule lists · Settings precedence layers · Hook events that CAN block · Hook events that CANNOT block · Hook exit codes · Hook JSON return — the PreToolUse nest · Hook JSON return — top-level common fields · --output-format values · Session continuation · Permission strings & keys.",
         "key": "C/inventory",
@@ -6404,7 +6404,7 @@
           "AgentDefinition fields (camelCase) · ClaudeAgentOptions — the snake_case twins",
           "stop_reason values · ClaudeAgentOptions — the snake_case twins",
           "AgentDefinition fields (camelCase) · Schema modelling",
-          "ClaudeAgentOptions — the snake_case twins · AgentDefinition fields (camelCase)"
+          "AgentDefinition fields (camelCase) · stop_reason values"
         ],
         "explanation": "D - Agent SDK · PROGRAM — a construct you instantiate in your own program. The two lists are: AgentDefinition fields (camelCase) · ClaudeAgentOptions — the snake_case twins.",
         "key": "D/inventory",
@@ -6442,7 +6442,7 @@
           "SERVER tools · Escalation triggers · Escalation NON-triggers · Context mechanisms",
           "The agentic patterns · Escalation triggers · Escalation NON-triggers · Schema modelling",
           "The agentic patterns · Escalation triggers · Escalation NON-triggers · Context mechanisms",
-          "Escalation triggers · The agentic patterns · Escalation NON-triggers · Context mechanisms"
+          "The agentic patterns · Escalation triggers · Escalation NON-triggers · Batch result types"
         ],
         "explanation": "E - No surface — a concept, not a string you type anywhere. The four lists are: The agentic patterns · Escalation triggers · Escalation NON-triggers · Context mechanisms.",
         "key": "E/inventory",
